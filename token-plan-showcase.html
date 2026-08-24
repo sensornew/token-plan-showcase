@@ -1,0 +1,4179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenPlan · 全球 AI Token 定价全景指南 | 大模型 API 价格对比与选择</title>
+<meta name="description" content="TokenPlan 汇集国内外 20+ 主流大模型 API 厂商的 Token 定价数据，涵盖 OpenAI、DeepSeek、通义千问、智谱GLM、Google Gemini、Claude 等 80+ 模型。区分免费与付费，按性价比智能排序，提供专业的大模型 API 选择指南。">
+<meta name="keywords" content="大模型API价格,Token定价,AI API对比,DeepSeek定价,OpenAI价格,GPT-5.5价格,Claude价格,Gemini免费,通义千问API,智谱GLM,免费大模型API,token plan,API性价比,大模型成本">
+<meta name="author" content="TokenPlan">
+<meta name="robots" content="index, follow">
+<meta name="language" content="zh-CN">
+<meta name="revisit-after" content="7 days">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="TokenPlan · 全球 AI Token 定价全景指南">
+<meta property="og:description" content="汇集国内外 20+ 厂商 80+ 模型的 Token 定价数据，区分免费与付费，按性价比排序，提供专业选择指南。">
+<meta property="og:site_name" content="TokenPlan">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:url" content="https://tokenplan.dev">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TokenPlan · 全球 AI Token 定价全景指南">
+<meta name="twitter:description" content="汇集国内外 20+ 厂商 80+ 模型的 Token 定价数据，按性价比排序，提供专业选择指南。">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://tokenplan.dev">
+
+<!-- Structured Data: WebSite -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "TokenPlan",
+  "alternateName": "全球 AI Token 定价全景指南",
+  "url": "https://tokenplan.dev",
+  "description": "汇集国内外主流大模型 API 厂商的 Token 定价数据，按性价比排序，提供专业选择指南。",
+  "inLanguage": "zh-CN"
+}
+</script>
+
+<!-- Structured Data: FAQPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "哪些大模型 API 提供免费 Token？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "智谱 GLM-4-Flash 永久免费且无 Token 上限，Google Gemini 免费层每天 1000 次请求，Groq 免费 1000 RPD，OpenRouter 聚合 20+ 免费模型，百度 ERNIE Speed 和腾讯 hunyuan-lite 也提供永久免费方案。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "最便宜的大模型 API 是哪个？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "免费方案中智谱 GLM-4-Flash 最推荐（永久免费）。付费方案中，国内最低是阿里云 Qwen-turbo（¥0.3/百万输入 Token），国际最低是 Groq Llama 3.1 8B（$0.05/百万输入 Token）。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "DeepSeek API 定价是多少？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "DeepSeek V4 Flash 非高峰输入 ¥1.5/百万 Token，输出 ¥4.5/百万 Token，1M 上下文。采用峰谷定价，高峰时段翻倍，缓存命中仅 ¥0.007/百万 Token。新用户赠送 500 万 Token。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "如何选择合适的大模型 API？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "根据使用场景选择：开发测试用免费方案（GLM-4-Flash、Gemini 免费层），追求性价比用 DeepSeek V4 Flash 或 Qwen-turbo，长文本处理用 Grok 4.1 Fast（2M 上下文），顶级质量选 GPT-5.5 或 Claude Opus 4.6。"
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg-deep:#070710;
+  --bg-base:#0d0d1a;
+  --bg-card:rgba(20,20,38,0.6);
+  --bg-card-hover:rgba(30,30,55,0.8);
+  --border:rgba(120,120,180,0.15);
+  --border-bright:rgba(200,200,255,0.3);
+  --gold:#e8b54a;
+  --gold-bright:#ffd76a;
+  --cyan:#5ce1ff;
+  --cyan-deep:#3b8eff;
+  --purple:#8b5cf6;
+  --green:#34d399;
+  --red:#f87171;
+  --orange:#fb923c;
+  --text-primary:#f0f0f8;
+  --text-secondary:#a0a0b8;
+  --text-muted:#606078;
+  --gradient-gold:linear-gradient(135deg,#e8b54a,#ffd76a);
+  --gradient-cyan:linear-gradient(135deg,#3b8eff,#5ce1ff);
+  --gradient-hero:radial-gradient(ellipse at top,rgba(139,92,246,0.15),transparent 50%),radial-gradient(ellipse at bottom right,rgba(232,181,74,0.1),transparent 50%),radial-gradient(ellipse at bottom left,rgba(59,142,255,0.1),transparent 50%);
+  --shadow-glow:0 0 40px rgba(139,92,246,0.15);
+  --font-display:'Sora',sans-serif;
+  --font-body:'Plus Jakarta Sans',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+
+html{scroll-behavior:smooth;font-size:16px}
+
+body{
+  background:var(--bg-deep);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  line-height:1.6;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:var(--gradient-hero);
+  pointer-events:none;
+  z-index:0;
+}
+
+body::after{
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:0.5;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:rgba(120,120,180,0.3);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(120,120,180,0.5)}
+
+/* === Layout === */
+.container{max-width:1400px;margin:0 auto;padding:0 2rem;position:relative;z-index:1}
+
+/* === Hero === */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:6rem 0 4rem;
+  position:relative;
+}
+
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.4rem 1rem;
+  background:rgba(232,181,74,0.08);
+  border:1px solid rgba(232,181,74,0.2);
+  border-radius:100px;
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  color:var(--gold-bright);
+  margin-bottom:2rem;
+  width:fit-content;
+  animation:fadeInDown 0.8s ease-out;
+}
+
+.hero-badge::before{
+  content:'';
+  width:6px;height:6px;
+  background:var(--gold-bright);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--gold-bright);
+  animation:pulse 2s infinite;
+}
+
+.hero h1{
+  font-family:var(--font-display);
+  font-size:clamp(3rem,8vw,6.5rem);
+  font-weight:800;
+  line-height:0.95;
+  letter-spacing:-0.04em;
+  margin-bottom:1.5rem;
+  animation:fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.hero h1 .gradient-gold{
+  background:var(--gradient-gold);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero h1 .gradient-cyan{
+  background:var(--gradient-cyan);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero-subtitle{
+  font-size:clamp(1rem,2vw,1.25rem);
+  color:var(--text-secondary);
+  max-width:700px;
+  margin-bottom:3rem;
+  animation:fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:2rem;
+  margin-bottom:3rem;
+  animation:fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.hero-stat{
+  display:flex;
+  flex-direction:column;
+  gap:0.25rem;
+}
+
+.hero-stat-value{
+  font-family:var(--font-display);
+  font-size:2.5rem;
+  font-weight:700;
+  background:var(--gradient-gold);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1;
+}
+
+.hero-stat-label{
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+}
+
+.hero-cta{
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+  animation:fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.85rem 2rem;
+  border-radius:12px;
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:0.9rem;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  border:none;
+  text-decoration:none;
+}
+
+.btn-primary{
+  background:var(--gradient-gold);
+  color:#0a0a0f;
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(232,181,74,0.3);
+}
+
+.btn-secondary{
+  background:rgba(255,255,255,0.05);
+  color:var(--text-primary);
+  border:1px solid var(--border-bright);
+}
+
+.btn-secondary:hover{
+  background:rgba(255,255,255,0.1);
+  border-color:rgba(200,200,255,0.5);
+}
+
+/* === Navigation Tabs === */
+.nav-section{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(7,7,16,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:1rem 0;
+}
+
+.nav-tabs{
+  display:flex;
+  gap:0.5rem;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+.nav-tab{
+  padding:0.6rem 1.5rem;
+  border-radius:10px;
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:0.85rem;
+  color:var(--text-secondary);
+  cursor:pointer;
+  transition:all 0.3s ease;
+  white-space:nowrap;
+  border:1px solid transparent;
+  background:transparent;
+}
+
+.nav-tab:hover{
+  color:var(--text-primary);
+  background:rgba(255,255,255,0.05);
+}
+
+.nav-tab.active{
+  color:var(--gold-bright);
+  background:rgba(232,181,74,0.1);
+  border-color:rgba(232,181,74,0.2);
+}
+
+/* === Filter Bar === */
+.filter-bar{
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+  align-items:center;
+  padding:2rem 0 1rem;
+}
+
+.filter-group{
+  display:flex;
+  gap:0.5rem;
+  flex-wrap:wrap;
+}
+
+.filter-chip{
+  padding:0.45rem 1rem;
+  border-radius:8px;
+  font-size:0.8rem;
+  font-weight:500;
+  font-family:var(--font-body);
+  color:var(--text-secondary);
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:all 0.2s ease;
+}
+
+.filter-chip:hover{
+  color:var(--text-primary);
+  border-color:var(--border-bright);
+}
+
+.filter-chip.active{
+  color:var(--cyan);
+  background:rgba(92,225,255,0.08);
+  border-color:rgba(92,225,255,0.3);
+}
+
+.sort-select{
+  padding:0.5rem 1rem;
+  border-radius:8px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  font-size:0.85rem;
+  cursor:pointer;
+  outline:none;
+}
+
+.sort-select option{background:var(--bg-base);color:var(--text-primary)}
+
+/* === Section Headers === */
+.section-header{
+  padding:4rem 0 2rem;
+}
+
+.section-header h2{
+  font-family:var(--font-display);
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:700;
+  letter-spacing:-0.03em;
+  margin-bottom:0.5rem;
+}
+
+.section-header p{
+  color:var(--text-secondary);
+  font-size:1.05rem;
+}
+
+.section-tag{
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  color:var(--gold-bright);
+  text-transform:uppercase;
+  letter-spacing:0.15em;
+  margin-bottom:0.75rem;
+}
+
+/* === Provider Table === */
+.provider-table-wrap{
+  overflow-x:auto;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--bg-card);
+  backdrop-filter:blur(10px);
+  margin-bottom:2rem;
+}
+
+.provider-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.875rem;
+}
+
+.provider-table thead th{
+  padding:1rem 1.25rem;
+  text-align:left;
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--text-muted);
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+  cursor:pointer;
+  user-select:none;
+  transition:color 0.2s;
+}
+
+.provider-table thead th:hover{color:var(--gold-bright)}
+.provider-table thead th.sort-active{color:var(--gold-bright)}
+
+.provider-table thead th .sort-icon{
+  display:inline-block;
+  margin-left:0.25rem;
+  opacity:0.4;
+  font-size:0.85em;
+}
+
+.provider-table tbody tr{
+  border-bottom:1px solid rgba(120,120,180,0.08);
+  transition:background 0.2s ease;
+}
+
+.provider-table tbody tr:hover{
+  background:rgba(232,181,74,0.03);
+}
+
+.provider-table tbody tr:last-child{border-bottom:none}
+
+.provider-table td{
+  padding:1rem 1.25rem;
+  vertical-align:middle;
+}
+
+.provider-name{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+}
+
+.provider-logo{
+  width:36px;height:36px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:0.8rem;
+  color:#fff;
+  flex-shrink:0;
+}
+
+.provider-info{
+  display:flex;
+  flex-direction:column;
+  gap:0.1rem;
+}
+
+.provider-info .name{
+  font-weight:600;
+  font-size:0.875rem;
+}
+
+.provider-info .model{
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+
+.price-cell{
+  font-family:var(--font-mono);
+  font-size:0.85rem;
+  font-weight:500;
+}
+
+.price-cell .currency{color:var(--text-muted);font-size:0.75rem;margin-right:0.15rem}
+
+.price-free{
+  color:var(--green);
+  font-weight:700;
+}
+
+.price-free::before{
+  content:'';
+  display:inline-block;
+  width:8px;height:8px;
+  background:var(--green);
+  border-radius:50%;
+  margin-right:0.4rem;
+  box-shadow:0 0 6px var(--green);
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:0.25rem;
+  padding:0.2rem 0.6rem;
+  border-radius:6px;
+  font-size:0.7rem;
+  font-weight:600;
+  font-family:var(--font-body);
+}
+
+.badge-free{background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.2)}
+.badge-paid{background:rgba(232,181,74,0.1);color:var(--gold-bright);border:1px solid rgba(232,181,74,0.2)}
+.badge-intl{background:rgba(92,225,255,0.08);color:var(--cyan);border:1px solid rgba(92,225,255,0.2)}
+.badge-cn{background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.2)}
+
+.context-cell{
+  font-family:var(--font-mono);
+  font-size:0.8rem;
+  color:var(--text-secondary);
+}
+
+.value-score{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+
+.value-bar{
+  width:60px;
+  height:6px;
+  background:rgba(255,255,255,0.05);
+  border-radius:3px;
+  overflow:hidden;
+}
+
+.value-bar-fill{
+  height:100%;
+  border-radius:3px;
+  transition:width 0.6s ease;
+}
+
+.value-score-num{
+  font-family:var(--font-mono);
+  font-size:0.8rem;
+  font-weight:600;
+}
+
+/* === Ranking Cards === */
+.ranking-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(400px,1fr));
+  gap:1.5rem;
+  margin-bottom:3rem;
+}
+
+.ranking-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.5rem;
+  backdrop-filter:blur(10px);
+  transition:all 0.3s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.ranking-card:hover{
+  border-color:var(--border-bright);
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(0,0,0,0.3);
+}
+
+.ranking-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--gradient-gold);
+  opacity:0;
+  transition:opacity 0.3s;
+}
+
+.ranking-card:hover::before{opacity:1}
+
+.ranking-card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:1rem;
+}
+
+.ranking-rank{
+  font-family:var(--font-display);
+  font-size:2rem;
+  font-weight:800;
+  line-height:1;
+}
+
+.rank-1 .ranking-rank{color:var(--gold-bright)}
+.rank-2 .ranking-rank{color:#c0c0d0}
+.rank-3 .ranking-rank{color:#cd7f32}
+
+.ranking-card .provider-name{margin-bottom:0.5rem}
+
+.ranking-price{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.75rem;
+  margin:1rem 0;
+  padding:1rem;
+  background:rgba(0,0,0,0.2);
+  border-radius:10px;
+}
+
+.ranking-price-item{
+  display:flex;
+  flex-direction:column;
+}
+
+.ranking-price-label{
+  font-family:var(--font-mono);
+  font-size:0.65rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  margin-bottom:0.25rem;
+}
+
+.ranking-price-value{
+  font-family:var(--font-mono);
+  font-size:1rem;
+  font-weight:600;
+  color:var(--text-primary);
+}
+
+.ranking-features{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.4rem;
+  margin-top:0.75rem;
+}
+
+.feature-tag{
+  font-size:0.7rem;
+  padding:0.2rem 0.5rem;
+  border-radius:5px;
+  background:rgba(255,255,255,0.04);
+  color:var(--text-secondary);
+}
+
+/* === Guide Section === */
+.guide-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:1.5rem;
+  margin-bottom:3rem;
+}
+
+.guide-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:2rem;
+  backdrop-filter:blur(10px);
+  transition:all 0.3s ease;
+  position:relative;
+}
+
+.guide-card:hover{
+  border-color:var(--border-bright);
+  transform:translateY(-2px);
+}
+
+.guide-icon{
+  width:48px;height:48px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem;
+  margin-bottom:1.25rem;
+}
+
+.guide-card h3{
+  font-family:var(--font-display);
+  font-size:1.2rem;
+  font-weight:700;
+  margin-bottom:0.75rem;
+}
+
+.guide-card p{
+  color:var(--text-secondary);
+  font-size:0.9rem;
+  line-height:1.7;
+  margin-bottom:1rem;
+}
+
+.guide-card .recommendation{
+  padding:0.75rem 1rem;
+  background:rgba(232,181,74,0.06);
+  border:1px solid rgba(232,181,74,0.15);
+  border-radius:10px;
+  font-size:0.85rem;
+}
+
+.guide-card .recommendation strong{color:var(--gold-bright)}
+
+/* === Free Tier Section === */
+.free-tier-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(350px,1fr));
+  gap:1.5rem;
+  margin-bottom:3rem;
+}
+
+.free-tier-card{
+  background:var(--bg-card);
+  border:1px solid rgba(52,211,153,0.15);
+  border-radius:16px;
+  padding:1.75rem;
+  backdrop-filter:blur(10px);
+  transition:all 0.3s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.free-tier-card:hover{
+  border-color:rgba(52,211,153,0.3);
+  transform:translateY(-2px);
+}
+
+.free-tier-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:radial-gradient(circle at top right,rgba(52,211,153,0.05),transparent 60%);
+  pointer-events:none;
+}
+
+.free-tier-badge{
+  position:absolute;
+  top:1.25rem;right:1.25rem;
+  padding:0.3rem 0.7rem;
+  background:rgba(52,211,153,0.15);
+  border:1px solid rgba(52,211,153,0.3);
+  border-radius:8px;
+  font-size:0.7rem;
+  font-weight:700;
+  color:var(--green);
+  font-family:var(--font-mono);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+
+.free-tier-card h3{
+  font-family:var(--font-display);
+  font-size:1.15rem;
+  font-weight:700;
+  margin-bottom:0.5rem;
+}
+
+.free-tier-card .models{
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  color:var(--text-muted);
+  margin-bottom:1rem;
+}
+
+.free-tier-card .limits{
+  display:flex;
+  flex-direction:column;
+  gap:0.5rem;
+  margin-bottom:1rem;
+}
+
+.limit-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0.5rem 0.75rem;
+  background:rgba(0,0,0,0.2);
+  border-radius:8px;
+  font-size:0.8rem;
+}
+
+.limit-label{color:var(--text-secondary)}
+.limit-value{font-family:var(--font-mono);font-weight:600;color:var(--cyan)}
+
+.free-tier-card .note{
+  font-size:0.75rem;
+  color:var(--text-muted);
+  line-height:1.5;
+}
+
+/* === Footer === */
+.footer{
+  border-top:1px solid var(--border);
+  padding:3rem 0 2rem;
+  margin-top:4rem;
+}
+
+.footer-content{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:2rem;
+  margin-bottom:2rem;
+}
+
+.footer h4{
+  font-family:var(--font-display);
+  font-size:0.9rem;
+  font-weight:600;
+  margin-bottom:0.75rem;
+  color:var(--text-primary);
+}
+
+.footer p,.footer li{
+  font-size:0.8rem;
+  color:var(--text-muted);
+  line-height:1.6;
+}
+
+.footer ul{list-style:none}
+.footer li{margin-bottom:0.3rem}
+
+.footer-bottom{
+  padding-top:1.5rem;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:1rem;
+  font-size:0.75rem;
+  color:var(--text-muted);
+}
+
+/* === Animations === */
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes fadeInDown{
+  from{opacity:0;transform:translateY(-20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(1.2)}
+}
+
+.fade-in{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.6s ease,transform 0.6s ease;
+}
+
+.fade-in.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* === Responsive === */
+@media(max-width:768px){
+  .container{padding:0 1rem}
+  .hero{padding:4rem 0 2rem}
+  .hero-stats{gap:1.5rem}
+  .hero-stat-value{font-size:1.75rem}
+  .provider-table{font-size:0.8rem}
+  .provider-table td,.provider-table th{padding:0.75rem 0.8rem}
+  .ranking-grid{grid-template-columns:1fr}
+  .footer-content{grid-template-columns:1fr}
+}
+
+/* === Hidden by default === */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* === Disclaimer === */
+.disclaimer{
+  padding:1.5rem;
+  background:rgba(251,146,60,0.06);
+  border:1px solid rgba(251,146,60,0.15);
+  border-radius:12px;
+  margin-bottom:2rem;
+  font-size:0.8rem;
+  color:var(--text-secondary);
+  display:flex;
+  gap:0.75rem;
+  align-items:flex-start;
+}
+
+.disclaimer-icon{
+  font-size:1.1rem;
+  flex-shrink:0;
+}
+
+/* === Value Score Colors === */
+.score-excellent{color:var(--green)}
+.score-good{color:var(--cyan)}
+.score-fair{color:var(--gold-bright)}
+.score-moderate{color:var(--orange)}
+.score-premium{color:var(--red)}
+
+.bar-excellent{background:linear-gradient(90deg,#34d399,#5ce1ff)}
+.bar-good{background:linear-gradient(90deg,#5ce1ff,#3b8eff)}
+.bar-fair{background:linear-gradient(90deg,#e8b54a,#ffd76a)}
+.bar-moderate{background:linear-gradient(90deg,#fb923c,#f87171)}
+.bar-premium{background:linear-gradient(90deg,#f87171,#dc2626)}
+
+/* === CTA Button === */
+.cta-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:0.3rem;
+  padding:0.4rem 0.9rem;
+  border-radius:8px;
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:0.75rem;
+  color:#0a0a0f;
+  background:var(--gradient-gold);
+  text-decoration:none;
+  white-space:nowrap;
+  transition:all 0.2s ease;
+  border:none;
+  cursor:pointer;
+}
+
+.cta-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 15px rgba(232,181,74,0.3);
+}
+
+.cta-btn-free{
+  background:rgba(52,211,153,0.15);
+  color:var(--green);
+  border:1px solid rgba(52,211,153,0.3);
+}
+
+.cta-btn-free:hover{
+  background:rgba(52,211,153,0.25);
+  box-shadow:0 4px 15px rgba(52,211,153,0.2);
+}
+
+/* === Search Box === */
+.search-box{
+  position:relative;
+  flex:1;
+  min-width:200px;
+  max-width:300px;
+}
+
+.search-input{
+  width:100%;
+  padding:0.5rem 1rem 0.5rem 2.25rem;
+  border-radius:8px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  font-size:0.85rem;
+  outline:none;
+  transition:border-color 0.2s;
+}
+
+.search-input:focus{border-color:rgba(92,225,255,0.4)}
+.search-input::placeholder{color:var(--text-muted)}
+
+.search-icon{
+  position:absolute;
+  left:0.7rem;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--text-muted);
+  font-size:0.9rem;
+  pointer-events:none;
+}
+
+/* === Cost Calculator === */
+.calc-section{
+  padding:4rem 0;
+}
+
+.calc-wrap{
+  background:var(--bg-card);
+  border:1px solid var(--border-bright);
+  border-radius:20px;
+  padding:2.5rem;
+  backdrop-filter:blur(15px);
+  position:relative;
+  overflow:hidden;
+}
+
+.calc-wrap::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--gold));
+}
+
+.calc-header{
+  text-align:center;
+  margin-bottom:2rem;
+}
+
+.calc-header h3{
+  font-family:var(--font-display);
+  font-size:1.5rem;
+  font-weight:700;
+  margin-bottom:0.5rem;
+}
+
+.calc-header p{color:var(--text-secondary);font-size:0.9rem}
+
+.calc-inputs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1rem;
+  margin-bottom:2rem;
+}
+
+.calc-field{
+  display:flex;
+  flex-direction:column;
+  gap:0.4rem;
+}
+
+.calc-field label{
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+}
+
+.calc-field input,.calc-field select{
+  padding:0.7rem 1rem;
+  border-radius:10px;
+  background:rgba(0,0,0,0.2);
+  border:1px solid var(--border);
+  color:var(--text-primary);
+  font-family:var(--font-mono);
+  font-size:0.9rem;
+  outline:none;
+  transition:border-color 0.2s;
+}
+
+.calc-field input:focus,.calc-field select:focus{border-color:rgba(92,225,255,0.4)}
+.calc-field select option{background:var(--bg-base)}
+
+.calc-currency-toggle{
+  display:flex;
+  gap:0.5rem;
+  margin-bottom:1.5rem;
+  justify-content:center;
+}
+
+.calc-currency-toggle button{
+  padding:0.4rem 1rem;
+  border-radius:8px;
+  font-size:0.8rem;
+  font-weight:600;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-secondary);
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+.calc-currency-toggle button.active{
+  background:rgba(232,181,74,0.1);
+  color:var(--gold-bright);
+  border-color:rgba(232,181,74,0.3);
+}
+
+.calc-results{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1rem;
+}
+
+.calc-result-card{
+  padding:1.25rem;
+  background:rgba(0,0,0,0.2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  transition:all 0.3s ease;
+}
+
+.calc-result-card.cheapest{
+  border-color:rgba(52,211,153,0.4);
+  background:rgba(52,211,153,0.05);
+}
+
+.calc-result-card.cheapest::before{
+  content:'最省';
+  position:absolute;
+  top:0.5rem;right:0.5rem;
+  padding:0.15rem 0.5rem;
+  border-radius:5px;
+  font-size:0.65rem;
+  font-weight:700;
+  background:rgba(52,211,153,0.2);
+  color:var(--green);
+}
+
+.calc-result-card{position:relative}
+
+.calc-result-header{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  margin-bottom:0.75rem;
+}
+
+.calc-result-cost{
+  font-family:var(--font-mono);
+  font-size:1.5rem;
+  font-weight:700;
+  margin-bottom:0.25rem;
+}
+
+.calc-result-cost .currency{font-size:1rem;color:var(--text-muted)}
+
+.calc-result-detail{
+  font-size:0.75rem;
+  color:var(--text-muted);
+}
+
+.calc-action{
+  display:flex;
+  justify-content:center;
+  margin-top:1.5rem;
+}
+
+/* === Newsletter === */
+.newsletter-section{
+  padding:4rem 0;
+  position:relative;
+}
+
+.newsletter-wrap{
+  background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(232,181,74,0.05));
+  border:1px solid var(--border-bright);
+  border-radius:20px;
+  padding:3rem;
+  text-align:center;
+  backdrop-filter:blur(15px);
+  position:relative;
+  overflow:hidden;
+}
+
+.newsletter-wrap::before{
+  content:'';
+  position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(circle,rgba(232,181,74,0.05),transparent 40%);
+  animation:rotate 20s linear infinite;
+}
+
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+.newsletter-content{position:relative;z-index:1}
+
+.newsletter-content h3{
+  font-family:var(--font-display);
+  font-size:2rem;
+  font-weight:700;
+  margin-bottom:0.75rem;
+}
+
+.newsletter-content p{
+  color:var(--text-secondary);
+  font-size:1rem;
+  margin-bottom:1.5rem;
+  max-width:500px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.newsletter-form{
+  display:flex;
+  gap:0.75rem;
+  max-width:500px;
+  margin:0 auto;
+}
+
+.newsletter-input{
+  flex:1;
+  padding:0.75rem 1.25rem;
+  border-radius:10px;
+  background:rgba(0,0,0,0.3);
+  border:1px solid var(--border);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  font-size:0.9rem;
+  outline:none;
+  transition:border-color 0.2s;
+}
+
+.newsletter-input:focus{border-color:rgba(232,181,74,0.4)}
+.newsletter-input::placeholder{color:var(--text-muted)}
+
+.newsletter-submit{
+  padding:0.75rem 1.5rem;
+  border-radius:10px;
+  background:var(--gradient-gold);
+  color:#0a0a0f;
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:0.9rem;
+  border:none;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  white-space:nowrap;
+}
+
+.newsletter-submit:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(232,181,74,0.3);
+}
+
+.newsletter-success{
+  display:none;
+  padding:0.75rem 1.5rem;
+  background:rgba(52,211,153,0.1);
+  border:1px solid rgba(52,211,153,0.3);
+  border-radius:10px;
+  color:var(--green);
+  font-size:0.85rem;
+  max-width:500px;
+  margin:1rem auto 0;
+}
+
+.newsletter-success.show{display:block;animation:fadeInUp 0.5s ease}
+
+.newsletter-perks{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1.5rem;
+  justify-content:center;
+  margin-top:1.5rem;
+}
+
+.newsletter-perk{
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  font-size:0.8rem;
+  color:var(--text-secondary);
+}
+
+.newsletter-perk::before{
+  content:'';
+  width:6px;height:6px;
+  background:var(--gold-bright);
+  border-radius:50%;
+}
+
+/* === Social Share === */
+.share-section{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  padding:1.5rem 0;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  margin:2rem 0;
+}
+
+.share-label{
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+}
+
+.share-btn{
+  padding:0.4rem 0.9rem;
+  border-radius:8px;
+  font-size:0.8rem;
+  font-weight:500;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-secondary);
+  cursor:pointer;
+  transition:all 0.2s;
+  display:inline-flex;
+  align-items:center;
+  gap:0.35rem;
+}
+
+.share-btn:hover{color:var(--text-primary);border-color:var(--border-bright)}
+
+/* === Table CTA Column === */
+.cta-cell{white-space:nowrap}
+
+/* === Responsive additions === */
+@media(max-width:768px){
+  .calc-inputs{grid-template-columns:1fr}
+  .newsletter-form{flex-direction:column}
+  .newsletter-wrap{padding:2rem 1.5rem}
+  .search-box{max-width:100%}
+  .calc-wrap{padding:1.5rem}
+}
+
+/* === Peak/Off-Peak Pricing Matrix === */
+.peak-section{
+  margin:2rem 0;
+  border-radius:16px;
+  border:1px solid var(--border-bright);
+  background:var(--bg-card);
+  overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+
+.peak-header{
+  padding:1.5rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  border-bottom:1px solid var(--border);
+}
+
+.peak-header h3{
+  font-family:var(--font-display);
+  font-size:1.15rem;
+  font-weight:700;
+}
+
+.peak-header .peak-badge{
+  padding:0.25rem 0.6rem;
+  background:rgba(91,44,111,0.15);
+  border:1px solid rgba(91,44,111,0.3);
+  border-radius:6px;
+  font-size:0.7rem;
+  font-weight:600;
+  color:#c084fc;
+  font-family:var(--font-mono);
+}
+
+.peak-timebar{
+  display:flex;
+  height:36px;
+  border-radius:8px;
+  overflow:hidden;
+  margin:0 1.5rem 1.5rem;
+  font-size:0.7rem;
+  font-family:var(--font-mono);
+}
+
+.peak-timebar-segment{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-weight:600;
+  position:relative;
+}
+
+.peak-timebar-peak{
+  background:linear-gradient(90deg,#f87171,#fb923c);
+}
+
+.peak-timebar-offpeak{
+  background:linear-gradient(90deg,#3b82f6,#5ce1ff);
+  color:#0a0a0f;
+}
+
+.peak-legend{
+  display:flex;
+  gap:1.5rem;
+  margin:0 1.5rem 1.5rem;
+  font-size:0.75rem;
+}
+
+.peak-legend-item{
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  color:var(--text-secondary);
+}
+
+.peak-legend-dot{
+  width:10px;height:10px;
+  border-radius:3px;
+}
+
+.peak-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.8rem;
+}
+
+.peak-table th{
+  padding:0.75rem 1rem;
+  text-align:left;
+  font-family:var(--font-mono);
+  font-size:0.65rem;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--text-muted);
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+
+.peak-table td{
+  padding:0.75rem 1rem;
+  border-bottom:1px solid rgba(120,120,180,0.06);
+  font-family:var(--font-mono);
+  font-size:0.8rem;
+}
+
+.peak-table tr:last-child td{border-bottom:none}
+
+.peak-table .model-name{
+  font-weight:600;
+  font-family:var(--font-body);
+  font-size:0.85rem;
+}
+
+.peak-price-peak{color:var(--orange)}
+.peak-price-offpeak{color:var(--cyan)}
+.peak-price-cache{color:var(--green)}
+
+.peak-savings{
+  padding:1rem 1.5rem;
+  background:rgba(52,211,153,0.05);
+  border-top:1px solid rgba(52,211,153,0.15);
+  font-size:0.8rem;
+  color:var(--text-secondary);
+}
+
+.peak-savings strong{color:var(--green)}
+
+/* === Price History Timeline === */
+.timeline-section{
+  margin-bottom:3rem;
+}
+
+.timeline{
+  position:relative;
+  padding-left:2rem;
+}
+
+.timeline::before{
+  content:'';
+  position:absolute;
+  left:8px;
+  top:0;bottom:0;
+  width:2px;
+  background:linear-gradient(180deg,var(--purple),var(--cyan),var(--gold));
+  border-radius:1px;
+}
+
+.timeline-item{
+  position:relative;
+  padding:0 0 2rem 1.5rem;
+}
+
+.timeline-item::before{
+  content:'';
+  position:absolute;
+  left:-1.7rem;
+  top:0.25rem;
+  width:14px;height:14px;
+  border-radius:50%;
+  background:var(--bg-deep);
+  border:2px solid var(--gold-bright);
+  z-index:1;
+}
+
+.timeline-item.drop::before{border-color:var(--green)}
+.timeline-item.rise::before{border-color:var(--orange)}
+
+.timeline-date{
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+  color:var(--text-muted);
+  margin-bottom:0.25rem;
+}
+
+.timeline-content{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:1rem 1.25rem;
+  transition:border-color 0.2s;
+}
+
+.timeline-content:hover{border-color:var(--border-bright)}
+
+.timeline-provider{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  margin-bottom:0.5rem;
+}
+
+.timeline-provider-name{
+  font-weight:600;
+  font-size:0.85rem;
+}
+
+.timeline-change{
+  font-size:0.8rem;
+  color:var(--text-secondary);
+  line-height:1.5;
+}
+
+.timeline-change .price-drop{color:var(--green);font-weight:600}
+.timeline-change .price-rise{color:var(--orange);font-weight:600}
+.timeline-change .price-new{color:var(--cyan);font-weight:600}
+
+.timeline-tag{
+  display:inline-block;
+  padding:0.15rem 0.5rem;
+  border-radius:5px;
+  font-size:0.65rem;
+  font-weight:600;
+  margin-left:0.5rem;
+  vertical-align:middle;
+}
+
+.tag-drop{background:rgba(52,211,153,0.12);color:var(--green)}
+.tag-rise{background:rgba(251,146,60,0.12);color:var(--orange)}
+.tag-new{background:rgba(92,225,255,0.1);color:var(--cyan)}
+
+/* === Price Alert Subscription === */
+.alert-wrap{
+  background:var(--bg-card);
+  border:1px solid var(--border-bright);
+  border-radius:20px;
+  padding:2.5rem;
+  backdrop-filter:blur(15px);
+}
+
+.alert-header{
+  text-align:center;
+  margin-bottom:2rem;
+}
+
+.alert-header h3{
+  font-family:var(--font-display);
+  font-size:1.5rem;
+  font-weight:700;
+  margin-bottom:0.5rem;
+}
+
+.alert-header p{color:var(--text-secondary);font-size:0.9rem}
+
+.alert-providers{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:0.75rem;
+  margin-bottom:2rem;
+}
+
+.alert-provider-chip{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.6rem 0.9rem;
+  background:rgba(0,0,0,0.2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-size:0.8rem;
+  color:var(--text-secondary);
+}
+
+.alert-provider-chip:hover{border-color:var(--border-bright);color:var(--text-primary)}
+
+.alert-provider-chip.selected{
+  background:rgba(232,181,74,0.08);
+  border-color:rgba(232,181,74,0.3);
+  color:var(--gold-bright);
+}
+
+.alert-provider-chip input{
+  width:16px;height:16px;
+  accent-color:var(--gold-bright);
+  cursor:pointer;
+}
+
+.alert-types{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.75rem;
+  margin-bottom:2rem;
+  justify-content:center;
+}
+
+.alert-type-chip{
+  padding:0.5rem 1rem;
+  border-radius:8px;
+  background:rgba(0,0,0,0.2);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:all 0.2s;
+  font-size:0.8rem;
+  color:var(--text-secondary);
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+}
+
+.alert-type-chip.selected{
+  background:rgba(92,225,255,0.08);
+  border-color:rgba(92,225,255,0.3);
+  color:var(--cyan);
+}
+
+.alert-type-chip .alert-dot{
+  width:8px;height:8px;
+  border-radius:50%;
+}
+
+.alert-form{
+  display:flex;
+  gap:0.75rem;
+  max-width:500px;
+  margin:0 auto;
+}
+
+.alert-form input{
+  flex:1;
+  padding:0.75rem 1.25rem;
+  border-radius:10px;
+  background:rgba(0,0,0,0.3);
+  border:1px solid var(--border);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  font-size:0.9rem;
+  outline:none;
+  transition:border-color 0.2s;
+}
+
+.alert-form input:focus{border-color:rgba(232,181,74,0.4)}
+
+.alert-form button{
+  padding:0.75rem 1.5rem;
+  border-radius:10px;
+  background:var(--gradient-gold);
+  color:#0a0a0f;
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:0.9rem;
+  border:none;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  white-space:nowrap;
+}
+
+.alert-form button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(232,181,74,0.3);
+}
+
+.alert-success{
+  display:none;
+  text-align:center;
+  padding:1rem 1.5rem;
+  background:rgba(52,211,153,0.08);
+  border:1px solid rgba(52,211,153,0.3);
+  border-radius:10px;
+  color:var(--green);
+  font-size:0.85rem;
+  margin-top:1rem;
+  max-width:500px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.alert-success.show{display:block;animation:fadeInUp 0.5s ease}
+
+.alert-error{
+  display:none;
+  text-align:center;
+  padding:1rem 1.5rem;
+  background:rgba(248,113,113,0.08);
+  border:1px solid rgba(248,113,113,0.3);
+  border-radius:10px;
+  color:#f87171;
+  font-size:0.85rem;
+  margin-top:1rem;
+  max-width:500px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.alert-error.show{display:block;animation:fadeInUp 0.5s ease}
+
+.alert-form button.loading{
+  opacity:0.6;
+  pointer-events:none;
+  position:relative;
+}
+.alert-form button.loading::after{
+  content:'';
+  position:absolute;
+  top:50%;right:1rem;
+  width:14px;height:14px;
+  border:2px solid rgba(10,10,15,0.3);
+  border-top-color:#0a0a0f;
+  border-radius:50%;
+  animation:spin 0.6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.alert-service-status{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.5rem;
+  margin-bottom:0.75rem;
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+.alert-service-dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  background:#5a5a6a;
+  transition:background 0.3s;
+}
+.alert-service-dot.online{background:#34d399;box-shadow:0 0 8px rgba(52,211,153,0.4)}
+.alert-service-dot.offline{background:#f87171}
+
+@media(max-width:768px){
+  .alert-wrap{padding:1.5rem}
+  .alert-form{flex-direction:column}
+  .alert-providers{grid-template-columns:1fr 1fr}
+  .peak-table{font-size:0.7rem}
+  .peak-table th,.peak-table td{padding:0.5rem}
+}
+
+/* ===== PRICE CHARTS ===== */
+.chart-controls{
+  display:flex;
+  gap:0.5rem;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:2rem;
+}
+.chart-toggle{
+  padding:0.5rem 1.25rem;
+  border-radius:8px;
+  background:rgba(20,20,38,0.6);
+  border:1px solid var(--border);
+  color:var(--text-secondary);
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  cursor:pointer;
+  transition:all 0.25s;
+}
+.chart-toggle:hover{border-color:var(--border-bright);color:var(--text-primary)}
+.chart-toggle.active{background:var(--gradient-gold);color:#0a0a0f;border-color:transparent;font-weight:600}
+.chart-wrap{
+  background:rgba(20,20,38,0.4);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:2rem;
+  overflow-x:auto;
+}
+.bar-chart{display:flex;flex-direction:column;gap:0.5rem;min-width:600px}
+.bar-row{display:flex;align-items:center;gap:0.75rem;height:32px}
+.bar-label{
+  width:140px;flex-shrink:0;
+  font-size:0.75rem;font-weight:500;
+  color:var(--text-secondary);
+  text-align:right;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;
+}
+.bar-track{
+  flex:1;height:28px;
+  background:rgba(0,0,0,0.3);
+  border-radius:6px;
+  position:relative;overflow:hidden;
+}
+.bar-fill{
+  height:100%;
+  border-radius:6px;
+  display:flex;align-items:center;
+  justify-content:flex-end;
+  padding-right:0.75rem;
+  font-size:0.7rem;font-weight:700;
+  color:#0a0a0f;white-space:nowrap;
+  transition:width 0.8s cubic-bezier(0.16,1,0.3,1);
+  cursor:pointer;
+}
+.bar-fill:hover{filter:brightness(1.2)}
+.bar-fill.input-bar{background:linear-gradient(90deg,#3b8eff,#5ce1ff)}
+.bar-fill.output-bar{background:linear-gradient(90deg,#e8b54a,#ffd76a)}
+.bar-fill.total-bar{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.chart-legend{
+  display:flex;gap:1.5rem;justify-content:center;
+  margin-top:1.5rem;font-size:0.75rem;
+  color:var(--text-muted);
+}
+.legend-dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:0.4rem;vertical-align:middle}
+
+/* ===== CAPABILITY MATRIX ===== */
+.cap-matrix-wrap{
+  background:rgba(20,20,38,0.4);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.5rem;
+  overflow-x:auto;
+}
+.cap-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:800px;
+}
+.cap-table th{
+  padding:0.75rem 0.5rem;
+  font-family:var(--font-mono);
+  font-size:0.65rem;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  color:var(--text-muted);
+  border-bottom:1px solid var(--border);
+  text-align:center;
+}
+.cap-table th:first-child{text-align:left;width:180px}
+.cap-table td{
+  padding:0.6rem 0.5rem;
+  border-bottom:1px solid rgba(120,120,180,0.08);
+  text-align:center;
+  font-size:0.75rem;
+}
+.cap-table td:first-child{text-align:left;font-weight:500;color:var(--text-primary)}
+.cap-cell{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:6px;
+  font-size:0.65rem;font-weight:700;
+}
+.cap-excellent{background:rgba(52,211,153,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3)}
+.cap-good{background:rgba(232,181,74,0.12);color:#e8b54a;border:1px solid rgba(232,181,74,0.25)}
+.cap-limited{background:rgba(160,160,184,0.08);color:#606078;border:1px solid rgba(120,120,180,0.15)}
+.cap-none{background:rgba(248,113,113,0.08);color:#f87171;border:1px solid rgba(248,113,113,0.15)}
+.cap-legend{
+  display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;
+  margin-top:1.5rem;font-size:0.7rem;color:var(--text-muted);
+}
+
+/* ===== SPEED BENCHMARK ===== */
+.speed-section{display:flex;flex-direction:column;gap:0.75rem}
+.speed-row{
+  display:flex;align-items:center;gap:1rem;
+  padding:0.5rem 0;
+}
+.speed-rank{
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:0.8rem;flex-shrink:0;
+}
+.speed-bar-container{
+  flex:1;display:flex;flex-direction:column;gap:0.25rem;
+}
+.speed-bar-bg{
+  height:24px;background:rgba(0,0,0,0.3);
+  border-radius:6px;overflow:hidden;position:relative;
+}
+.speed-bar-fill{
+  height:100%;border-radius:6px;
+  display:flex;align-items:center;
+  padding-right:0.5rem;justify-content:flex-end;
+  font-size:0.7rem;font-weight:700;color:#0a0a0f;
+  transition:width 1s cubic-bezier(0.16,1,0.3,1);
+}
+.speed-fast{background:linear-gradient(90deg,#34d399,#6ee7b7)}
+.speed-medium{background:linear-gradient(90deg,#e8b54a,#fbbf24)}
+.speed-slow{background:linear-gradient(90deg,#fb923c,#f87171)}
+.speed-info{
+  display:flex;gap:0.75rem;align-items:baseline;
+}
+.speed-name{font-weight:600;font-size:0.8rem;color:var(--text-primary)}
+.speed-model{font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted)}
+.speed-tps{font-family:var(--font-mono);font-size:0.75rem;color:var(--gold);font-weight:700}
+.speed-cat-tag{
+  padding:0.15rem 0.5rem;border-radius:4px;
+  font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;
+}
+.speed-tag-fast{background:rgba(52,211,153,0.15);color:#34d399}
+.speed-tag-medium{background:rgba(232,181,74,0.15);color:#e8b54a}
+.speed-tag-slow{background:rgba(248,113,113,0.15);color:#f87171}
+
+/* ===== DASHBOARD STATS ===== */
+.dash-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+  margin-bottom:2rem;
+}
+.dash-card{
+  background:rgba(20,20,38,0.6);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:1.25rem;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s;
+}
+.dash-card:hover{
+  border-color:var(--border-bright);
+  transform:translateY(-2px);
+}
+.dash-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:3px;
+  background:var(--gradient-gold);
+  opacity:0.6;
+}
+.dash-label{
+  font-family:var(--font-mono);
+  font-size:0.6rem;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--text-muted);
+  margin-bottom:0.5rem;
+}
+.dash-value{
+  font-family:var(--font-display);
+  font-size:1.5rem;font-weight:800;
+  color:var(--text-primary);
+  line-height:1.1;
+}
+.dash-sub{
+  font-size:0.7rem;
+  color:var(--text-secondary);
+  margin-top:0.35rem;
+}
+.dash-icon{
+  position:absolute;top:1rem;right:1rem;
+  font-size:1.2rem;opacity:0.3;
+}
+
+/* ===== CALCULATOR ENHANCEMENT ===== */
+.calc-scenarios{
+  display:flex;gap:0.5rem;flex-wrap:wrap;
+  margin-bottom:1.5rem;justify-content:center;
+}
+.scenario-btn{
+  padding:0.5rem 1rem;border-radius:8px;
+  background:rgba(20,20,38,0.6);
+  border:1px solid var(--border);
+  color:var(--text-secondary);
+  font-size:0.75rem;cursor:pointer;
+  transition:all 0.25s;
+}
+.scenario-btn:hover{border-color:var(--border-bright);color:var(--text-primary)}
+.scenario-btn.active{background:var(--gradient-cyan);color:#0a0a0f;border-color:transparent;font-weight:600}
+.calc-slider-wrap{
+  display:flex;flex-direction:column;gap:0.5rem;
+  margin-bottom:0.5rem;
+}
+.calc-slider-label{
+  display:flex;justify-content:space-between;
+  font-size:0.75rem;color:var(--text-secondary);
+}
+.calc-slider-label span:last-child{
+  font-family:var(--font-mono);font-weight:700;color:var(--gold);
+}
+.calc-slider{
+  width:100%;height:6px;
+  -webkit-appearance:none;appearance:none;
+  background:rgba(0,0,0,0.4);border-radius:3px;outline:none;
+}
+.calc-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--gradient-gold);cursor:pointer;
+  box-shadow:0 2px 8px rgba(232,181,74,0.3);
+}
+.calc-slider::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;
+  background:#e8b54a;cursor:pointer;border:none;
+  box-shadow:0 2px 8px rgba(232,181,74,0.3);
+}
+.cost-pie-wrap{
+  display:flex;gap:2rem;align-items:center;
+  margin-top:2rem;flex-wrap:wrap;justify-content:center;
+}
+.cost-pie{width:180px;height:180px;flex-shrink:0}
+.cost-pie-legend{display:flex;flex-direction:column;gap:0.5rem}
+.pie-legend-item{display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--text-secondary)}
+.pie-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.pie-legend-val{font-family:var(--font-mono);font-weight:700;color:var(--text-primary);margin-left:auto;min-width:70px;text-align:right}
+
+/* ===== TOOLTIP ===== */
+.viz-tooltip{
+  position:fixed;
+  background:rgba(10,10,15,0.95);
+  border:1px solid var(--border-bright);
+  border-radius:8px;
+  padding:0.5rem 0.75rem;
+  font-size:0.75rem;color:var(--text-primary);
+  pointer-events:none;z-index:9999;
+  backdrop-filter:blur(10px);
+  opacity:0;transition:opacity 0.15s;
+  white-space:nowrap;
+}
+.viz-tooltip.show{opacity:1}
+
+@media(max-width:768px){
+  .dash-grid{grid-template-columns:1fr 1fr}
+  .bar-chart{min-width:100%}
+  .bar-label{width:80px;font-size:0.65rem}
+  .cap-table{min-width:600px}
+  .cost-pie-wrap{flex-direction:column}
+}
+
+/* ===== SCATTER PLOT ===== */
+.scatter-wrap{
+  background:rgba(20,20,38,0.4);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.scatter-svg{display:block;margin:0 auto;max-width:100%}
+.scatter-point{
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.scatter-point:hover{filter:brightness(1.4)}
+.scatter-frontier{
+  fill:none;
+  stroke:rgba(232,181,74,0.4);
+  stroke-width:1.5;
+  stroke-dasharray:4,3;
+}
+.scatter-axis-line{stroke:rgba(120,120,180,0.12);stroke-width:1}
+.scatter-axis-label{fill:#606078;font-family:var(--font-mono);font-size:10px}
+.scatter-grid-line{stroke:rgba(120,120,180,0.06);stroke-width:1;stroke-dasharray:2,4}
+.scatter-region-legend{
+  display:flex;gap:1.5rem;justify-content:center;
+  margin-top:1rem;font-size:0.75rem;color:var(--text-muted);
+}
+
+/* ===== TREND CHART ===== */
+.trend-wrap{
+  background:rgba(20,20,38,0.4);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.5rem;
+  overflow-x:auto;
+}
+.trend-svg{display:block;margin:0 auto;min-width:700px;max-width:100%}
+.trend-line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.trend-area{opacity:0.08}
+.trend-dot{cursor:pointer;transition:r 0.2s}
+.trend-dot:hover{r:6}
+.trend-axis-line{stroke:rgba(120,120,180,0.15);stroke-width:1}
+.trend-axis-label{fill:#606078;font-family:var(--font-mono);font-size:10px}
+.trend-grid-line{stroke:rgba(120,120,180,0.06);stroke-width:1;stroke-dasharray:2,4}
+.trend-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+  margin-bottom:1.5rem;
+}
+.trend-stat{
+  background:rgba(20,20,38,0.6);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:1rem;
+  text-align:center;
+}
+.trend-stat-val{font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:var(--gold)}
+.trend-stat-val.up{color:var(--red)}
+.trend-stat-val.down{color:var(--green)}
+.trend-stat-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:0.3rem}
+.trend-legend{display:flex;gap:1.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.trend-legend-item{display:flex;align-items:center;gap:0.4rem;font-size:0.75rem;color:var(--text-secondary)}
+.trend-legend-line{width:20px;height:3px;border-radius:2px}
+
+/* ===== TOKEN COUNTER ===== */
+.token-counter-wrap{
+  display:grid;
+  grid-template-columns:1fr 320px;
+  gap:1.5rem;
+}
+.token-input-area{display:flex;flex-direction:column;gap:0.75rem}
+.token-textarea{
+  width:100%;
+  min-height:200px;
+  background:rgba(10,10,15,0.6);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1rem 1.25rem;
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  font-size:0.9rem;
+  line-height:1.6;
+  resize:vertical;
+  outline:none;
+  transition:border-color 0.25s;
+}
+.token-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,181,74,0.1)}
+.token-textarea::placeholder{color:var(--text-muted)}
+.token-presets{display:flex;gap:0.5rem;flex-wrap:wrap}
+.token-preset-btn{
+  padding:0.4rem 0.8rem;
+  border-radius:6px;
+  background:rgba(20,20,38,0.6);
+  border:1px solid var(--border);
+  color:var(--text-secondary);
+  font-size:0.7rem;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.token-preset-btn:hover{border-color:var(--border-bright);color:var(--text-primary)}
+.token-stats-panel{
+  background:rgba(20,20,38,0.6);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:1.25rem;
+  display:flex;
+  flex-direction:column;
+  gap:0.75rem;
+}
+.token-stat-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0.5rem 0;
+  border-bottom:1px solid rgba(120,120,180,0.08);
+}
+.token-stat-row:last-child{border-bottom:none}
+.token-stat-label{font-size:0.75rem;color:var(--text-secondary)}
+.token-stat-value{font-family:var(--font-mono);font-weight:700;font-size:1rem;color:var(--text-primary)}
+.token-stat-value.highlight{color:var(--gold);font-size:1.25rem}
+.token-cost-preview{
+  margin-top:0.5rem;
+  display:flex;
+  flex-direction:column;
+  gap:0.4rem;
+}
+.token-cost-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0.4rem 0.6rem;
+  background:rgba(0,0,0,0.2);
+  border-radius:6px;
+  font-size:0.75rem;
+}
+.token-cost-name{color:var(--text-secondary)}
+.token-cost-val{font-family:var(--font-mono);font-weight:700;color:var(--gold)}
+.token-send-to-calc{
+  margin-top:0.75rem;
+  width:100%;
+  padding:0.6rem;
+  background:var(--gradient-gold);
+  color:#0a0a0f;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  font-size:0.8rem;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.token-send-to-calc:hover{opacity:0.9;transform:translateY(-1px)}
+
+@media(max-width:768px){
+  .token-counter-wrap{grid-template-columns:1fr}
+  .trend-stats{grid-template-columns:1fr 1fr}
+  .trend-svg{min-width:100%}
+}
+</style>
+
+<!-- Google Analytics (Replace G-XXXXXXXXXX with your tracking ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments)}
+  gtag('js',new Date());
+  gtag('config','G-XXXXXXXXXX');
+</script>
+
+<!-- Baidu Analytics (Replace with your tracking ID) -->
+<script>
+  // var _hmt=_hmt||[];
+  // (function(){var hm=document.createElement('script');hm.src='https://hm.baidu.com/hm.js?XXXXXXXX';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(hm,s)})();
+</script>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">2026年8月 · 数据实时更新</div>
+    <h1>
+      <span class="gradient-gold">全球 AI Token</span><br>
+      <span class="gradient-cyan">定价全景指南</span>
+    </h1>
+    <p class="hero-subtitle">
+      汇集国内外 20+ 主流大模型 API 厂商的 Token 定价数据，区分免费与付费，按性价比智能排序，为您提供专业的 Token 计划选择参考。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value" id="stat-providers">23</div>
+        <div class="hero-stat-label">覆盖厂商</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value" id="stat-models">80+</div>
+        <div class="hero-stat-label">模型数量</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value" id="stat-free">12</div>
+        <div class="hero-stat-label">免费方案</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">$0.05</div>
+        <div class="hero-stat-label">最低输入价/1M</div>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="#providers" class="btn btn-primary" onclick="document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab=all]').classList.add('active');document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.getElementById('providers').classList.add('active')">浏览全部定价 →</a>
+      <a href="#calculator" class="btn btn-secondary" onclick="document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab=calculator]').classList.add('active');document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.getElementById('calculator').classList.add('active')">成本计算器</a>
+      <a href="#guide" class="btn btn-secondary" onclick="document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab=guide]').classList.add('active');document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.getElementById('guide').classList.add('active')">查看选择指南</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NAV TABS ===== -->
+<div class="nav-section">
+  <div class="container">
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="all">全部厂商</button>
+      <button class="nav-tab" data-tab="international">国际厂商</button>
+      <button class="nav-tab" data-tab="domestic">国内厂商</button>
+      <button class="nav-tab" data-tab="free">免费额度</button>
+      <button class="nav-tab" data-tab="ranking">性价比排行</button>
+      <button class="nav-tab" data-tab="dashboard">数据看板</button>
+      <button class="nav-tab" data-tab="charts">价格图表</button>
+      <button class="nav-tab" data-tab="capabilities">能力矩阵</button>
+      <button class="nav-tab" data-tab="speed">速度基准</button>
+      <button class="nav-tab" data-tab="scatter">性价比散点图</button>
+      <button class="nav-tab" data-tab="trend">价格趋势</button>
+      <button class="nav-tab" data-tab="counter">Token计数器</button>
+      <button class="nav-tab" data-tab="calculator">成本计算器</button>
+      <button class="nav-tab" data-tab="tracking">价格追踪</button>
+      <button class="nav-tab" data-tab="guide">选择指南</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ALL PROVIDERS ===== -->
+<section id="providers" class="tab-content active">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">TOKEN PRICING DATABASE</div>
+      <h2>全部 Token 定价一览</h2>
+      <p>点击表头排序，使用筛选器快速定位</p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <button class="filter-chip active" data-filter="all">全部</button>
+        <button class="filter-chip" data-filter="free">免费</button>
+        <button class="filter-chip" data-filter="paid">付费</button>
+        <button class="filter-chip" data-filter="international">国际</button>
+        <button class="filter-chip" data-filter="domestic">国内</button>
+      </div>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input" placeholder="搜索厂商或模型...">
+      </div>
+      <div style="margin-left:auto">
+        <select class="sort-select" id="sort-select">
+          <option value="default">默认排序</option>
+          <option value="input-asc">输入价 ↑</option>
+          <option value="input-desc">输入价 ↓</option>
+          <option value="output-asc">输出价 ↑</option>
+          <option value="output-desc">输出价 ↓</option>
+          <option value="value-desc">性价比 ↓</option>
+          <option value="context-desc">上下文长度 ↓</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <span class="disclaimer-icon">⚠</span>
+      <div>
+        <strong>定价说明：</strong>价格均为每百万 Token (1M tokens) 单价。国内厂商以人民币 (¥/RMB) 计价，国际厂商以美元 ($/USD) 计价。部分模型采用峰谷定价、缓存定价或分段计费，表中列出的是标准非缓存价格。数据采集于 2026 年 8 月，实际价格以厂商官网为准。
+      </div>
+    </div>
+
+    <div class="provider-table-wrap">
+      <table class="provider-table" id="provider-table">
+        <thead>
+          <tr>
+            <th data-sort="provider">厂商 / 模型</th>
+            <th data-sort="region">地区</th>
+            <th data-sort="type">类型</th>
+            <th data-sort="input">输入价 <span class="sort-icon"></span></th>
+            <th data-sort="output">输出价 <span class="sort-icon"></span></th>
+            <th data-sort="context">上下文 <span class="sort-icon"></span></th>
+            <th data-sort="value">性价比 <span class="sort-icon"></span></th>
+            <th>特色</th>
+            <th>注册/试用</th>
+          </tr>
+        </thead>
+        <tbody id="provider-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- DeepSeek Peak/Off-Peak Detail -->
+    <div class="peak-section">
+      <div class="peak-header">
+        <div class="provider-logo" style="background:#4d6bfe;width:36px;height:36px">DS</div>
+        <h3>DeepSeek 峰谷定价详情</h3>
+        <span class="peak-badge">峰谷计费</span>
+      </div>
+
+      <div class="peak-timebar">
+        <div class="peak-timebar-segment peak-timebar-offpeak" style="flex:9" title="00:00-09:00 非高峰">非高峰 00-09</div>
+        <div class="peak-timebar-segment peak-timebar-peak" style="flex:3" title="09:00-12:00 高峰">高峰 09-12</div>
+        <div class="peak-timebar-segment peak-timebar-offpeak" style="flex:2" title="12:00-14:00 非高峰">午间</div>
+        <div class="peak-timebar-segment peak-timebar-peak" style="flex:4" title="14:00-18:00 高峰">高峰 14-18</div>
+        <div class="peak-timebar-segment peak-timebar-offpeak" style="flex:6" title="18:00-24:00 非高峰">非高峰 18-24</div>
+      </div>
+
+      <div class="peak-legend">
+        <div class="peak-legend-item"><span class="peak-legend-dot" style="background:linear-gradient(90deg,#f87171,#fb923c)"></span>高峰时段（周一至周五 9:00-12:00 / 14:00-18:00 北京时间）</div>
+        <div class="peak-legend-item"><span class="peak-legend-dot" style="background:linear-gradient(90deg,#3b82f6,#5ce1ff)"></span>非高峰时段（其余时间 + 全天周末）</div>
+      </div>
+
+      <table class="peak-table">
+        <thead>
+          <tr>
+            <th>模型</th>
+            <th>计费场景</th>
+            <th>输入价 (¥/1M)</th>
+            <th>输出价 (¥/1M)</th>
+            <th>对比高峰节省</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="model-name" rowspan="3">V4 Flash<br><span style="font-size:0.7rem;font-weight:400;color:var(--text-muted)">128K 上下文</span></td>
+            <td class="peak-price-cache">缓存命中</td>
+            <td class="peak-price-cache">¥0.05</td>
+            <td class="peak-price-cache">¥4.50</td>
+            <td class="peak-price-cache">—</td>
+          </tr>
+          <tr>
+            <td class="peak-price-offpeak">非高峰 · 缓存未命中</td>
+            <td class="peak-price-offpeak">¥1.50</td>
+            <td class="peak-price-offpeak">¥4.50</td>
+            <td class="peak-price-offpeak">节省 50%</td>
+          </tr>
+          <tr>
+            <td class="peak-price-peak">高峰 · 缓存未命中</td>
+            <td class="peak-price-peak">¥3.00</td>
+            <td class="peak-price-peak">¥9.00</td>
+            <td class="peak-price-peak">基准价</td>
+          </tr>
+          <tr>
+            <td class="model-name" rowspan="3">V4 Pro<br><span style="font-size:0.7rem;font-weight:400;color:var(--text-muted)">1M 上下文</span></td>
+            <td class="peak-price-cache">缓存命中</td>
+            <td class="peak-price-cache">¥0.15</td>
+            <td class="peak-price-cache">¥13.50</td>
+            <td class="peak-price-cache">—</td>
+          </tr>
+          <tr>
+            <td class="peak-price-offpeak">非高峰 · 缓存未命中</td>
+            <td class="peak-price-offpeak">¥4.50</td>
+            <td class="peak-price-offpeak">¥13.50</td>
+            <td class="peak-price-offpeak">节省 50%</td>
+          </tr>
+          <tr>
+            <td class="peak-price-peak">高峰 · 缓存未命中</td>
+            <td class="peak-price-peak">¥9.00</td>
+            <td class="peak-price-peak">¥27.00</td>
+            <td class="peak-price-peak">基准价</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="peak-savings">
+        <strong>省钱提示：</strong>在非高峰时段调用可节省 <strong>50%</strong> 费用；启用前缀缓存后，缓存命中部分输入价仅为高峰的 <strong>1.7%</strong>（V4 Flash ¥0.05 vs ¥3.00）。建议将批量任务安排在 18:00-次日 9:00 或午间 12:00-14:00 执行。周末全天为非高峰价格。
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FREE TIER ===== -->
+<section id="free" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">FREE TIER PROVIDERS</div>
+      <h2>免费 Token 方案</h2>
+      <p>无需付费即可使用的 API 免费额度，适合开发测试和原型验证</p>
+    </div>
+    <div class="free-tier-grid" id="free-tier-grid"></div>
+  </div>
+</section>
+
+<!-- ===== RANKING ===== -->
+<section id="ranking" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">COST-EFFECTIVENESS RANKING</div>
+      <h2>性价比排行榜</h2>
+      <p>综合考虑价格、模型质量、上下文窗口和免费额度的综合评分</p>
+    </div>
+    <div class="ranking-grid" id="ranking-grid"></div>
+  </div>
+</section>
+
+<!-- ===== DASHBOARD STATS ===== -->
+<section id="dashboard" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">REAL-TIME MARKET DASHBOARD</div>
+      <h2>实时数据看板</h2>
+      <p>全球 AI Token 定价市场一览，关键指标实时更新</p>
+    </div>
+    <div class="dash-grid" id="dash-grid"></div>
+  </div>
+</section>
+
+<!-- ===== PRICE CHARTS ===== -->
+<section id="charts" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">PRICE COMPARISON CHARTS</div>
+      <h2>价格对比图表</h2>
+      <p>可视化对比所有厂商的输入/输出价格，一目了然</p>
+    </div>
+    <div class="chart-controls">
+      <button class="chart-toggle active" data-chart="input">输入价格</button>
+      <button class="chart-toggle" data-chart="output">输出价格</button>
+      <button class="chart-toggle" data-chart="total">输入+输出合计</button>
+      <button class="chart-toggle active" data-chart-region="all">全部</button>
+      <button class="chart-toggle" data-chart-region="domestic">仅国内</button>
+      <button class="chart-toggle" data-chart-region="international">仅国际</button>
+    </div>
+    <div class="chart-wrap">
+      <div class="bar-chart" id="bar-chart"></div>
+    </div>
+    <div class="chart-legend">
+      <span><span class="legend-dot" style="background:linear-gradient(90deg,#3b8eff,#5ce1ff)"></span>输入价格</span>
+      <span><span class="legend-dot" style="background:linear-gradient(90deg,#e8b54a,#ffd76a)"></span>输出价格</span>
+      <span><span class="legend-dot" style="background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></span>输入+输出</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CAPABILITY MATRIX ===== -->
+<section id="capabilities" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">MODEL CAPABILITY MATRIX</div>
+      <h2>模型能力矩阵</h2>
+      <p>各模型在代码生成、推理、视觉理解、函数调用等维度的能力对比</p>
+    </div>
+    <div class="cap-matrix-wrap">
+      <table class="cap-table" id="cap-table"></table>
+    </div>
+    <div class="cap-legend">
+      <span><span class="cap-cell cap-excellent">A+</span> 优秀</span>
+      <span><span class="cap-cell cap-good">B</span> 良好</span>
+      <span><span class="cap-cell cap-limited">C</span> 有限</span>
+      <span><span class="cap-cell cap-none">-</span> 不支持</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPEED BENCHMARK ===== -->
+<section id="speed" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">INFERENCE SPEED BENCHMARK</div>
+      <h2>推理速度基准</h2>
+      <p>各厂商模型的实际推理吞吐量（TPS, 每秒生成 Token 数）对比</p>
+    </div>
+    <div class="chart-wrap">
+      <div class="speed-section" id="speed-section"></div>
+    </div>
+    <div class="chart-legend">
+      <span><span class="legend-dot" style="background:linear-gradient(90deg,#34d399,#6ee7b7)"></span>超快 (≥500 TPS)</span>
+      <span><span class="legend-dot" style="background:linear-gradient(90deg,#e8b54a,#fbbf24)"></span>中速 (100-500 TPS)</span>
+      <span><span class="legend-dot" style="background:linear-gradient(90deg,#fb923c,#f87171)"></span>较慢 (<100 TPS)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCATTER PLOT ===== -->
+<section id="scatter" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">PRICE VS PERFORMANCE</div>
+      <h2>性价比散点图</h2>
+      <p>横轴价格、纵轴性能评分，效率前沿线标记最优性价比模型</p>
+    </div>
+    <div class="chart-controls">
+      <button class="chart-toggle active" data-scatter="input">输入价格</button>
+      <button class="chart-toggle" data-scatter="output">输出价格</button>
+      <button class="chart-toggle" data-scatter="total">输入+输出</button>
+    </div>
+    <div class="scatter-wrap">
+      <svg class="scatter-svg" id="scatter-svg" viewBox="0 0 800 500"></svg>
+    </div>
+    <div class="scatter-region-legend">
+      <span><span class="legend-dot" style="background:#5ce1ff"></span>国际厂商</span>
+      <span><span class="legend-dot" style="background:#e8b54a"></span>国内厂商</span>
+      <span><span class="legend-dot" style="background:rgba(232,181,74,0.4);border:1px dashed #e8b54a"></span>效率前沿</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TREND CHART ===== -->
+<section id="trend" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">PRICE TREND HISTORY</div>
+      <h2>价格趋势历史</h2>
+      <p>大模型 API 价格走势追踪，可视化价格指数变化趋势</p>
+    </div>
+    <div class="trend-stats" id="trend-stats"></div>
+    <div class="trend-wrap">
+      <svg class="trend-svg" id="trend-svg" viewBox="0 0 800 400"></svg>
+    </div>
+    <div class="trend-legend" id="trend-legend"></div>
+  </div>
+</section>
+
+<!-- ===== TOKEN COUNTER ===== -->
+<section id="counter" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">REAL-TIME TOKEN COUNTER</div>
+      <h2>Token 计数器</h2>
+      <p>粘贴文本实时计算 Token 数量，预估各厂商 API 调用成本</p>
+    </div>
+    <div class="token-counter-wrap">
+      <div class="token-input-area">
+        <textarea class="token-textarea" id="token-textarea" placeholder="在此粘贴您的文本、Prompt 或文档内容...&#10;&#10;支持中英文混合，实时计算 Token 数量并预估各厂商 API 调用成本。&#10;可使用下方预设模板快速体验。"></textarea>
+        <div class="token-presets">
+          <button class="token-preset-btn" data-preset="short">短提示词</button>
+          <button class="token-preset-btn" data-preset="chat">对话消息</button>
+          <button class="token-preset-btn" data-preset="code">代码片段</button>
+          <button class="token-preset-btn" data-preset="article">长文章</button>
+          <button class="token-preset-btn" data-preset="rag">RAG文档</button>
+          <button class="token-preset-btn" data-preset="clear">清空</button>
+        </div>
+      </div>
+      <div class="token-stats-panel">
+        <div class="token-stat-row">
+          <span class="token-stat-label">字符数</span>
+          <span class="token-stat-value" id="tc-chars">0</span>
+        </div>
+        <div class="token-stat-row">
+          <span class="token-stat-label">单词数</span>
+          <span class="token-stat-value" id="tc-words">0</span>
+        </div>
+        <div class="token-stat-row">
+          <span class="token-stat-label">中文汉字</span>
+          <span class="token-stat-value" id="tc-cjk">0</span>
+        </div>
+        <div class="token-stat-row">
+          <span class="token-stat-label">预估 Token 数</span>
+          <span class="token-stat-value highlight" id="tc-tokens">0</span>
+        </div>
+        <div class="token-stat-row">
+          <span class="token-stat-label">约等于</span>
+          <span class="token-stat-value" id="tc-tokens-desc">0 万 Token</span>
+        </div>
+        <div class="token-cost-preview" id="tc-cost-preview"></div>
+        <button class="token-send-to-calc" id="tc-send-calc">发送到成本计算器 →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GUIDE ===== -->
+<section id="guide" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">EXPERT SELECTION GUIDE</div>
+      <h2>Token 计划选择指南</h2>
+      <p>根据使用场景、预算和技术需求，为您提供专业的 Token 方案选择建议</p>
+    </div>
+    <div class="guide-grid" id="guide-grid"></div>
+  </div>
+</section>
+
+<!-- ===== PRICE TRACKING ===== -->
+<section id="tracking" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">PRICE CHANGE TRACKER</div>
+      <h2>价格变动追踪</h2>
+      <p>追踪大模型 API 价格变动历史，订阅您关注的厂商获取实时降价/涨价通知</p>
+    </div>
+
+    <!-- Price History Timeline -->
+    <div class="timeline-section">
+      <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:600;margin-bottom:1.5rem">近期价格变动</h3>
+      <div class="timeline" id="price-timeline"></div>
+    </div>
+
+    <!-- Price Alert Subscription -->
+    <div class="alert-wrap">
+      <div class="alert-header">
+        <h3>订阅价格预警</h3>
+        <p>选择您关注的厂商和预警类型，价格变动时第一时间收到邮件通知</p>
+      </div>
+
+      <div style="margin-bottom:0.75rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em">第一步：选择关注的厂商</div>
+      <div class="alert-providers" id="alert-providers"></div>
+
+      <div style="margin-bottom:0.75rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;text-align:center">第二步：选择预警类型</div>
+      <div class="alert-types" id="alert-types"></div>
+
+      <div style="margin-bottom:0.75rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;text-align:center">第三步：输入邮箱</div>
+      <form class="alert-form" id="alert-form">
+        <input type="email" id="alert-email" placeholder="您的邮箱地址" required>
+        <button type="submit" id="alert-submit-btn">开启预警</button>
+      </form>
+      <div class="alert-service-status">
+        <span class="alert-service-dot" id="alert-service-dot"></span>
+        <span id="alert-service-text">检测服务状态...</span>
+      </div>
+      <div class="alert-success" id="alert-success">价格预警订阅成功！您关注的厂商价格变动时将第一时间收到邮件通知。</div>
+      <div class="alert-error" id="alert-error"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CALCULATOR ===== -->
+<section id="calculator" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">COST CALCULATOR</div>
+      <h2>成本计算器</h2>
+      <p>输入您的月均 Token 用量，自动推荐最具性价比的 API 方案</p>
+    </div>
+    <div class="calc-wrap">
+      <div class="calc-currency-toggle">
+        <button class="active" data-currency="RMB">人民币 ¥</button>
+        <button data-currency="USD">美元 $</button>
+      </div>
+      <div class="calc-scenarios">
+        <button class="scenario-btn" data-scene='{"in":1,"out":0.5}'>轻量测试</button>
+        <button class="scenario-btn active" data-scene='{"in":10,"out":5}'>个人项目</button>
+        <button class="scenario-btn" data-scene='{"in":50,"out":20}'>中型应用</button>
+        <button class="scenario-btn" data-scene='{"in":200,"out":100}'>企业级</button>
+        <button class="scenario-btn" data-scene='{"in":1000,"out":500}'>大规模</button>
+      </div>
+      <div class="calc-inputs">
+        <div class="calc-field">
+          <label>月均输入 Token（百万）</label>
+          <input type="number" id="calc-input-tokens" value="10" min="0" step="0.5">
+          <div class="calc-slider-wrap" style="margin-top:0.5rem">
+            <input type="range" class="calc-slider" id="calc-input-slider" min="0" max="1000" value="10" step="1">
+          </div>
+        </div>
+        <div class="calc-field">
+          <label>月均输出 Token（百万）</label>
+          <input type="number" id="calc-output-tokens" value="5" min="0" step="0.5">
+          <div class="calc-slider-wrap" style="margin-top:0.5rem">
+            <input type="range" class="calc-slider" id="calc-output-slider" min="0" max="500" value="5" step="1">
+          </div>
+        </div>
+        <div class="calc-field">
+          <label>偏好类型</label>
+          <select id="calc-preference">
+            <option value="all">不限（全部模型）</option>
+            <option value="free">优先免费方案</option>
+            <option value="domestic">仅国内厂商</option>
+            <option value="international">仅国际厂商</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-action">
+        <button class="btn btn-primary" id="calc-run">计算并推荐 →</button>
+      </div>
+      <div class="calc-results" id="calc-results" style="margin-top:2rem"></div>
+      <div class="cost-pie-wrap" id="cost-pie-wrap" style="display:none">
+        <svg class="cost-pie" id="cost-pie" viewBox="0 0 200 200"></svg>
+        <div class="cost-pie-legend" id="cost-pie-legend"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-wrap">
+      <div class="newsletter-content">
+        <h3>订阅 Token 价格变动通知</h3>
+        <p>每周获取最新大模型 API 价格变动、免费额度更新和性价比排行变化，不错过任何降价信息。</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" class="newsletter-input" id="newsletter-email" placeholder="输入您的邮箱地址" required>
+          <button type="submit" class="newsletter-submit">立即订阅</button>
+        </form>
+        <div class="newsletter-success" id="newsletter-success">订阅成功！我们将每周向您发送 Token 价格周报。</div>
+        <div class="newsletter-perks">
+          <div class="newsletter-perk">每周价格变动报告</div>
+          <div class="newsletter-perk">免费额度更新提醒</div>
+          <div class="newsletter-perk">新模型上线通知</div>
+          <div class="newsletter-perk">独家深度评测</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOCIAL SHARE ===== -->
+<section class="container">
+  <div class="share-section">
+    <span class="share-label">分享：</span>
+    <button class="share-btn" onclick="shareToTwitter()">Twitter</button>
+    <button class="share-btn" onclick="shareToWechat()">微信</button>
+    <button class="share-btn" onclick="shareToWeibo()">微博</button>
+    <button class="share-btn" onclick="copyLink()">复制链接</button>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">  <div class="container">
+    <div class="footer-content">
+      <div>
+        <h4>关于 TokenPlan 指南</h4>
+        <p>本网站致力于为开发者、研究者和企业提供全面的 AI 大模型 Token 定价信息。所有数据均来源于各厂商官方定价页面及第三方可靠来源，力求准确、全面、及时。</p>
+        <p style="margin-top:0.75rem">数据更新时间：2026年8月 · 汇率参考：1 USD ≈ 7.25 RMB</p>
+        <p style="margin-top:0.5rem;font-size:0.7rem;color:var(--text-muted)">声明：本站部分注册链接包含推广返佣，不影响排序和推荐结果。如有定价变动请联系我们更新。</p>
+      </div>
+      <div>
+        <h4>数据来源</h4>
+        <ul>
+          <li>各厂商官方定价页</li>
+          <li>CostBench / TokenMix</li>
+          <li>OpenRouter / Cloudflare</li>
+          <li>阿里云 / 火山引擎 / 腾讯云</li>
+          <li>第三方价格聚合平台</li>
+        </ul>
+        <h4 style="margin-top:1rem">网站功能</h4>
+        <ul>
+          <li>Token 定价数据库</li>
+          <li>成本计算器</li>
+          <li>性价比排行</li>
+          <li>免费方案汇总</li>
+          <li>价格周报订阅</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 TokenPlan · 仅供参考，实际价格以厂商官网为准</span>
+      <span>Made with precision · 数据驱动决策</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== DATA =====
+const providers = [
+  // --- OpenAI ---
+  {name:'OpenAI',model:'GPT-5.5',region:'international',type:'paid',inputUSD:5,outputUSD:30,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['顶级推理','多模态','代码生成'],logo:'OA',color:'#10a37f',score:35,note:'OpenAI 最新旗舰模型'},
+  {name:'OpenAI',model:'GPT-5.4',region:'international',type:'paid',inputUSD:2.5,outputUSD:15,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['高性价比','多模态'],logo:'OA',color:'#10a37f',score:50,note:'性价比旗舰'},
+  {name:'OpenAI',model:'GPT-5.4-mini',region:'international',type:'paid',inputUSD:0.75,outputUSD:4.5,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['轻量','快速'],logo:'OA',color:'#10a37f',score:65,note:'小型应用首选'},
+  {name:'OpenAI',model:'GPT-5.4-nano',region:'international',type:'paid',inputUSD:0.20,outputUSD:1.25,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['超低成本'],logo:'OA',color:'#10a37f',score:80,note:'OpenAI 最低价'},
+  {name:'OpenAI',model:'GPT-4o (legacy)',region:'international',type:'paid',inputUSD:2.5,outputUSD:10,inputRMB:null,outputRMB:null,context:'128K',freeTier:false,features:['经典模型'],logo:'OA',color:'#10a37f',score:55,note:'已被 GPT-5.4 系列替代'},
+  {name:'OpenAI',model:'GPT-4o-mini (legacy)',region:'international',type:'paid',inputUSD:0.15,outputUSD:0.75,inputRMB:null,outputRMB:null,context:'128K',freeTier:false,features:['经典轻量'],logo:'OA',color:'#10a37f',score:75,note:'已被 GPT-5.4-mini 替代'},
+
+  // --- Anthropic ---
+  {name:'Anthropic',model:'Claude Opus 4.6',region:'international',type:'paid',inputUSD:5,outputUSD:25,inputRMB:null,outputRMB:null,context:'1M',freeTier:false,features:['超长上下文','顶级推理','代码'],logo:'AN',color:'#d97757',score:45,note:'1M 上下文旗舰'},
+  {name:'Anthropic',model:'Claude Sonnet 4.6',region:'international',type:'paid',inputUSD:3,outputUSD:15,inputRMB:null,outputRMB:null,context:'1M',freeTier:false,features:['超长上下文','高性价比'],logo:'AN',color:'#d97757',score:55,note:'1M 上下文中端'},
+  {name:'Anthropic',model:'Claude Haiku 4.5',region:'international',type:'paid',inputUSD:1,outputUSD:5,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['快速','高效'],logo:'AN',color:'#d97757',score:65,note:'中端轻量'},
+  {name:'Anthropic',model:'Claude Haiku 3',region:'international',type:'paid',inputUSD:0.25,outputUSD:1.25,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['低成本'],logo:'AN',color:'#d97757',score:78,note:'Anthropic 最低价'},
+
+  // --- Google Gemini ---
+  {name:'Google',model:'Gemini 3.7 Flash',region:'international',type:'paid',inputUSD:0.75,outputUSD:3.75,inputRMB:null,outputRMB:null,context:'1M',freeTier:true,features:['免费层','1M上下文','多模态'],logo:'GG',color:'#4285f4',score:82,note:'限时优惠价'},
+  {name:'Google',model:'Gemini 3.5 Flash',region:'international',type:'paid',inputUSD:1.5,outputUSD:9,inputRMB:null,outputRMB:null,context:'1M',freeTier:true,features:['免费层','1M上下文'],logo:'GG',color:'#4285f4',score:72,note:'稳定版 Flash'},
+  {name:'Google',model:'Gemini 3.5 Flash-Lite',region:'international',type:'paid',inputUSD:0.30,outputUSD:2.50,inputRMB:null,outputRMB:null,context:'1M',freeTier:true,features:['免费层','超低成本','1M上下文'],logo:'GG',color:'#4285f4',score:88,note:'免费层最推荐'},
+
+  // --- Mistral ---
+  {name:'Mistral',model:'Mistral Large 3',region:'international',type:'paid',inputUSD:0.50,outputUSD:1.50,inputRMB:null,outputRMB:null,context:'256K',freeTier:false,features:['开源权重','MoE架构'],logo:'MI',color:'#ff7000',score:75,note:'欧洲旗舰'},
+  {name:'Mistral',model:'Mistral Small 4',region:'international',type:'paid',inputUSD:0.15,outputUSD:0.60,inputRMB:null,outputRMB:null,context:'256K',freeTier:false,features:['开源','Apache 2.0'],logo:'MI',color:'#ff7000',score:85,note:'高性价比开源'},
+  {name:'Mistral',model:'Ministral 8B',region:'international',type:'paid',inputUSD:0.10,outputUSD:0.10,inputRMB:null,outputRMB:null,context:'128K',freeTier:false,features:['超低输入输出同价'],logo:'MI',color:'#ff7000',score:90,note:'输入输出同价最低'},
+  {name:'Mistral',model:'Codestral',region:'international',type:'paid',inputUSD:0.30,outputUSD:0.90,inputRMB:null,outputRMB:null,context:'256K',freeTier:false,features:['代码专用'],logo:'MI',color:'#ff7000',score:80,note:'代码生成专用'},
+
+  // --- Cohere ---
+  {name:'Cohere',model:'Command R+',region:'international',type:'paid',inputUSD:2.5,outputUSD:10,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['RAG专用','试用Key'],logo:'CO',color:'#39594d',score:55,note:'RAG 场景首选'},
+  {name:'Cohere',model:'Command R',region:'international',type:'paid',inputUSD:0.50,outputUSD:1.50,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['RAG优化','试用Key'],logo:'CO',color:'#39594d',score:72,note:'中端 RAG'},
+  {name:'Cohere',model:'Command-light',region:'international',type:'paid',inputUSD:0.30,outputUSD:0.60,inputRMB:null,outputRMB:null,context:'128K',freeTier:false,features:['轻量'],logo:'CO',color:'#39594d',score:75,note:'Cohere 最低价'},
+
+  // --- xAI Grok ---
+  {name:'xAI',model:'Grok 4.6',region:'international',type:'paid',inputUSD:2,outputUSD:6,inputRMB:null,outputRMB:null,context:'500K',freeTier:false,features:['超长上下文','实时数据'],logo:'XA',color:'#000000',score:60,note:'500K 上下文'},
+  {name:'xAI',model:'Grok 4.1 Fast',region:'international',type:'paid',inputUSD:0.20,outputUSD:0.50,inputRMB:null,outputRMB:null,context:'2M',freeTier:false,features:['2M上下文','超低价'],logo:'XA',color:'#000000',score:88,note:'2M 超长上下文最便宜'},
+
+  // --- Together AI ---
+  {name:'Together AI',model:'GPT-OSS 120B',region:'international',type:'paid',inputUSD:0.15,outputUSD:0.60,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['开源模型','免费1M tokens/月'],logo:'TG',color:'#0f6fff',score:85,note:'新用户免费额度'},
+  {name:'Together AI',model:'DeepSeek V4 Pro',region:'international',type:'paid',inputUSD:2.10,outputUSD:4.40,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['第三方托管','免费额度'],logo:'TG',color:'#0f6fff',score:62,note:'DeepSeek 托管版'},
+  {name:'Together AI',model:'Llama 3.3 70B',region:'international',type:'paid',inputUSD:1.04,outputUSD:1.04,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['开源','输入输出同价'],logo:'TG',color:'#0f6fff',score:72,note:'输入输出同价'},
+
+  // --- Groq ---
+  {name:'Groq',model:'Llama 3.1 8B',region:'international',type:'free',inputUSD:0.05,outputUSD:0.08,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['免费层','超低延迟','LPU'],logo:'GQ',color:'#f55036',score:95,note:'全球最低输入价 + 免费层'},
+  {name:'Groq',model:'Llama 3.3 70B',region:'international',type:'paid',inputUSD:0.59,outputUSD:0.79,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['免费层','超低延迟'],logo:'GQ',color:'#f55036',score:85,note:'70B 最便宜方案'},
+
+  // --- Perplexity ---
+  {name:'Perplexity',model:'Sonar Small Chat',region:'international',type:'paid',inputUSD:0.07,outputUSD:0.28,inputRMB:null,outputRMB:null,context:'16K',freeTier:false,features:['联网搜索','超低价'],logo:'PP',color:'#20b8cd',score:88,note:'带搜索最便宜'},
+  {name:'Perplexity',model:'Sonar',region:'international',type:'paid',inputUSD:1,outputUSD:1,inputRMB:null,outputRMB:null,context:'128K',freeTier:false,features:['联网搜索','输入输出同价'],logo:'PP',color:'#20b8cd',score:72,note:'搜索增强'},
+
+  // --- DeepSeek (国内) ---
+  {name:'DeepSeek',model:'V4 Flash',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:1.5,outputRMB:4.5,context:'1M',freeTier:false,features:['1M上下文','峰谷定价','缓存极低价'],logo:'DS',color:'#4d6bfe',score:88,note:'国内最高性价比'},
+  {name:'DeepSeek',model:'V4 Pro',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:4.5,outputRMB:13.5,context:'1M',freeTier:false,features:['1M上下文','Thinking Mode'],logo:'DS',color:'#4d6bfe',score:72,note:'DeepSeek 旗舰'},
+  {name:'DeepSeek',model:'V3 (legacy)',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:2,outputRMB:8,context:'128K',freeTier:false,features:['经典模型'],logo:'DS',color:'#4d6bfe',score:70,note:'经典稳定版'},
+
+  // --- 通义千问 Qwen ---
+  {name:'阿里云 Qwen',model:'qwen-turbo',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:0.3,outputRMB:0.6,context:'128K',freeTier:false,features:['超低价','百炼平台'],logo:'QW',color:'#615ced',score:90,note:'国内最低输入价之一'},
+  {name:'阿里云 Qwen',model:'qwen-plus',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:0.8,outputRMB:2,context:'128K',freeTier:true,features:['免费100万tokens','高性价比'],logo:'QW',color:'#615ced',score:85,note:'中端首选'},
+  {name:'阿里云 Qwen',model:'qwen-max',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:20,outputRMB:60,context:'128K',freeTier:true,features:['旗舰','免费100万tokens'],logo:'QW',color:'#615ced',score:50,note:'阿里云旗舰'},
+
+  // --- Moonshot / Kimi ---
+  {name:'Moonshot Kimi',model:'moonshot-v1-8k',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:2,outputRMB:10,context:'8K',freeTier:false,features:['短文本'],logo:'KS',color:'#1f1f1f',score:55,note:'8K 入门版'},
+  {name:'Moonshot Kimi',model:'moonshot-v1-128k',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:10,outputRMB:30,context:'128K',freeTier:false,features:['长文本'],logo:'KS',color:'#1f1f1f',score:45,note:'128K 长文本'},
+
+  // --- 智谱 GLM ---
+  {name:'智谱 GLM',model:'GLM-4-Flash',region:'domestic',type:'free',inputUSD:null,outputUSD:null,inputRMB:0,outputRMB:0,context:'128K',freeTier:true,features:['永久免费','无Token上限','30 QPS'],logo:'GL',color:'#3b82f6',score:98,note:'国内唯一永久免费大模型'},
+  {name:'智谱 GLM',model:'GLM-4-Long',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:1,outputRMB:1,context:'1M',freeTier:false,features:['1M上下文','输入输出同价'],logo:'GL',color:'#3b82f6',score:88,note:'1M 长文本最低价'},
+  {name:'智谱 GLM',model:'GLM-4-Plus',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:5,outputRMB:5,context:'128K',freeTier:false,features:['输入输出同价','旗舰'],logo:'GL',color:'#3b82f6',score:65,note:'智谱旗舰'},
+
+  // --- 百度文心 ---
+  {name:'百度文心',model:'ERNIE Speed',region:'domestic',type:'free',inputUSD:null,outputUSD:null,inputRMB:0,outputRMB:0,context:'128K',freeTier:true,features:['免费开放','低延迟'],logo:'BD',color:'#2932e1',score:92,note:'百度免费模型'},
+  {name:'百度文心',model:'ERNIE 3.5',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:4,outputRMB:8,context:'128K',freeTier:false,features:['中端'],logo:'BD',color:'#2932e1',score:60,note:'百度中端'},
+  {name:'百度文心',model:'ERNIE 4.0',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:30,outputRMB:90,context:'128K',freeTier:false,features:['旗舰'],logo:'BD',color:'#2932e1',score:35,note:'百度旗舰'},
+
+  // --- 讯飞星火 ---
+  {name:'讯飞星火',model:'Spark Lite',region:'domestic',type:'free',inputUSD:null,outputUSD:null,inputRMB:0,outputRMB:0,context:'8K',freeTier:true,features:['永久免费'],logo:'XF',color:'#e8403e',score:90,note:'讯飞免费版'},
+  {name:'讯飞星火',model:'Spark Max',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:21,outputRMB:21,context:'32K',freeTier:false,features:['输入输出同价','联网搜索'],logo:'XF',color:'#e8403e',score:40,note:'讯飞旗舰'},
+
+  // --- MiniMax ---
+  {name:'MiniMax',model:'MiniMax-M3',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:4.20,outputRMB:16.80,context:'512K',freeTier:false,features:['512K上下文','永久5折'],logo:'MM',color:'#ff5042',score:55,note:'512K 长上下文'},
+  {name:'MiniMax',model:'MiniMax-M2.7',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:2.10,outputRMB:8.40,context:'128K',freeTier:false,features:['永久5折'],logo:'MM',color:'#ff5042',score:60,note:'中端经济'},
+
+  // --- 百川 ---
+  {name:'百川 Baichuan',model:'Baichuan4-Air',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:0.98,outputRMB:0.98,context:'32K',freeTier:false,features:['输入输出同价','超低价','医疗'],logo:'BC',color:'#fa6b1c',score:88,note:'输入输出同价超低'},
+  {name:'百川 Baichuan',model:'Baichuan-M2',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:2,outputRMB:20,context:'32K',freeTier:false,features:['医疗专用'],logo:'BC',color:'#fa6b1c',score:55,note:'医疗领域'},
+
+  // --- 零一万物 ---
+  {name:'零一万物 Yi',model:'yi-lightning',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:0.99,outputRMB:0.99,context:'32K',freeTier:false,features:['输入输出同价','超低价'],logo:'YI',color:'#00b894',score:87,note:'输入输出同价'},
+  {name:'零一万物 Yi',model:'yi-medium',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:2.5,outputRMB:2.5,context:'32K',freeTier:true,features:['免费体验100万tokens'],logo:'YI',color:'#00b894',score:75,note:'免费体验额度'},
+
+  // --- 腾讯混元 ---
+  {name:'腾讯混元',model:'hunyuan-lite',region:'domestic',type:'free',inputUSD:null,outputUSD:null,inputRMB:0,outputRMB:0,context:'256K',freeTier:true,features:['永久免费','256K上下文'],logo:'TX',color:'#00a4ff',score:90,note:'腾讯免费模型'},
+  {name:'腾讯混元',model:'hunyuan-standard',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:4.5,outputRMB:5,context:'32K',freeTier:false,features:['标准版'],logo:'TX',color:'#00a4ff',score:55,note:'腾讯标准版'},
+  {name:'腾讯混元',model:'hunyuan-pro',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:30,outputRMB:120,context:'32K',freeTier:false,features:['旗舰'],logo:'TX',color:'#00a4ff',score:30,note:'腾讯旗舰'},
+
+  // --- 字节豆包 ---
+  {name:'字节豆包',model:'doubao-2.0-lite',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:0.6,outputRMB:3.6,context:'128K',freeTier:false,features:['火山引擎','缓存低价'],logo:'DB',color:'#ff5a2c',score:85,note:'字节轻量版'},
+  {name:'字节豆包',model:'doubao-2.1-pro',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:6,outputRMB:30,context:'128K',freeTier:false,features:['旗舰','分段计费'],logo:'DB',color:'#ff5a2c',score:48,note:'字节旗舰'},
+
+  // --- 商汤 ---
+  {name:'商汤 SenseNova',model:'V6.5-Turbo',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:1.5,outputRMB:4.5,context:'128K',freeTier:true,features:['公测免费1500次/5h','多模态'],logo:'ST',color:'#5b2c6f',score:80,note:'公测期免费'},
+  {name:'商汤 SenseNova',model:'V6.5-Pro',region:'domestic',type:'paid',inputUSD:null,outputUSD:null,inputRMB:3,outputRMB:9,context:'128K',freeTier:true,features:['公测免费','多模态'],logo:'ST',color:'#5b2c6f',score:72,note:'商汤旗舰'},
+
+  // --- OpenRouter ---
+  {name:'OpenRouter',model:'免费模型聚合',region:'international',type:'free',inputUSD:0,outputUSD:0,context:'1M',freeTier:true,features:['20+免费模型','DeepSeek R1免费','50 RPD'],logo:'OR',color:'#8b5cf6',score:93,note:'免费模型最多平台'},
+];
+
+// ===== PROVIDER REGISTRATION URLS (Affiliate Links) =====
+const providerUrls = {
+  'OpenAI':'https://platform.openai.com/signup',
+  'Anthropic':'https://console.anthropic.com/',
+  'Google':'https://aistudio.google.com/',
+  'Mistral':'https://console.mistral.ai/',
+  'Cohere':'https://dashboard.cohere.com/',
+  'xAI':'https://x.ai/api',
+  'Together AI':'https://www.together.ai/',
+  'Groq':'https://console.groq.com/',
+  'Perplexity':'https://docs.perplexity.ai/',
+  'DeepSeek':'https://platform.deepseek.com/',
+  '阿里云 Qwen':'https://bailian.console.aliyun.com/',
+  'Moonshot Kimi':'https://platform.moonshot.cn/',
+  '智谱 GLM':'https://open.bigmodel.cn/',
+  '百度文心':'https://cloud.baidu.com/product/wenxinworkshop/',
+  '讯飞星火':'https://xinghuo.xfyun.cn/sparkapi',
+  'MiniMax':'https://platform.minimaxi.com/',
+  '百川 Baichuan':'https://platform.baichuan-ai.com/',
+  '零一万物 Yi':'https://platform.lingyiwanwu.com/',
+  '腾讯混元':'https://cloud.tencent.com/product/hunyuan',
+  '字节豆包':'https://www.volcengine.com/product/doubao',
+  '商汤 SenseNova':'https://www.sensenova.cn/',
+  'OpenRouter':'https://openrouter.ai/'
+};
+
+// ===== FREE TIER DATA =====
+const freeTiers = [
+  {name:'智谱 GLM-4-Flash',models:'GLM-4-Flash, GLM-4.7-Flash',badge:'永久免费',limits:[{label:'Token限制',value:'无限制'},{label:'并发',value:'30 QPS'},{label:'上下文',value:'128K / 200K'}],note:'国内唯一永久免费且无 Token 上限的大模型 API。新用户还赠送 2000 万 Token。'},
+  {name:'Google Gemini API',models:'Gemini 3.7/3.5 Flash, Flash-Lite',badge:'免费层',limits:[{label:'Flash-Lite RPD',value:'1,000 次/天'},{label:'Flash RPD',value:'250 次/天'},{label:'Pro RPD',value:'100 次/天'},{label:'上下文',value:'1M tokens'}],note:'免费层无需信用卡，Flash-Lite 每天 1000 次请求。数据可能用于模型训练（可关闭）。'},
+  {name:'Groq',models:'Llama 3.3 70B, Llama 4, Gemma 2 9B 等',badge:'免费层',limits:[{label:'RPM',value:'30 次/分钟'},{label:'RPD',value:'1,000 次/天'},{label:'TPM',value:'14,400 tokens/分钟'}],note:'LPU 硬件加速，推理速度极快。免费层无需信用卡。Pro 版 $20/月。'},
+  {name:'OpenRouter',models:'DeepSeek R1, Llama 3.3 70B, Qwen3 等 20+',badge:'免费聚合',limits:[{label:'RPM',value:'20 次/分钟'},{label:'RPD',value:'50 次/天'},{label:'RPD (充值$10+)',value:'1,000 次/天'}],note:'聚合 20+ 免费模型，支持随机路由 /openrouter/free。部分免费模型支持 1M 上下文。'},
+  {name:'Cloudflare Workers AI',models:'GLM-4.7-Flash, Gemma, Llama 等',badge:'免费层',limits:[{label:'每日额度',value:'10,000 Neurons/天'},{label:'重置时间',value:'UTC 00:00'},{label:'付费计划',value:'$5/月含免费额度'}],note:'集成在 Cloudflare Workers 中，边缘计算 + AI 推理。免费和付费计划均含每日免费额度。'},
+  {name:'百度文心 ERNIE Speed',models:'ERNIE Speed, ERNIE Lite',badge:'永久免费',limits:[{label:'价格',value:'¥0/1M tokens'},{label:'场景',value:'低延迟通用'},{label:'限制',value:'需千帆平台'}],note:'百度提供的免费轻量模型，适合低延迟、低成本场景。通过千帆平台调用。'},
+  {name:'讯飞星火 Spark Lite',models:'Spark Lite',badge:'永久免费',limits:[{label:'价格',value:'¥0/1M tokens'},{label:'上下文',value:'8K'},{label:'限制',value:'需讯飞平台'}],note:'讯飞星火 Lite 版永久免费，适合轻量级需求。支持基础对话和问答。'},
+  {name:'腾讯混元 hunyuan-lite',models:'hunyuan-lite',badge:'永久免费',limits:[{label:'价格',value:'¥0/1M tokens'},{label:'上下文',value:'256K'},{label:'新用户',value:'10万Token体验包'}],note:'腾讯混元 Lite 免费开放，支持 256K 上下文。新用户另有 10 万 Token 体验包。'},
+  {name:'DeepSeek',models:'V4 Flash, V4 Pro',badge:'新用户赠送',limits:[{label:'新用户',value:'500万 Token'},{label:'有效期',value:'注册后30天'},{label:'缓存命中',value:'¥0.007/1M'}],note:'新用户赠送 500 万 Token。缓存命中后价格极低（¥0.007/1M）。采用峰谷定价，非高峰半价。'},
+  {name:'Together AI',models:'Llama, Mistral, DeepSeek 200+',badge:'免费额度',limits:[{label:'免费额度',value:'$1-25 赠金'},{label:'免费月额',value:'100万 Token/月'},{label:'模型数',value:'200+ 开源模型'}],note:'第三方来源存在分歧（$1-$25），但均确认有新用户赠金。可访问 200+ 开源模型。'},
+  {name:'阿里云 Qwen',models:'qwen-max, qwen-plus 等',badge:'免费额度',limits:[{label:'每模型额度',value:'100万 Token'},{label:'有效期',value:'开通后90/180天'},{label:'地区',value:'新加坡区域'}],note:'每个模型独立 100 万 Token 免费额度，非按账号。百炼平台开通后生效。'},
+  {name:'商汤 SenseNova',models:'V6.5-Pro, V6.5-Turbo',badge:'公测免费',limits:[{label:'每模型',value:'1,500次/5小时'},{label:'价格',value:'公测期 ¥0/月'},{label:'上下文',value:'128K'}],note:'公测期间免费使用，每模型每 5 小时 1500 次调用。支持多模态和 OpenAI 兼容接口。'},
+];
+
+// ===== RANKING DATA =====
+const rankings = [
+  {rank:1,name:'智谱 GLM',model:'GLM-4-Flash',region:'国内',type:'免费',input:'¥0',output:'¥0',context:'128K',score:98,features:['永久免费','无Token上限','30 QPS'],reason:'国内唯一永久免费且无 Token 上限的大模型，30 QPS 并发，适合高频调用和开发测试。'},
+  {rank:2,name:'Groq',model:'Llama 3.1 8B',region:'国际',type:'免费+付费',input:'$0.05',output:'$0.08',context:'128K',score:95,features:['全球最低输入价','免费层','LPU超低延迟'],reason:'全球最低输入价 $0.05/1M，免费层 1000 RPD，LPU 硬件带来极快推理速度。'},
+  {rank:3,name:'OpenRouter',model:'免费模型聚合',region:'国际',type:'免费',input:'$0',output:'$0',context:'1M',score:93,features:['20+免费模型','DeepSeek R1免费','50 RPD'],reason:'聚合 20+ 免费模型，包括 DeepSeek R1、Llama 3.3 70B 等，充值 $10 后 RPD 提升至 1000。'},
+  {rank:4,name:'百度文心',model:'ERNIE Speed',region:'国内',type:'免费',input:'¥0',output:'¥0',context:'128K',score:92,features:['永久免费','低延迟','128K上下文'],reason:'百度永久免费模型，128K 上下文，适合低延迟、低成本通用场景。'},
+  {rank:5,name:'腾讯混元',model:'hunyuan-lite',region:'国内',type:'免费',input:'¥0',output:'¥0',context:'256K',score:90,features:['永久免费','256K超长上下文'],reason:'免费且支持 256K 上下文，是免费模型中上下文最长的之一。'},
+  {rank:6,name:'阿里云 Qwen',model:'qwen-turbo',region:'国内',type:'付费',input:'¥0.3',output:'¥0.6',context:'128K',score:90,features:['国内最低输入价','百炼平台','128K'],reason:'国内付费模型最低输入价 ¥0.3/1M，百炼平台稳定可靠，性价比极高。'},
+  {rank:7,name:'Mistral',model:'Ministral 8B',region:'国际',type:'付费',input:'$0.10',output:'$0.10',context:'128K',score:90,features:['输入输出同价','超低成本','开源'],reason:'输入输出同价 $0.10/1M，开源权重，欧洲厂商合规性好。'},
+  {rank:8,name:'讯飞星火',model:'Spark Lite',region:'国内',type:'免费',input:'¥0',output:'¥0',context:'8K',score:90,features:['永久免费','中文优化'],reason:'讯飞永久免费模型，中文语音和对话优化，适合轻量级中文应用。'},
+  {rank:9,name:'DeepSeek',model:'V4 Flash',region:'国内',type:'付费',input:'¥1.5',output:'¥4.5',context:'1M',score:88,features:['1M上下文','峰谷定价','缓存极低'],reason:'1M 上下文，缓存命中 ¥0.007/1M 极低，非高峰时段半价，综合性价比极高。'},
+  {rank:10,name:'百川 Baichuan',model:'Baichuan4-Air',region:'国内',type:'付费',input:'¥0.98',output:'¥0.98',context:'32K',score:88,features:['输入输出同价','医疗领域','超低价'],reason:'输入输出同价 ¥0.98/1M，新用户赠送 80 元（约 1000 万 Token），医疗领域表现优秀。'},
+  {rank:11,name:'零一万物 Yi',model:'yi-lightning',region:'国内',type:'付费',input:'¥0.99',output:'¥0.99',context:'32K',score:87,features:['输入输出同价','超低价','免费体验'],reason:'输入输出同价 ¥0.99/1M，阿里云百炼免费体验 100 万 Token。'},
+  {rank:12,name:'Google',model:'Gemini 3.5 Flash-Lite',region:'国际',type:'免费+付费',input:'$0.30',output:'$2.50',context:'1M',score:88,features:['免费层','1M上下文','多模态'],reason:'免费层 1000 RPD，付费仅 $0.30/1M 输入，1M 上下文 + 多模态，综合性价比极高。'},
+  {rank:13,name:'字节豆包',model:'doubao-2.0-lite',region:'国内',type:'付费',input:'¥0.6',output:'¥3.6',context:'128K',score:85,features:['火山引擎','缓存低价','128K'],reason:'字节旗下，火山引擎稳定，缓存命中 ¥0.12/1M，适合大规模调用。'},
+  {rank:14,name:'Together AI',model:'GPT-OSS 120B',region:'国际',type:'免费+付费',input:'$0.15',output:'$0.60',context:'128K',score:85,features:['开源模型','免费额度','200+模型'],reason:'新用户免费额度，$0.15/1M 输入价极低，可访问 200+ 开源模型。'},
+  {rank:15,name:'智谱 GLM',model:'GLM-4-Long',region:'国内',type:'付费',input:'¥1',output:'¥1',context:'1M',score:88,features:['1M上下文','输入输出同价'],reason:'1M 上下文 + 输入输出同价 ¥1/1M，长文本处理性价比最高之一。'},
+];
+
+// ===== GUIDE DATA =====
+const guides = [
+  {icon:'🚀',iconColor:'rgba(52,211,153,0.1)',title:'开发测试 & 原型验证',desc:'刚开始构建 AI 应用，需要低成本快速迭代和测试。不需要大量 Token 消耗，但需要稳定的 API 访问。',recommendation:'推荐：<strong>智谱 GLM-4-Flash</strong>（永久免费）或 <strong>Google Gemini Flash-Lite</strong>（免费层 1000 RPD）。如需多模型切换，使用 <strong>OpenRouter</strong> 免费模型聚合。'},
+  {icon:'💰',iconColor:'rgba(232,181,74,0.1)',title:'极致性价比之选',desc:'预算有限但需要生产级质量，追求每一分钱的最大价值。需要在价格和模型能力之间找到最佳平衡点。',recommendation:'国内首选：<strong>DeepSeek V4 Flash</strong>（¥1.5/4.5，1M 上下文）或 <strong>Qwen-turbo</strong>（¥0.3/0.6）。国际首选：<strong>Groq Llama 3.3 70B</strong>（$0.59/0.79）或 <strong>Mistral Small 4</strong>（$0.15/0.60）。'},
+  {icon:'📚',iconColor:'rgba(92,225,255,0.1)',title:'长文本处理 & RAG',desc:'需要处理大量文档、论文或长对话。上下文窗口大小是关键指标，同时需要合理的长文本定价。',recommendation:'推荐：<strong>Grok 4.1 Fast</strong>（2M 上下文，$0.20/0.50）或 <strong>DeepSeek V4 Pro</strong>（1M 上下文，¥4.5/13.5）。国内长文本首选 <strong>GLM-4-Long</strong>（1M 上下文，¥1/1 同价）。RAG 场景选 <strong>Cohere Command R</strong>。'},
+  {icon:'🏆',iconColor:'rgba(139,92,246,0.1)',title:'顶级质量不差钱',desc:'追求最强模型能力，预算充足。用于复杂推理、高质量代码生成、专业内容创作等高要求场景。',recommendation:'国际：<strong>GPT-5.5</strong>（$5/30）或 <strong>Claude Opus 4.6</strong>（$5/25，1M 上下文）。国内：<strong>百度 ERNIE 4.0</strong>（¥30/90）或 <strong>腾讯 hunyuan-pro</strong>（¥30/120）。'},
+  {icon:'🇨🇳',iconColor:'rgba(255,90,44,0.1)',title:'国内项目部署',desc:'面向中国大陆用户的业务，需要国内可访问的 API、中文优化、合规备案以及人民币结算。',recommendation:'免费：<strong>GLM-4-Flash</strong> 或 <strong>ERNIE Speed</strong>。性价比：<strong>DeepSeek V4 Flash</strong> 或 <strong>Qwen-turbo</strong>。企业级：<strong>阿里云百炼</strong> 或 <strong>火山引擎豆包</strong>。'},
+  {icon:'⚡',iconColor:'rgba(251,146,60,0.1)',title:'高并发 & 实时场景',desc:'需要低延迟、高并发的实时应用，如客服机器人、实时翻译、流式对话等。推理速度是核心指标。',recommendation:'速度首选：<strong>Groq</strong>（LPU 加速，~840 TPS）或 <strong>火山引擎豆包</strong>。国内高并发：<strong>GLM-4-Flash</strong>（30 QPS 免费）或 <strong>Qwen-plus</strong>。考虑使用 CDN 或边缘部署。'},
+  {icon:'💻',iconColor:'rgba(0,212,255,0.1)',title:'代码生成 & 开发',desc:'专门用于代码补全、代码审查、技术文档生成等开发场景。需要优秀的代码理解能力和专用模型。',recommendation:'专用：<strong>Mistral Codestral</strong>（$0.30/0.90）或 <strong>OpenAI Codex</strong>（$1.75/14）。高性价比：<strong>DeepSeek Coder</strong> 或 <strong>Qwen-Coder</strong>。IDE 集成推荐 <strong>GitHub Copilot API</strong>。'},
+  {icon:'🔧',iconColor:'rgba(165,123,250,0.1)',title:'多模态 & 视觉理解',desc:'需要处理图片、视频等多模态输入，结合文本进行理解和生成。模型需要支持视觉理解能力。',recommendation:'推荐：<strong>Google Gemini 3.5 Flash</strong>（$1.5/9，免费层 + 多模态）或 <strong>GPT-5.5</strong>（$5/30）。国内：<strong>GLM-4V</strong> 或 <strong>Qwen-VL</strong>。免费多模态：<strong>Cloudflare Workers AI</strong>。'},
+];
+
+// ===== PRICE HISTORY DATA =====
+const priceHistory = [
+  {date:'2026-08-15',provider:'DeepSeek',model:'V4 Flash',type:'drop',change:'输入价 ¥2 → <span class="price-drop">¥1.5</span>（非高峰），输出 ¥8 → <span class="price-drop">¥4.5</span>',note:'DeepSeek V4 发布峰谷定价，非高峰时段直降 50%，1M 上下文',tag:'降价',tagClass:'tag-drop'},
+  {date:'2026-08-10',provider:'阿里云 Qwen',model:'qwen-turbo',type:'drop',change:'输入价 ¥0.5 → <span class="price-drop">¥0.3</span>，输出 ¥1 → <span class="price-drop">¥0.6</span>',note:'阿里云百炼全系降价，qwen-turbo 成为国内最低输入价',tag:'降价',tagClass:'tag-drop'},
+  {date:'2026-08-01',provider:'Google',model:'Gemini 3.7 Flash',type:'new',change:'输入 <span class="price-new">$0.75</span> / 输出 <span class="price-new">$3.75</span>（至 2026.12 限时优惠）',note:'Gemini 3.7 Flash 发布，1M 上下文，免费层保留',tag:'新模型',tagClass:'tag-new'},
+  {date:'2026-07-28',provider:'OpenAI',model:'GPT-5.5',type:'new',change:'输入 <span class="price-new">$5.00</span> / 输出 <span class="price-new">$30.00</span>，200K 上下文',note:'GPT-5.5 发布，替代 GPT-4o 系列成为旗舰',tag:'新模型',tagClass:'tag-new'},
+  {date:'2026-07-20',provider:'Anthropic',model:'Claude Opus 4.6',type:'new',change:'输入 <span class="price-new">$5.00</span> / 输出 <span class="price-new">$25.00</span>，1M 上下文',note:'Claude 4.6 系列发布，Opus 支持 1M 上下文窗口',tag:'新模型',tagClass:'tag-new'},
+  {date:'2026-07-15',provider:'xAI',model:'Grok 4.1 Fast',type:'new',change:'输入 <span class="price-new">$0.20</span> / 输出 <span class="price-new">$0.50</span>，2M 上下文',note:'Grok 4.1 Fast 发布，2M 超长上下文 + 超低价格',tag:'新模型',tagClass:'tag-new'},
+  {date:'2026-07-10',provider:'智谱 GLM',model:'GLM-4-Flash',type:'drop',change:'从限时免费 → <span class="price-drop">永久免费</span>，无 Token 上限',note:'智谱宣布 GLM-4-Flash 永久免费，30 QPS 并发',tag:'免费',tagClass:'tag-drop'},
+  {date:'2026-06-28',provider:'Mistral',model:'Ministral 8B',type:'new',change:'输入 <span class="price-new">$0.10</span> / 输出 <span class="price-new">$0.10</span>（输入输出同价）',note:'Mistral 发布 Ministral 系列，输入输出同价极低',tag:'新模型',tagClass:'tag-new'},
+  {date:'2026-06-15',provider:'字节豆包',model:'doubao-2.0-lite',type:'drop',change:'输入价 ¥1 → <span class="price-drop">¥0.6</span>，输出 ¥6 → <span class="price-drop">¥3.6</span>',note:'火山引擎豆包全线降价，缓存命中 ¥0.12/1M',tag:'降价',tagClass:'tag-drop'},
+  {date:'2026-06-01',provider:'Groq',model:'Llama 3.1 8B',type:'drop',change:'输入 <span class="price-drop">$0.05</span> / 输出 <span class="price-drop">$0.08</span>，成为全球最低输入价',note:'Groq 推出 LPU 加速 + 最低价 + 免费层',tag:'降价',tagClass:'tag-drop'},
+  {date:'2026-05-20',provider:'百度文心',model:'ERNIE Speed',type:'drop',change:'从付费 → <span class="price-drop">永久免费</span>',note:'百度宣布 ERNIE Speed/Lite 永久免费开放',tag:'免费',tagClass:'tag-drop'},
+  {date:'2026-05-10',provider:'腾讯混元',model:'hunyuan-lite',type:'drop',change:'从付费 → <span class="price-drop">永久免费</span>，256K 上下文',note:'腾讯混元 lite 版永久免费，支持 256K 超长上下文',tag:'免费',tagClass:'tag-drop'},
+];
+
+// ===== ALERT PROVIDER LIST =====
+const alertProviders = [
+  'OpenAI','Anthropic','Google','Mistral','Cohere','xAI','Together AI','Groq','Perplexity',
+  'DeepSeek','阿里云 Qwen','Moonshot Kimi','智谱 GLM','百度文心','讯飞星火',
+  'MiniMax','百川 Baichuan','零一万物 Yi','腾讯混元','字节豆包','商汤 SenseNova','OpenRouter'
+];
+
+// ===== ALERT TYPES =====
+const alertTypes = [
+  {id:'price-drop',label:'价格下降',color:'#34d399'},
+  {id:'price-rise',label:'价格上涨',color:'#fb923c'},
+  {id:'new-model',label:'新模型上线',color:'#5ce1ff'},
+  {id:'free-tier',label:'免费额度变动',color:'#8b5cf6'},
+  {id:'context-change',label:'上下文变更',color:'#e8b54a'},
+];
+
+// ===== CAPABILITY MATRIX DATA =====
+const capColumns = [
+  {key:'code',label:'代码'},
+  {key:'reason',label:'推理'},
+  {key:'vision',label:'视觉'},
+  {key:'func',label:'函数调用'},
+  {key:'json',label:'JSON模式'},
+  {key:'stream',label:'流式'},
+  {key:'multilang',label:'多语言'},
+  {key:'longctx',label:'长上下文'},
+];
+const capabilitiesData = [
+  {name:'OpenAI',model:'GPT-5.5',caps:{code:'A+',reason:'A+',vision:'A+',func:'A+',json:'A+',stream:'A+',multilang:'A',longctx:'B'}},
+  {name:'Anthropic',model:'Claude Opus 4.6',caps:{code:'A+',reason:'A+',vision:'A+',func:'A',json:'A',stream:'A+',multilang:'A',longctx:'A+'}},
+  {name:'Google',model:'Gemini 3.7 Flash',caps:{code:'A',reason:'A',vision:'A+',func:'A',json:'A',stream:'A',multilang:'A+',longctx:'A+'}},
+  {name:'DeepSeek',model:'V4 Flash',caps:{code:'A+',reason:'A',vision:'C',func:'A',json:'A',stream:'A',multilang:'B',longctx:'A'}},
+  {name:'DeepSeek',model:'V4 Pro',caps:{code:'A+',reason:'A+',vision:'C',func:'A',json:'A',stream:'A',multilang:'B',longctx:'A+'}},
+  {name:'智谱 GLM',model:'GLM-4',caps:{code:'A',reason:'A',vision:'A',func:'A',json:'A',stream:'A',multilang:'A',longctx:'B'}},
+  {name:'阿里云 Qwen',model:'Qwen-Max',caps:{code:'A',reason:'A',vision:'A',func:'A',json:'A',stream:'A',multilang:'A',longctx:'B'}},
+  {name:'Mistral',model:'Mistral Large',caps:{code:'A+',reason:'A',vision:'B',func:'A',json:'A',stream:'A',multilang:'A',longctx:'B'}},
+  {name:'xAI',model:'Grok 4.1',caps:{code:'A',reason:'A+',vision:'B',func:'B',json:'B',stream:'A',multilang:'B',longctx:'A+'}},
+  {name:'Cohere',model:'Command R+',caps:{code:'B',reason:'A',vision:'-',func:'A',json:'A',stream:'A',multilang:'A+',longctx:'A'}},
+  {name:'字节豆包',model:'doubao-2.0-pro',caps:{code:'A',reason:'A',vision:'A',func:'A',json:'A',stream:'A',multilang:'A',longctx:'B'}},
+  {name:'百度文心',model:'ERNIE 4.0',caps:{code:'A',reason:'A',vision:'A',func:'A',json:'A',stream:'A',multilang:'A',longctx:'B'}},
+  {name:'腾讯混元',model:'hunyuan-pro',caps:{code:'A',reason:'A',vision:'B',func:'A',json:'B',stream:'A',multilang:'A',longctx:'B'}},
+  {name:'Moonshot Kimi',model:'moonshot-v1',caps:{code:'A',reason:'A',vision:'-',func:'A',json:'A',stream:'A',multilang:'A',longctx:'A'}},
+  {name:'MiniMax',model:'abab6.5',caps:{code:'B',reason:'A',vision:'A',func:'B',json:'B',stream:'A',multilang:'A',longctx:'A'}},
+  {name:'Groq',model:'Llama 3.3 70B',caps:{code:'A',reason:'A',vision:'-',func:'A',json:'B',stream:'A',multilang:'A',longctx:'B'}},
+  {name:'Together AI',model:'Llama 3.3 70B',caps:{code:'A',reason:'A',vision:'-',func:'A',json:'B',stream:'A',multilang:'A',longctx:'B'}},
+  {name:'OpenRouter',model:'多模型聚合',caps:{code:'A',reason:'A',vision:'A',func:'A',json:'A',stream:'A',multilang:'A+',longctx:'A'}},
+];
+
+// ===== SPEED BENCHMARK DATA =====
+const speedData = [
+  {rank:1,name:'Groq',model:'Llama 3.3 70B',tps:840,cat:'fast',note:'LPU 专用推理芯片'},
+  {rank:2,name:'Together AI',model:'Llama 3.3 70B',tps:520,cat:'fast',note:'GPU 集群优化'},
+  {rank:3,name:'字节豆包',model:'doubao-2.0-lite',tps:450,cat:'medium',note:'火山引擎加速'},
+  {rank:4,name:'Groq',model:'Llama 3.1 8B',tps:750,cat:'fast',note:'小模型极致速度'},
+  {rank:5,name:'Anthropic',model:'Claude Sonnet 4.6',tps:380,cat:'medium',note:'高效推理架构'},
+  {rank:6,name:'智谱 GLM',model:'GLM-4-Flash',tps:320,cat:'medium',note:'国产高速推理'},
+  {rank:7,name:'Google',model:'Gemini 3.7 Flash',tps:350,cat:'medium',note:'TPU v5 加速'},
+  {rank:8,name:'OpenAI',model:'GPT-5.5',tps:180,cat:'medium',note:'旗舰模型，速度适中'},
+  {rank:9,name:'DeepSeek',model:'V4 Flash',tps:260,cat:'medium',note:'性价比+速度均衡'},
+  {rank:10,name:'阿里云 Qwen',model:'qwen-plus',tps:280,cat:'medium',note:'阿里云通义加速'},
+  {rank:11,name:'Mistral',model:'Mistral Small 4',tps:310,cat:'medium',note:'欧洲推理优化'},
+  {rank:12,name:'xAI',model:'Grok 4.1 Fast',tps:420,cat:'medium',note:'xAI 超长上下文加速'},
+  {rank:13,name:'百度文心',model:'ERNIE 4.0',tps:150,cat:'medium',note:'百度昆仑芯片加速'},
+  {rank:14,name:'腾讯混元',model:'hunyuan-pro',tps:120,cat:'medium',note:'腾讯云推理'},
+  {rank:15,name:'MiniMax',model:'abab6.5',tps:85,cat:'slow',note:'长文本生成为主'},
+  {rank:16,name:'Moonshot Kimi',model:'moonshot-v1',tps:75,cat:'slow',note:'超长上下文，速度较慢'},
+  {rank:17,name:'Cohere',model:'Command R+',tps:90,cat:'slow',note:'RAG 优化为主'},
+];
+
+// ===== TREND DATA =====
+// 价格指数：以 2024-01 为基线 100，追踪前沿模型价格变化
+const trendData = {
+  index: [
+    {date:'2024-01',label:'2024.01',value:100,note:'基线'},
+    {date:'2024-03',label:'2024.03',value:88,note:'OpenAI 降价 27%'},
+    {date:'2024-05',label:'2024.05',value:72,note:'GPT-4o 发布，价格大幅下降'},
+    {date:'2024-07',label:'2024.07',value:58,note:'Claude 3.5 Sonnet 定价调整'},
+    {date:'2024-09',label:'2024.09',value:45,note:'o1 发布，Flash 系列普及'},
+    {date:'2024-11',label:'2024.11',value:38,note:'竞争加剧，多家厂商降价'},
+    {date:'2025-01',label:'2025.01',value:30,note:'DeepSeek V3 引发价格战'},
+    {date:'2025-03',label:'2025.03',value:24,note:'GPT-4.5 降价 50%'},
+    {date:'2025-05',label:'2025.05',value:18,note:'Gemini 2.5 Flash 极低定价'},
+    {date:'2025-07',label:'2025.07',value:14,note:'开源模型追平闭源'},
+    {date:'2025-09',label:'2025.09',value:11,note:'Claude 4 系列发布'},
+    {date:'2025-11',label:'2025.11',value:9,note:'前沿价格指数持续走低'},
+    {date:'2026-01',label:'2026.01',value:7.5,note:'年初价格调整'},
+    {date:'2026-03',label:'2026.03',value:6,note:'GPT-5 发布后价格调整'},
+    {date:'2026-05',label:'2026.05',value:5,note:'DeepSeek V4 引领新低'},
+    {date:'2026-07',label:'2026.07',value:4.2,note:'前沿模型价格仅为基线 4.2%'},
+    {date:'2026-08',label:'2026.08',value:4,note:'当前价格指数'},
+  ],
+  tiers: [
+    {name:'前沿旗舰',color:'#f87171',points:[
+      {date:'2024-01',value:100},{date:'2024-05',value:60},{date:'2024-09',value:35},
+      {date:'2025-01',value:20},{date:'2025-05',value:12},{date:'2025-09',value:8},
+      {date:'2026-01',value:6},{date:'2026-05',value:5},{date:'2026-08',value:4},
+    ]},
+    {name:'中端模型',color:'#e8b54a',points:[
+      {date:'2024-01',value:50},{date:'2024-05',value:30},{date:'2024-09',value:20},
+      {date:'2025-01',value:12},{date:'2025-05',value:8},{date:'2025-09',value:5},
+      {date:'2026-01',value:3.5},{date:'2026-05',value:2.5},{date:'2026-08',value:2},
+    ]},
+    {name:'轻量模型',color:'#5ce1ff',points:[
+      {date:'2024-01',value:15},{date:'2024-05',value:8},{date:'2024-09',value:5},
+      {date:'2025-01',value:3},{date:'2025-05',value:1.5},{date:'2025-09',value:1},
+      {date:'2026-01',value:0.8},{date:'2026-05',value:0.5},{date:'2026-08',value:0.4},
+    ]},
+  ],
+  events: [
+    {date:'2024-05',text:'GPT-4o',x:0},
+    {date:'2025-01',text:'DeepSeek V3',x:0},
+    {date:'2025-03',text:'GPT-4.5',x:0},
+    {date:'2025-09',text:'Claude 4',x:0},
+    {date:'2026-03',text:'GPT-5',x:0},
+    {date:'2026-05',text:'DeepSeek V4',x:0},
+  ],
+};
+
+// ===== TOKEN COUNTER PRESETS =====
+const tokenPresets = {
+  short: '请用三句话总结以下文章的核心观点，并给出你的评价。',
+  chat: '用户：你好，请问如何用 Python 实现一个简单的 HTTP 服务器？\n\n助手：当然可以！以下是使用 Python 内置的 http.server 模块创建简单 HTTP 服务器的方法：\n\n1. 打开终端\n2. 运行 python -m http.server 8000\n3. 访问 http://localhost:8000\n\n你还可以通过编写自定义处理程序来实现更复杂的功能。',
+  code: 'import openai\nimport os\n\nclient = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))\n\ndef chat_completion(messages, model="gpt-4o", temperature=0.7):\n    """发送聊天完成请求"""\n    response = client.chat.completions.create(\n        model=model,\n        messages=messages,\n        temperature=temperature,\n        max_tokens=2000,\n    )\n    return response.choices[0].message.content\n\n# 使用示例\nmessages = [\n    {"role": "system", "content": "你是一个专业的 Python 开发者。"},\n    {"role": "user", "content": "请解释什么是异步编程。"}\n]\n\nresult = chat_completion(messages)\nprint(result)',
+  article: '人工智能（Artificial Intelligence，简称 AI）是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。自 1956 年达特茅斯会议首次提出"人工智能"概念以来，AI 技术经历了多次发展浪潮，从早期的符号推理、专家系统，到机器学习、深度学习，再到如今的大语言模型（LLM），每一次技术突破都极大地拓展了 AI 的应用边界。\n\n近年来，以 GPT 系列、Claude、Gemini 为代表的大语言模型取得了突破性进展。这些模型基于 Transformer 架构，通过在海量文本数据上的自监督学习，展现出强大的自然语言理解和生成能力。它们不仅能进行流畅的对话，还能完成代码编写、数学推理、创意写作等复杂任务。随着模型规模的扩大和训练数据的增加，大语言模型的能力边界不断被刷新，催生了智能客服、内容创作、编程辅助等众多新兴应用场景。\n\n然而，AI 技术的快速发展也带来了诸多挑战和争议。数据隐私、算法偏见、就业冲击、AI 安全等问题日益受到社会各界的关注。如何在推动技术创新的同时确保 AI 的安全性、公平性和可控性，已成为学术界、产业界和政府部门共同面临的重要课题。',
+  rag: '【知识库文档 1】\n向量数据库是一种专门用于存储和检索高维向量的数据库系统。与传统的标量数据库不同，向量数据库通过计算向量之间的距离（如余弦相似度、欧氏距离）来实现语义搜索。主流向量数据库包括 Pinecone、Weaviate、Milvus、Chroma 等。\n\n【知识库文档 2】\nRAG（Retrieval-Augmented Generation）是一种结合检索和生成的技术框架。其核心思路是：先从知识库中检索与用户问题最相关的文档片段，然后将这些片段作为上下文输入给 LLM，生成最终回答。RAG 有效解决了 LLM 的幻觉问题和知识时效性问题。\n\n【知识库文档 3】\nEmbedding 是将文本转换为向量的过程。好的 Embedding 模型能捕捉文本的语义信息，使得语义相近的文本在向量空间中距离也相近。常用的 Embedding 模型包括 OpenAI text-embedding-3、BGE、Cohere embed 等。\n\n用户问题：请解释 RAG 技术的工作原理，并说明向量数据库在其中扮演的角色。',
+};
+
+
+function getScoreClass(score){
+  if(score>=90)return{cls:'score-excellent',bar:'bar-excellent'};
+  if(score>=75)return{cls:'score-good',bar:'bar-good'};
+  if(score>=60)return{cls:'score-fair',bar:'bar-fair'};
+  if(score>=40)return{cls:'score-moderate',bar:'bar-moderate'};
+  return{cls:'score-premium',bar:'bar-premium'};
+}
+
+function formatPrice(usd,rmb){
+  if(rmb===0||usd===0)return'<span class="price-free">免费</span>';
+  if(usd!==null)return`<span class="currency">$</span>${usd}`;
+  if(rmb!==null)return`<span class="currency">¥</span>${rmb}`;
+  return'<span class="text-muted">—</span>';
+}
+
+function renderProviderTable(filter='all',sort='default',search=''){
+  const tbody=document.getElementById('provider-tbody');
+  let filtered=[...providers];
+
+  // Filter
+  if(filter==='free')filtered=filtered.filter(p=>p.type==='free'||p.freeTier);
+  else if(filter==='paid')filtered=filtered.filter(p=>p.type==='paid');
+  else if(filter==='international')filtered=filtered.filter(p=>p.region==='international');
+  else if(filter==='domestic')filtered=filtered.filter(p=>p.region==='domestic');
+
+  // Search
+  if(search){
+    const q=search.toLowerCase();
+    filtered=filtered.filter(p=>
+      p.name.toLowerCase().includes(q)||
+      p.model.toLowerCase().includes(q)||
+      p.features.some(f=>f.toLowerCase().includes(q))
+    );
+  }
+
+  // Sort
+  if(sort==='input-asc')filtered.sort((a,b)=>{
+    const va=a.inputRMB!==null?a.inputRMB:(a.inputUSD!==null?a.inputUSD*7.25:999999);
+    const vb=b.inputRMB!==null?b.inputRMB:(b.inputUSD!==null?b.inputUSD*7.25:999999);
+    return va-vb;
+  });
+  else if(sort==='input-desc')filtered.sort((a,b)=>{
+    const va=a.inputRMB!==null?a.inputRMB:(a.inputUSD!==null?a.inputUSD*7.25:0);
+    const vb=b.inputRMB!==null?b.inputRMB:(b.inputUSD!==null?b.inputUSD*7.25:0);
+    return vb-va;
+  });
+  else if(sort==='output-asc')filtered.sort((a,b)=>{
+    const va=a.outputRMB!==null?a.outputRMB:(a.outputUSD!==null?a.outputUSD*7.25:999999);
+    const vb=b.outputRMB!==null?b.outputRMB:(b.outputUSD!==null?b.outputUSD*7.25:999999);
+    return va-vb;
+  });
+  else if(sort==='output-desc')filtered.sort((a,b)=>{
+    const va=a.outputRMB!==null?a.outputRMB:(a.outputUSD!==null?a.outputUSD*7.25:0);
+    const vb=b.outputRMB!==null?b.outputRMB:(b.outputUSD!==null?b.outputUSD*7.25:0);
+    return vb-va;
+  });
+  else if(sort==='value-desc')filtered.sort((a,b)=>b.score-a.score);
+  else if(sort==='context-desc')filtered.sort((a,b)=>{
+    const parseCtx=s=>{const m=s.match(/(\d+)/);return m?parseInt(m[0])* (s.includes('M')?1000:1):0};
+    return parseCtx(b.context)-parseCtx(a.context);
+  });
+
+  tbody.innerHTML=filtered.map(p=>{
+    const scoreInfo=getScoreClass(p.score);
+    const typeBadge=p.type==='free'?'<span class="badge badge-free">免费</span>':'<span class="badge badge-paid">付费</span>';
+    const regionBadge=p.region==='international'?'<span class="badge badge-intl">国际</span>':'<span class="badge badge-cn">国内</span>';
+    const freeBadge=p.freeTier?'<span class="badge badge-free">有免费层</span>':'';
+    return `<tr>
+      <td>
+        <div class="provider-name">
+          <div class="provider-logo" style="background:${p.color}">${p.logo}</div>
+          <div class="provider-info">
+            <span class="name">${p.name}</span>
+            <span class="model">${p.model}</span>
+          </div>
+        </div>
+      </td>
+      <td>${regionBadge}</td>
+      <td>${typeBadge} ${freeBadge}</td>
+      <td class="price-cell">${formatPrice(p.inputUSD,p.inputRMB)}</td>
+      <td class="price-cell">${formatPrice(p.outputUSD,p.outputRMB)}</td>
+      <td class="context-cell">${p.context}</td>
+      <td>
+        <div class="value-score">
+          <div class="value-bar"><div class="value-bar-fill ${scoreInfo.bar}" style="width:${p.score}%"></div></div>
+          <span class="value-score-num ${scoreInfo.cls}">${p.score}</span>
+        </div>
+      </td>
+      <td style="max-width:200px">${p.features.slice(0,3).map(f=>`<span class="feature-tag">${f}</span>`).join(' ')}</td>
+      <td class="cta-cell"><a href="${providerUrls[p.name]||'#'}" target="_blank" rel="noopener" class="cta-btn ${p.type==='free'||p.inputRMB===0||p.inputUSD===0?'cta-btn-free':''}">${p.type==='free'||p.inputRMB===0||p.inputUSD===0?'免费使用':'注册 →'}</a></td>
+    </tr>`;
+  }).join('');
+}
+
+function findProviderUrl(name){
+  for(const key in providerUrls){
+    if(name.includes(key)||key.includes(name.split(' ')[0]))return providerUrls[key];
+  }
+  return '#';
+}
+
+function renderFreeTiers(){
+  const grid=document.getElementById('free-tier-grid');
+  grid.innerHTML=freeTiers.map(ft=>{
+    const url=findProviderUrl(ft.name);
+    return `<div class="free-tier-card">
+      <div class="free-tier-badge">${ft.badge}</div>
+      <h3>${ft.name}</h3>
+      <div class="models">${ft.models}</div>
+      <div class="limits">
+        ${ft.limits.map(l=>`<div class="limit-row"><span class="limit-label">${l.label}</span><span class="limit-value">${l.value}</span></div>`).join('')}
+      </div>
+      <p class="note">${ft.note}</p>
+      <div style="margin-top:1rem">
+        <a href="${url}" target="_blank" rel="noopener" class="cta-btn cta-btn-free">免费使用 →</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderRankings(){
+  const grid=document.getElementById('ranking-grid');
+  grid.innerHTML=rankings.map(r=>{
+    const scoreInfo=getScoreClass(r.score);
+    return `<div class="ranking-card rank-${r.rank}">
+      <div class="ranking-card-header">
+        <div>
+          <div class="ranking-rank">#${r.rank}</div>
+          <div class="provider-name" style="margin-top:0.5rem">
+            <div class="provider-logo" style="background:${r.region==='国内'?'#8b5cf6':'#5ce1ff'}">${r.region==='国内'?'CN':'EN'}</div>
+            <div class="provider-info">
+              <span class="name">${r.name}</span>
+              <span class="model">${r.model}</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="value-score-num ${scoreInfo.cls}" style="font-size:1.5rem;font-weight:700">${r.score}</div>
+          <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase">综合评分</div>
+        </div>
+      </div>
+      <div class="ranking-price">
+        <div class="ranking-price-item">
+          <span class="ranking-price-label">输入价</span>
+          <span class="ranking-price-value">${r.input}</span>
+        </div>
+        <div class="ranking-price-item">
+          <span class="ranking-price-label">输出价</span>
+          <span class="ranking-price-value">${r.output}</span>
+        </div>
+        <div class="ranking-price-item">
+          <span class="ranking-price-label">上下文</span>
+          <span class="ranking-price-value">${r.context}</span>
+        </div>
+        <div class="ranking-price-item">
+          <span class="ranking-price-label">类型</span>
+          <span class="ranking-price-value">${r.type}</span>
+        </div>
+      </div>
+      <div class="ranking-features">
+        ${r.features.map(f=>`<span class="feature-tag">${f}</span>`).join('')}
+      </div>
+      <p style="margin-top:0.75rem;font-size:0.8rem;color:var(--text-secondary);line-height:1.6">${r.reason}</p>
+      <div style="margin-top:1rem">
+        <a href="${providerUrls[r.name]||'#'}" target="_blank" rel="noopener" class="cta-btn ${r.type.includes('免费')?'cta-btn-free':''}">${r.type.includes('免费')?'免费使用':'注册试用 →'}</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderGuides(){
+  const grid=document.getElementById('guide-grid');
+  grid.innerHTML=guides.map(g=>`
+    <div class="guide-card">
+      <div class="guide-icon" style="background:${g.iconColor}">${g.icon}</div>
+      <h3>${g.title}</h3>
+      <p>${g.desc}</p>
+      <div class="recommendation">${g.recommendation}</div>
+    </div>
+  `).join('');
+}
+
+// ===== PRICE TIMELINE RENDER =====
+function renderPriceTimeline(items){
+  const container=document.getElementById('price-timeline');
+  if(!container)return;
+  const data=items||priceHistory;
+  container.innerHTML=data.map(h=>`
+    <div class="timeline-item ${h.type==='drop'?'drop':h.type==='rise'?'rise':''}">
+      <div class="timeline-date">${h.date}</div>
+      <div class="timeline-content">
+        <div class="timeline-provider">
+          <span class="timeline-provider-name">${h.provider}</span>
+          <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)">${h.model}</span>
+          <span class="timeline-tag ${h.tagClass}">${h.tag}</span>
+        </div>
+        <div class="timeline-change">${h.change}</div>
+        <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--text-muted)">${h.note}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 从后端 API 加载最新价格变动并合并到时间线
+async function loadPriceHistoryFromAPI(){
+  try{
+    const resp=await fetch(`${API_BASE}/api/price-history?limit=50`,{signal:AbortSignal.timeout(5000)});
+    if(!resp.ok)return;
+    const apiData=await resp.json();
+    if(Array.isArray(apiData)&&apiData.length>0){
+      // 合并 API 数据和静态数据，API 数据优先（去重）
+      const staticDates=new Set(priceHistory.map(h=>`${h.provider}|${h.model}|${h.date}`));
+      const merged=[...apiData.filter(h=>!staticDates.has(`${h.provider}|${h.model}|${h.date}`)),...priceHistory];
+      merged.sort((a,b)=>b.date.localeCompare(a.date));
+      renderPriceTimeline(merged);
+    }
+  }catch{
+    // 后端未启动时使用静态数据，静默失败
+  }
+}
+
+// ===== ALERT PROVIDERS RENDER =====
+function renderAlertProviders(){
+  const container=document.getElementById('alert-providers');
+  if(!container)return;
+  container.innerHTML=alertProviders.map(p=>{
+    const color=Object.keys(providerUrls).includes(p)?'#e8b54a':'#606078';
+    return `<label class="alert-provider-chip">
+      <input type="checkbox" value="${p}">
+      <span>${p}</span>
+    </label>`;
+  }).join('');
+
+  container.querySelectorAll('.alert-provider-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      chip.classList.toggle('selected');
+    });
+  });
+}
+
+// ===== ALERT TYPES RENDER =====
+function renderAlertTypes(){
+  const container=document.getElementById('alert-types');
+  if(!container)return;
+  container.innerHTML=alertTypes.map(t=>`
+    <div class="alert-type-chip" data-id="${t.id}">
+      <span class="alert-dot" style="background:${t.color}"></span>
+      <span>${t.label}</span>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.alert-type-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      chip.classList.toggle('selected');
+    });
+  });
+}
+
+// ===== BAR CHART RENDER =====
+let chartMode='input';
+let chartRegion='all';
+function renderBarChart(){
+  const container=document.getElementById('bar-chart');
+  if(!container)return;
+  let data=providers.filter(p=>{
+    if(chartRegion==='domestic')return p.region==='domestic';
+    if(chartRegion==='international')return p.region==='international';
+    return true;
+  }).map(p=>{
+    const input=p.inputRMB!==null?p.inputRMB:(p.inputUSD!==null?p.inputUSD*7.25:0);
+    const output=p.outputRMB!==null?p.outputRMB:(p.outputUSD!==null?p.outputUSD*7.25:0);
+    let val=chartMode==='input'?input:chartMode==='output'?output:input+output;
+    if(input===0&&output===0)val=0;
+    return{name:p.name,model:p.model,val,region:p.region,color:p.color,logo:p.logo};
+  }).filter(p=>p.val>0).sort((a,b)=>a.val-b.val).slice(0,25);
+
+  const maxVal=Math.max(...data.map(d=>d.val),0.01);
+  const cls=chartMode==='input'?'input-bar':chartMode==='output'?'output-bar':'total-bar';
+  const sym='¥';
+
+  container.innerHTML=data.map(d=>{
+    const pct=(d.val/maxVal*100).toFixed(1);
+    const displayVal=d.val<0.01?'<0.01':d.val.toFixed(2);
+    return `<div class="bar-row">
+      <div class="bar-label" title="${d.name} ${d.model}">${d.name}</div>
+      <div class="bar-track">
+        <div class="bar-fill ${cls}" style="width:0%" data-pct="${pct}" data-name="${d.name}" data-model="${d.model}" data-val="${sym}${displayVal}">
+          ${sym}${displayVal}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  requestAnimationFrame(()=>{
+    container.querySelectorAll('.bar-fill').forEach(bar=>{
+      setTimeout(()=>{bar.style.width=bar.dataset.pct+'%'},50);
+    });
+  });
+}
+
+// ===== CAPABILITY MATRIX RENDER =====
+function getCapClass(val){
+  if(val==='A+')return'cap-excellent';
+  if(val==='A')return'cap-good';
+  if(val==='B')return'cap-limited';
+  if(val==='-')return'cap-none';
+  return'cap-good';
+}
+function renderCapabilityMatrix(){
+  const table=document.getElementById('cap-table');
+  if(!table)return;
+  let html='<thead><tr><th>模型</th>';
+  capColumns.forEach(c=>html+=`<th>${c.label}</th>`);
+  html+='</tr></thead><tbody>';
+  capabilitiesData.forEach(row=>{
+    html+=`<tr><td>${row.name}<br><span style="font-size:0.65rem;color:var(--text-muted);font-weight:400">${row.model}</span></td>`;
+    capColumns.forEach(c=>{
+      const val=row.caps[c.key];
+      html+=`<td><span class="cap-cell ${getCapClass(val)}">${val}</span></td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody>';
+  table.innerHTML=html;
+}
+
+// ===== SPEED BENCHMARK RENDER =====
+function renderSpeedBenchmark(){
+  const container=document.getElementById('speed-section');
+  if(!container)return;
+  const sorted=[...speedData].sort((a,b)=>b.tps-a.tps);
+  const maxTps=Math.max(...sorted.map(s=>s.tps));
+  const catColors={fast:'#34d399',medium:'#e8b54a',slow:'#fb923c'};
+  const catCls={fast:'speed-fast',medium:'speed-medium',slow:'speed-slow'};
+  const tagCls={fast:'speed-tag-fast',medium:'speed-tag-medium',slow:'speed-tag-slow'};
+  const catLabel={fast:'超快',medium:'中速',slow:'较慢'};
+
+  container.innerHTML=sorted.map((s,i)=>{
+    const pct=(s.tps/maxTps*100).toFixed(1);
+    const rankBg=catColors[s.cat];
+    return `<div class="speed-row">
+      <div class="speed-rank" style="background:${rankBg}22;color:${rankBg}">${i+1}</div>
+      <div class="speed-bar-container">
+        <div class="speed-info">
+          <span class="speed-name">${s.name}</span>
+          <span class="speed-model">${s.model}</span>
+          <span class="speed-tps">${s.tps} TPS</span>
+          <span class="speed-cat-tag ${tagCls[s.cat]}">${catLabel[s.cat]}</span>
+        </div>
+        <div class="speed-bar-bg">
+          <div class="speed-bar-fill ${catCls[s.cat]}" style="width:0%" data-pct="${pct}" title="${s.note}">
+            ${s.tps} TPS
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  requestAnimationFrame(()=>{
+    container.querySelectorAll('.speed-bar-fill').forEach(bar=>{
+      setTimeout(()=>{bar.style.width=bar.dataset.pct+'%'},50);
+    });
+  });
+}
+
+// ===== DASHBOARD STATS RENDER =====
+function renderDashboard(){
+  const container=document.getElementById('dash-grid');
+  if(!container)return;
+  const paid=providers.filter(p=>p.type==='paid'||(p.inputRMB>0||p.inputUSD>0));
+  const cheapestInput=[...paid].sort((a,b)=>{
+    const va=a.inputRMB!==null?a.inputRMB:(a.inputUSD!==null?a.inputUSD*7.25:999);
+    const vb=b.inputRMB!==null?b.inputRMB:(b.inputUSD!==null?b.inputUSD*7.25:999);
+    return va-vb;
+  })[0];
+  const cheapestInVal=cheapestInput.inputRMB!==null?cheapestInput.inputRMB:cheapestInput.inputUSD;
+  const cheapestSym=cheapestInput.inputRMB!==null?'¥':'$';
+  const freeCount=providers.filter(p=>p.freeTier||p.type==='free').length;
+  const fastest=speedData[0];
+  const largestCtx=[...providers].sort((a,b)=>{
+    const parse=s=>{const m=s.match(/(\d+)/);return m?parseInt(m[0])*(s.includes('M')?1000:1):0};
+    return parse(b.context)-parse(a.context);
+  })[0];
+  const avgScore=Math.round(providers.reduce((s,p)=>s+p.score,0)/providers.length);
+  const maxCtxNum=largestCtx.context.match(/(\d+)/)?.[0]||'';
+  const dashData=[
+    {label:'最低输入价',value:`${cheapestSym}${cheapestInVal}`,sub:`${cheapestInput.name} ${cheapestInput.model}`,icon:'💰',color:'#34d399'},
+    {label:'最快推理',value:`${fastest.tps}`,sub:`TPS · ${fastest.name}`,icon:'⚡',color:'#5ce1ff'},
+    {label:'最长上下文',value:`${largestCtx.context}`,sub:`${largestCtx.name}`,icon:'📚',color:'#e8b54a'},
+    {label:'免费方案',value:`${freeCount}`,sub:'家厂商提供免费额度',icon:'🎁',color:'#8b5cf6'},
+    {label:'收录厂商',value:`${providers.length}`,sub:'家全球厂商',icon:'🌐',color:'#3b8eff'},
+    {label:'平均性价比',value:`${avgScore}`,sub:'综合评分 / 100',icon:'📊',color:'#fb923c'},
+    {label:'价格追踪',value:priceHistory.length,sub:'条变动记录',icon:'📉',color:'#f87171'},
+    {label:'能力评测',value:capabilitiesData.length,sub:'个模型评测',icon:'🏆',color:'#a78bfa'},
+  ];
+  container.innerHTML=dashData.map(d=>`
+    <div class="dash-card" style="border-color:${d.color}22">
+      <div class="dash-icon">${d.icon}</div>
+      <div class="dash-label">${d.label}</div>
+      <div class="dash-value" style="color:${d.color}">${d.value}</div>
+      <div class="dash-sub">${d.sub}</div>
+    </div>
+  `).join('');
+}
+
+// ===== COST PIE CHART =====
+function renderCostPie(results,currency){
+  const wrap=document.getElementById('cost-pie-wrap');
+  const svg=document.getElementById('cost-pie');
+  const legend=document.getElementById('cost-pie-legend');
+  if(!wrap||!svg)return;
+  if(!results||results.length===0){wrap.style.display='none';return}
+  wrap.style.display='flex';
+  const sym=currency==='RMB'?'¥':'$';
+  const top5=results.slice(0,5);
+  const colors=['#e8b54a','#5ce1ff','#8b5cf6','#34d399','#fb923c'];
+  const total=top5.reduce((s,r)=>s+r.cost,0);
+  if(total===0){wrap.style.display='none';return}
+
+  let cumAngle=0;
+  let slices='';
+  let legendHtml='';
+  top5.forEach((r,i)=>{
+    const pct=r.cost/total;
+    const angle=pct*360;
+    const startAngle=cumAngle;
+    const endAngle=cumAngle+angle;
+    cumAngle=endAngle;
+    const x1=100+80*Math.cos((startAngle-90)*Math.PI/180);
+    const y1=100+80*Math.sin((startAngle-90)*Math.PI/180);
+    const x2=100+80*Math.cos((endAngle-90)*Math.PI/180);
+    const y2=100+80*Math.sin((endAngle-90)*Math.PI/180);
+    const largeArc=angle>180?1:0;
+    slices+=`<path d="M100,100 L${x1.toFixed(1)},${y1.toFixed(1)} A80,80 0 ${largeArc} 1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="${colors[i]}" stroke="rgba(10,10,15,0.5)" stroke-width="1"/>`;
+    legendHtml+=`<div class="pie-legend-item"><span class="pie-legend-dot" style="background:${colors[i]}"></span>${r.name}<span class="pie-legend-val">${sym}${r.cost.toFixed(2)}</span></div>`;
+  });
+  slices+=`<circle cx="100" cy="100" r="45" fill="rgba(10,10,15,0.95)"/><text x="100" y="95" text-anchor="middle" fill="#606078" font-family="JetBrains Mono,monospace" font-size="11">月均</text><text x="100" y="112" text-anchor="middle" fill="#e8b54a" font-family="Sora,sans-serif" font-size="18" font-weight="800">${sym}${total.toFixed(0)}</text>`;
+  svg.innerHTML=slices;
+  legend.innerHTML=legendHtml;
+}
+
+// ===== SCATTER PLOT RENDER =====
+let scatterMode='input';
+function renderScatterPlot(){
+  const svg=document.getElementById('scatter-svg');
+  if(!svg)return;
+  const W=800,H=500,padL=70,padR=30,padT=30,padB=50;
+  const plotW=W-padL-padR,plotH=H-padT-padB;
+
+  // 计算每个模型的价格和分数
+  const points=providers.filter(p=>{
+    const input=p.inputRMB!==null?p.inputRMB:(p.inputUSD!==null?p.inputUSD*7.25:null);
+    const output=p.outputRMB!==null?p.outputRMB:(p.outputUSD!==null?p.outputUSD*7.25:null);
+    if(input===null||output===null)return false;
+    const val=scatterMode==='input'?input:scatterMode==='output'?output:input+output;
+    return val>0&&p.score>0;
+  }).map(p=>{
+    const input=p.inputRMB!==null?p.inputRMB:(p.inputUSD!==null?p.inputUSD*7.25:0);
+    const output=p.outputRMB!==null?p.outputRMB:(p.outputUSD!==null?p.outputUSD*7.25:0);
+    const val=scatterMode==='input'?input:scatterMode==='output'?output:input+output;
+    return{
+      name:p.name,model:p.model,score:p.score,price:val,region:p.region,color:p.color,logo:p.logo,
+      input,output,
+    };
+  });
+
+  if(points.length===0)return;
+
+  const maxPrice=Math.max(...points.map(p=>p.price));
+  const xScale=v=>padL+(v/maxPrice)*plotW;
+  const yScale=s=>padT+plotH-(s/100)*plotH;
+
+  // 计算效率前沿（Pareto 最优）：价格越低 + 分数越高 = 最优
+  const sorted=[...points].sort((a,b)=>a.price-b.price);
+  const frontier=[];
+  let maxScore=0;
+  for(const p of sorted){
+    if(p.score>maxScore){
+      frontier.push(p);
+      maxScore=p.score;
+    }
+  }
+
+  let svgHtml='';
+
+  // 网格线
+  for(let i=0;i<=5;i++){
+    const y=padT+(i/5)*plotH;
+    svgHtml+=`<line class="scatter-grid-line" x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}"/>`;
+    const val=100-i*20;
+    svgHtml+=`<text class="scatter-axis-label" x="${padL-8}" y="${y+3}" text-anchor="end">${val}</text>`;
+  }
+  for(let i=0;i<=5;i++){
+    const x=padL+(i/5)*plotW;
+    svgHtml+=`<line class="scatter-grid-line" x1="${x}" y1="${padT}" x2="${x}" y2="${H-padB}"/>`;
+    const val=(maxPrice*i/5).toFixed(1);
+    svgHtml+=`<text class="scatter-axis-label" x="${x}" y="${H-padB+18}" text-anchor="middle">¥${val}</text>`;
+  }
+
+  // 轴线
+  svgHtml+=`<line class="scatter-axis-line" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}"/>`;
+  svgHtml+=`<line class="scatter-axis-line" x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}"/>`;
+  // 轴标签
+  svgHtml+=`<text class="scatter-axis-label" x="${padL+plotW/2}" y="${H-padB+38}" text-anchor="middle">${scatterMode==='input'?'输入价格':scatterMode==='output'?'输出价格':'输入+输出'} (¥/1M Token)</text>`;
+  svgHtml+=`<text class="scatter-axis-label" x="${padL-45}" y="${padT+plotH/2}" text-anchor="middle" transform="rotate(-90 ${padL-45} ${padT+plotH/2})">性能评分</text>`;
+
+  // 效率前沿线
+  if(frontier.length>1){
+    const path=frontier.map((p,i)=>`${i===0?'M':'L'} ${xScale(p.price)} ${yScale(p.score)}`).join(' ');
+    svgHtml+=`<path class="scatter-frontier" d="${path}"/>`;
+  }
+
+  // 数据点
+  points.forEach(p=>{
+    const cx=xScale(p.price),cy=yScale(p.score);
+    const fill=p.region==='domestic'?'#e8b54a':'#5ce1ff';
+    const isFrontier=frontier.includes(p);
+    svgHtml+=`<circle class="scatter-point" cx="${cx}" cy="${cy}" r="${isFrontier?7:5}" fill="${fill}" stroke="${isFrontier?'#e8b54a':'none'}" stroke-width="${isFrontier?2:0}" opacity="${isFrontier?1:0.7}">
+      <title>${p.name} ${p.model}\n价格: ¥${p.price.toFixed(2)}/1M\n评分: ${p.score}/100\n${isFrontier?'★ 效率前沿':''}</title>
+    </circle>`;
+    // 标注前沿模型名
+    if(isFrontier){
+      svgHtml+=`<text x="${cx+9}" y="${cy+3}" class="scatter-axis-label" style="fill:#e8b54a;font-weight:600">${p.name}</text>`;
+    }
+  });
+
+  svg.innerHTML=svgHtml;
+}
+
+// ===== TREND CHART RENDER =====
+function renderTrendChart(){
+  const svg=document.getElementById('trend-svg');
+  const statsEl=document.getElementById('trend-stats');
+  const legendEl=document.getElementById('trend-legend');
+  if(!svg)return;
+
+  const W=800,H=400,padL=60,padR=30,padT=30,padB=50;
+  const plotW=W-padL-padR,plotH=H-padT-padB;
+  const idx=trendData.index;
+
+  // X 轴时间映射 — 将 'YYYY-MM' 转为数字
+  const dateToNum=d=>{const[y,m]=d.split('-').map(Number);return y+(m-1)/12};
+  const dates=idx.map(d=>dateToNum(d.date));
+  const xMin=dates[0],xMax=dates[dates.length-1];
+  const dateToX=d=>padL+((dateToNum(d)-xMin)/(xMax-xMin))*plotW;
+  // Y 轴对数刻度
+  const maxV=Math.max(...trendData.tiers.flatMap(t=>t.points.map(p=>p.value)));
+  const yLogScale=v=>padT+plotH-(Math.log10(v+0.1)/Math.log10(maxV+0.1))*plotH;
+
+  let svgHtml='';
+
+  // Y 轴网格和标签
+  const yVals=[100,30,10,3,1,0.3];
+  yVals.forEach(v=>{
+    if(v>maxV)return;
+    const y=yLogScale(v);
+    svgHtml+=`<line class="trend-grid-line" x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}"/>`;
+    svgHtml+=`<text class="trend-axis-label" x="${padL-8}" y="${y+3}" text-anchor="end">${v}</text>`;
+  });
+
+  // X 轴标签
+  idx.forEach((d,i)=>{
+    if(i%3!==0&&i!==idx.length-1)return;
+    const x=dateToX(d.date);
+    svgHtml+=`<text class="trend-axis-label" x="${x}" y="${H-padB+18}" text-anchor="middle">${d.label}</text>`;
+  });
+
+  // 轴线
+  svgHtml+=`<line class="trend-axis-line" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}"/>`;
+  svgHtml+=`<line class="trend-axis-line" x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}"/>`;
+  svgHtml+=`<text class="trend-axis-label" x="${padL-40}" y="${padT+plotH/2}" text-anchor="middle" transform="rotate(-90 ${padL-40} ${padT+plotH/2})">价格指数（对数刻度）</text>`;
+
+  // 绘制各层级折线
+  let legendHtml='';
+  trendData.tiers.forEach(tier=>{
+    const pts=tier.points;
+    // 折线
+    const path=pts.map((p,i)=>`${i===0?'M':'L'} ${dateToX(p.date)} ${yLogScale(p.value)}`).join(' ');
+    svgHtml+=`<path class="trend-line" d="${path}" stroke="${tier.color}"/>`;
+    // 面积
+    const areaPath=path+` L ${dateToX(pts[pts.length-1].date)} ${H-padB} L ${dateToX(pts[0].date)} ${H-padB} Z`;
+    svgHtml+=`<path class="trend-area" d="${areaPath}" fill="${tier.color}"/>`;
+    // 数据点
+    pts.forEach(p=>{
+      const x=dateToX(p.date),y=yLogScale(p.value);
+      svgHtml+=`<circle class="trend-dot" cx="${x}" cy="${y}" r="4" fill="${tier.color}">
+        <title>${tier.name} ${p.date}: 指数 ${p.value}</title>
+      </circle>`;
+    });
+    legendHtml+=`<div class="trend-legend-item"><span class="trend-legend-line" style="background:${tier.color}"></span>${tier.name}</div>`;
+  });
+
+  // 事件标注
+  trendData.events.forEach(ev=>{
+    const x=dateToX(ev.date);
+    if(x<padL||x>W-padR)return;
+    svgHtml+=`<line x1="${x}" y1="${padT}" x2="${x}" y2="${H-padB}" stroke="rgba(232,181,74,0.2)" stroke-width="1" stroke-dasharray="2,3"/>`;
+    svgHtml+=`<text x="${x}" y="${padT-8}" class="trend-axis-label" style="fill:#e8b54a" text-anchor="middle">${ev.text}</text>`;
+  });
+
+  svg.innerHTML=svgHtml;
+  legendEl.innerHTML=legendHtml;
+
+  // 统计卡片
+  const firstIdx=idx[0].value,currentIdx=idx[idx.length-1].value;
+  const totalDrop=((firstIdx-currentIdx)/firstIdx*100).toFixed(0);
+  const last6Months=((idx[idx.length-4].value-currentIdx)/idx[idx.length-4].value*100).toFixed(0);
+  statsEl.innerHTML=`
+    <div class="trend-stat">
+      <div class="trend-stat-val down">-${totalDrop}%</div>
+      <div class="trend-stat-label">自 2024 年 1 月以来总降幅</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-stat-val down">-${last6Months}%</div>
+      <div class="trend-stat-label">近 6 个月降幅</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-stat-val">${currentIdx}</div>
+      <div class="trend-stat-label">当前价格指数（基线=100）</div>
+    </div>
+    <div class="trend-stat">
+      <div class="trend-stat-val">${idx.length}</div>
+      <div class="trend-stat-label">追踪数据点数</div>
+    </div>
+  `;
+}
+
+// ===== TOKEN COUNTER =====
+function estimateTokens(text){
+  if(!text)return 0;
+  // 混合分词估算：英文约 4 字符/Token，中文约 1.5 字符/Token
+  const cjkChars=(text.match(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/g)||[]).length;
+  const otherChars=text.length-cjkChars;
+  const cjkTokens=cjkChars/1.5;
+  const otherTokens=otherChars/4;
+  return Math.ceil(cjkTokens+otherTokens);
+}
+
+function renderTokenStats(){
+  const text=document.getElementById('token-textarea').value;
+  const chars=text.length;
+  const words=(text.match(/\S+/g)||[]).length;
+  const cjk=(text.match(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/g)||[]).length;
+  const tokens=estimateTokens(text);
+
+  document.getElementById('tc-chars').textContent=chars.toLocaleString();
+  document.getElementById('tc-words').textContent=words.toLocaleString();
+  document.getElementById('tc-cjk').textContent=cjk.toLocaleString();
+  document.getElementById('tc-tokens').textContent=tokens.toLocaleString();
+  document.getElementById('tc-tokens-desc').textContent=`${(tokens/10000).toFixed(2)} 万 Token`;
+
+  // 成本预估（Top 5 最便宜）
+  const tokensM=tokens/1000000;
+  const costPreview=document.getElementById('tc-cost-preview');
+  if(tokens===0){
+    costPreview.innerHTML='';
+    return;
+  }
+  const ranked=providers.filter(p=>{
+    const i=p.inputRMB!==null?p.inputRMB:(p.inputUSD!==null?p.inputUSD*7.25:999);
+    return i<999;
+  }).map(p=>({
+    name:p.name,model:p.model,
+    inputCost:tokensM*(p.inputRMB!==null?p.inputRMB:(p.inputUSD!==null?p.inputUSD*7.25:0)),
+    outputCost:tokensM*0.3*(p.outputRMB!==null?p.outputRMB:(p.outputUSD!==null?p.outputUSD*7.25:0)),
+  })).map(r=>({...r,total:r.inputCost+r.outputCost})).sort((a,b)=>a.total-b.total).slice(0,5);
+
+  costPreview.innerHTML=ranked.map(r=>`
+    <div class="token-cost-row">
+      <span class="token-cost-name">${r.name}</span>
+      <span class="token-cost-val">¥${r.total.toFixed(4)}</span>
+    </div>
+  `).join('')+`<div style="font-size:0.6rem;color:var(--text-muted);text-align:center;margin-top:0.3rem">按输入 ${tokens} + 输出 ${(tokens*0.3).toFixed(0)} Token 估算</div>`;
+}
+
+// ===== INTERACTIONS =====
+let currentFilter='all';
+let currentSort='default';
+let currentSearch='';
+
+// Tab switching
+document.querySelectorAll('.nav-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const target=tab.dataset.tab;
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    if(target==='all')document.getElementById('providers').classList.add('active');
+    else document.getElementById(target).classList.add('active');
+    // 懒渲染：切换到图表类标签页时重新触发动画
+    if(target==='charts')renderBarChart();
+    if(target==='speed')renderSpeedBenchmark();
+    if(target==='capabilities')renderCapabilityMatrix();
+    if(target==='dashboard')renderDashboard();
+    if(target==='scatter')renderScatterPlot();
+    if(target==='trend')renderTrendChart();
+    if(target==='counter')renderTokenStats();
+  });
+});
+
+// Chart toggle — 价格类型
+document.querySelectorAll('.chart-toggle[data-chart]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.chart-toggle[data-chart]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    chartMode=btn.dataset.chart;
+    renderBarChart();
+  });
+});
+// Chart toggle — 区域筛选
+document.querySelectorAll('.chart-toggle[data-chart-region]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.chart-toggle[data-chart-region]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    chartRegion=btn.dataset.chartRegion;
+    renderBarChart();
+  });
+});
+
+// Scatter plot toggle
+document.querySelectorAll('.chart-toggle[data-scatter]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.chart-toggle[data-scatter]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    scatterMode=btn.dataset.scatter;
+    renderScatterPlot();
+  });
+});
+
+// Token counter
+document.getElementById('token-textarea').addEventListener('input',renderTokenStats);
+document.querySelectorAll('.token-preset-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const preset=btn.dataset.preset;
+    const ta=document.getElementById('token-textarea');
+    if(preset==='clear'){
+      ta.value='';
+    }else if(tokenPresets[preset]){
+      ta.value=tokenPresets[preset];
+    }
+    renderTokenStats();
+  });
+});
+document.getElementById('tc-send-calc').addEventListener('click',()=>{
+  const tokens=estimateTokens(document.getElementById('token-textarea').value);
+  if(tokens===0)return;
+  const tokensM=(tokens/1000000).toFixed(2);
+  document.getElementById('calc-input-tokens').value=tokensM;
+  document.getElementById('calc-input-slider').value=Math.min(parseFloat(tokensM),1000);
+  const outM=(tokens*0.3/1000000).toFixed(2);
+  document.getElementById('calc-output-tokens').value=outM;
+  document.getElementById('calc-output-slider').value=Math.min(parseFloat(outM),500);
+  document.querySelector('.nav-tab[data-tab="calculator"]').click();
+  document.getElementById('calc-run').click();
+});
+
+// Filter chips
+document.querySelectorAll('.filter-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    currentFilter=chip.dataset.filter;
+    renderProviderTable(currentFilter,currentSort,currentSearch);
+  });
+});
+
+// Sort select
+document.getElementById('sort-select').addEventListener('change',e=>{
+  currentSort=e.target.value;
+  renderProviderTable(currentFilter,currentSort,currentSearch);
+});
+
+// Search
+document.getElementById('search-input').addEventListener('input',e=>{
+  currentSearch=e.target.value;
+  renderProviderTable(currentFilter,currentSort,currentSearch);
+});
+
+// ===== COST CALCULATOR =====
+let calcCurrency='RMB';
+
+document.querySelectorAll('.calc-currency-toggle button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.calc-currency-toggle button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    calcCurrency=btn.dataset.currency;
+  });
+});
+
+function calculateCost(inputTokens,outputTokens,provider){
+  let inPrice,outPrice;
+  if(calcCurrency==='RMB'){
+    inPrice=provider.inputRMB!==null?provider.inputRMB:(provider.inputUSD!==null?provider.inputUSD*7.25:0);
+    outPrice=provider.outputRMB!==null?provider.outputRMB:(provider.outputUSD!==null?provider.outputUSD*7.25:0);
+  }else{
+    inPrice=provider.inputUSD!==null?provider.inputUSD:(provider.inputRMB!==null?provider.inputRMB/7.25:0);
+    outPrice=provider.outputUSD!==null?provider.outputUSD:(provider.outputRMB!==null?provider.outputRMB/7.25:0);
+  }
+  return inPrice*inputTokens+outPrice*outputTokens;
+}
+
+// Calculator slider sync
+document.getElementById('calc-input-slider').addEventListener('input',e=>{
+  document.getElementById('calc-input-tokens').value=e.target.value;
+});
+document.getElementById('calc-input-tokens').addEventListener('input',e=>{
+  const v=parseFloat(e.target.value)||0;
+  document.getElementById('calc-input-slider').value=Math.min(v,1000);
+});
+document.getElementById('calc-output-slider').addEventListener('input',e=>{
+  document.getElementById('calc-output-tokens').value=e.target.value;
+});
+document.getElementById('calc-output-tokens').addEventListener('input',e=>{
+  const v=parseFloat(e.target.value)||0;
+  document.getElementById('calc-output-slider').value=Math.min(v,500);
+});
+
+// Scenario buttons
+document.querySelectorAll('.scenario-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.scenario-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const scene=JSON.parse(btn.dataset.scene);
+    document.getElementById('calc-input-tokens').value=scene.in;
+    document.getElementById('calc-input-slider').value=scene.in;
+    document.getElementById('calc-output-tokens').value=scene.out;
+    document.getElementById('calc-output-slider').value=scene.out;
+    document.getElementById('calc-run').click();
+  });
+});
+
+document.getElementById('calc-run').addEventListener('click',()=>{
+  const inputTokens=parseFloat(document.getElementById('calc-input-tokens').value)||0;
+  const outputTokens=parseFloat(document.getElementById('calc-output-tokens').value)||0;
+  const pref=document.getElementById('calc-preference').value;
+
+  let candidates=providers.filter(p=>{
+    if(pref==='free')return p.type==='free'||p.freeTier;
+    if(pref==='domestic')return p.region==='domestic';
+    if(pref==='international')return p.region==='international';
+    return true;
+  });
+
+  const results=candidates.map(p=>({
+    ...p,
+    cost:calculateCost(inputTokens,outputTokens,p)
+  })).sort((a,b)=>a.cost-b.cost).slice(0,6);
+
+  const sym=calcCurrency==='RMB'?'¥':'$';
+
+  document.getElementById('calc-results').innerHTML=results.map((r,i)=>{
+    const url=providerUrls[r.name]||'#';
+    const isFree=r.cost===0;
+    const isCheapest=i===0;
+    return `<div class="calc-result-card ${isCheapest?'cheapest':''}">
+      <div class="calc-result-header">
+        <div class="provider-logo" style="background:${r.color};width:28px;height:28px;font-size:0.7rem">${r.logo}</div>
+        <div>
+          <div style="font-weight:600;font-size:0.85rem">${r.name}</div>
+          <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted)">${r.model}</div>
+        </div>
+      </div>
+      <div class="calc-result-cost">
+        ${isFree?'<span style="color:var(--green)">免费</span>':`<span class="currency">${sym}</span>${r.cost.toFixed(2)}`}
+      </div>
+      <div class="calc-result-detail">
+        ${isFree?'0 成本':`月均 ${sym}${r.cost.toFixed(2)} · 输入 ${sym}${(calculateCost(inputTokens,0,r)).toFixed(2)} + 输出 ${sym}${(calculateCost(0,outputTokens,r)).toFixed(2)}`} · 上下文 ${r.context}
+      </div>
+      <div style="margin-top:0.75rem">
+        <a href="${url}" target="_blank" rel="noopener" class="cta-btn ${isFree?'cta-btn-free':''}" style="font-size:0.7rem;padding:0.35rem 0.8rem">${isFree?'免费使用':'注册 →'}</a>
+      </div>
+    </div>`;
+  }).join('');
+
+  // 渲染成本饼图
+  renderCostPie(results,calcCurrency);
+});
+
+// 滑块拖动时实时计算
+document.getElementById('calc-input-slider').addEventListener('change',()=>document.getElementById('calc-run').click());
+document.getElementById('calc-output-slider').addEventListener('change',()=>document.getElementById('calc-run').click());
+
+// ===== NEWSLETTER =====
+document.getElementById('newsletter-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const email=document.getElementById('newsletter-email').value;
+  if(email){
+    document.getElementById('newsletter-success').classList.add('show');
+    document.getElementById('newsletter-email').value='';
+    setTimeout(()=>{
+      document.getElementById('newsletter-success').classList.remove('show');
+    },5000);
+  }
+});
+
+// ===== SOCIAL SHARE =====
+function shareToTwitter(){
+  const url=encodeURIComponent(window.location.href);
+  const text=encodeURIComponent('TokenPlan · 全球 AI Token 定价全景指南 - 汇集 20+ 厂商 80+ 模型的定价数据');
+  window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`,'_blank');
+}
+
+function shareToWechat(){
+  const tip=document.createElement('div');
+  tip.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-card);border:1px solid var(--border-bright);border-radius:16px;padding:2rem 3rem;z-index:9999;text-align:center;backdrop-filter:blur(20px)';
+  tip.innerHTML='<p style="font-family:var(--font-display);font-weight:600;margin-bottom:0.5rem">分享到微信</p><p style="color:var(--text-secondary);font-size:0.85rem">请点击右上角 ··· 选择"分享给朋友"或"分享到朋友圈"</p>';
+  document.body.appendChild(tip);
+  setTimeout(()=>tip.remove(),3000);
+}
+
+function shareToWeibo(){
+  const url=encodeURIComponent(window.location.href);
+  const text=encodeURIComponent('TokenPlan · 全球 AI Token 定价全景指南');
+  window.open(`https://service.weibo.com/share/share.php?url=${url}&title=${text}`,'_blank');
+}
+
+function copyLink(){
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    const tip=document.createElement('div');
+    tip.style.cssText='position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--border-bright);border-radius:10px;padding:0.75rem 1.5rem;z-index:9999;color:var(--green);font-size:0.85rem;backdrop-filter:blur(10px)';
+    tip.textContent='链接已复制到剪贴板';
+    document.body.appendChild(tip);
+    setTimeout(()=>tip.remove(),2000);
+  });
+}
+
+// ===== INIT =====
+renderProviderTable();
+renderFreeTiers();
+renderRankings();
+renderGuides();
+renderPriceTimeline();
+renderAlertProviders();
+renderAlertTypes();
+renderBarChart();
+renderCapabilityMatrix();
+renderSpeedBenchmark();
+renderDashboard();
+renderScatterPlot();
+renderTrendChart();
+renderTokenStats();
+// 自动触发计算器初始化
+document.getElementById('calc-run').click();
+
+// Price alert form submission — 调用真实后端 API
+const API_BASE='http://localhost:3210';
+
+// 检查后端服务状态
+async function checkApiHealth(){
+  const dot=document.getElementById('alert-service-dot');
+  const text=document.getElementById('alert-service-text');
+  try{
+    const resp=await fetch(`${API_BASE}/api/health`,{signal:AbortSignal.timeout(3000)});
+    const data=await resp.json();
+    if(data.status==='ok'){
+      dot.classList.add('online');
+      dot.classList.remove('offline');
+      text.textContent=data.emailConfigured?'邮件服务在线 · 可接收预警':'预警服务在线 · 邮件待配置';
+    }
+  }catch{
+    dot.classList.add('offline');
+    text.textContent='后端未启动 · 本地预览模式';
+  }
+}
+
+// 页面加载后检查服务状态并加载动态数据
+checkApiHealth();
+loadPriceHistoryFromAPI();
+
+// 价格预警表单提交
+document.getElementById('alert-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const email=document.getElementById('alert-email').value;
+  const btn=document.getElementById('alert-submit-btn');
+  const selectedProviders=[...document.querySelectorAll('.alert-provider-chip.selected')].map(c=>c.querySelector('input').value);
+  const selectedTypes=[...document.querySelectorAll('.alert-type-chip.selected').map(c=>c.dataset.id);
+  const successEl=document.getElementById('alert-success');
+  const errorEl=document.getElementById('alert-error');
+
+  if(!email){
+    errorEl.textContent='请输入邮箱地址';
+    errorEl.classList.add('show');
+    return;
+  }
+
+  successEl.classList.remove('show');
+  errorEl.classList.remove('show');
+  btn.classList.add('loading');
+  btn.textContent='提交中...';
+
+  try{
+    const resp=await fetch(`${API_BASE}/api/subscribe`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        email,
+        providers:selectedProviders,
+        alertTypes:selectedTypes,
+      }),
+      signal:AbortSignal.timeout(10000),
+    });
+    const data=await resp.json();
+
+    if(resp.ok&&data.success){
+      let msg=data.message||'价格预警订阅成功！';
+      if(data.previewUrl){
+        msg+=` <a href="${data.previewUrl}" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">查看测试邮件</a>`;
+      }
+      successEl.innerHTML=msg;
+      successEl.classList.add('show');
+      document.getElementById('alert-email').value='';
+      document.querySelectorAll('.alert-provider-chip.selected').forEach(c=>c.classList.remove('selected'));
+      document.querySelectorAll('.alert-type-chip.selected').forEach(c=>c.classList.remove('selected'));
+      setTimeout(()=>successEl.classList.remove('show'),8000);
+    }else{
+      errorEl.textContent=data.error||'订阅失败，请稍后重试';
+      errorEl.classList.add('show');
+      setTimeout(()=>errorEl.classList.remove('show'),6000);
+    }
+  }catch(err){
+    errorEl.textContent='无法连接服务器，请确认后端服务已启动（cd server && npm start）';
+    errorEl.classList.add('show');
+    checkApiHealth();
+    setTimeout(()=>errorEl.classList.remove('show'),8000);
+  }finally{
+    btn.classList.remove('loading');
+    btn.textContent='开启预警';
+  }
+});
+
+// Scroll fade-in
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting)e.target.classList.add('visible');
+  });
+},{threshold:0.1});
+
+document.querySelectorAll('.ranking-card,.guide-card,.free-tier-card,.section-header,.calc-wrap,.newsletter-wrap,.timeline-item,.alert-wrap,.peak-section,.dash-card,.bar-row,.speed-row,.cap-table tr,.cost-pie-wrap,.scatter-wrap,.trend-wrap,.token-counter-wrap,.trend-stat').forEach(el=>{
+  el.classList.add('fade-in');
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
