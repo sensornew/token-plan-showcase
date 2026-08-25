@@ -1,6 +1,14 @@
 node_modules/
 .env
-server/data/
+server/data/subscriptions.json
+server/data/price-history.json
+server/data/price-changes.json
+server/data/prices-latest.json
+server/data/prices2.json
+server/data/relay-stations.json
+server/data/price-snapshot.json
+test-page.html
+test_tabs.py
 *.log
 .DS_Store
 Thumbs.db

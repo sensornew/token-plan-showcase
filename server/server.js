@@ -17,6 +17,7 @@ import {
   setLastChecked,
 } from './subscription-store.js';
 import { sendWelcomeEmail, sendPriceChangeEmail, isEmailConfigured } from './email-service.js';
+import { createRequire } from 'module';
 
 dotenv.config();
 
@@ -194,6 +195,120 @@ app.get('/api/stats', (req, res) => {
   res.json(getStats());
 });
 
+// ===== 中转站数据 API =====
+const _require = createRequire(import.meta.url);
+const { loadExisting: loadRelays, saveStations: saveRelays } = _require('./relay-crawler.cjs');
+
+app.get('/api/relay-stations', (req, res) => {
+  const stations = loadRelays();
+  const { type, free, verified, search } = req.query;
+  let filtered = stations;
+  if (type && type !== 'all') {
+    if (type === 'free') filtered = filtered.filter(s => s.freeTier);
+    else if (type === 'verified') filtered = filtered.filter(s => s.status === 'verified');
+    else filtered = filtered.filter(s => s.type === type);
+  }
+  if (search) {
+    const q = search.toLowerCase();
+    filtered = filtered.filter(s => {
+      const allText = (s.name + ' ' + (s.models || []).join(' ') + ' ' + (s.payment || []).join(' ') + ' ' + (s.note || '')).toLowerCase();
+      return allText.includes(q);
+    });
+  }
+  res.json({ total: filtered.length, stations: filtered });
+});
+
+app.post('/api/relay-stations/submit', (req, res) => {
+  try {
+    const { name, url, type, models, prices, payment, freeTier, note, email } = req.body;
+    if (!name || !url) return res.status(400).json({ error: '名称和 URL 为必填项' });
+    const station = {
+      name, url, type: type || 'relay', logo: name.slice(0, 2).toUpperCase(),
+      color: '#3b82f6', models: models || [], prices: prices || [],
+      discount: '待确认', payment: payment || ['待确认'],
+      freeTier: !!freeTier, note: note || '用户提交',
+      status: 'pending', source: 'user-submit',
+      submitterEmail: email, submittedAt: new Date().toISOString()
+    };
+    const saved = saveRelays([station]);
+    res.json({ success: true, total: saved.length, message: '提交成功，等待审核' });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/relay-stations/import', (req, res) => {
+  try {
+    const stations = Array.isArray(req.body) ? req.body : [req.body];
+    const saved = saveRelays(stations);
+    res.json({ success: true, total: saved.length, message: `导入 ${stations.length} 条` });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ===== 价格快照 API =====
+const SNAPSHOT_FILE = path.join(__dirname, 'data', 'price-snapshot.json');
+const PRICE_CHANGES_FILE = path.join(__dirname, 'data', 'price-changes.json');
+
+app.get('/api/price-snapshot', (req, res) => {
+  try {
+    if (!fs.existsSync(SNAPSHOT_FILE)) {
+      return res.json({ error: 'no_snapshot', message: '价格快照尚未生成。请运行 price-fetcher 或 price-scheduler。' });
+    }
+    const snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf8'));
+    const provider = req.query.provider;
+    if (provider) {
+      const result = snapshot.results?.find(r => r.provider === provider || r.name === provider);
+      if (result) return res.json(result);
+    }
+    res.json({
+      snapshotTime: snapshot.snapshotTime,
+      providerCount: snapshot.providerCount,
+      successCount: snapshot.successCount,
+      totalModels: snapshot.totalModels,
+      providers: snapshot.results?.map(r => ({
+        id: r.provider,
+        name: r.name,
+        url: r.url,
+        format: r.format,
+        modelCount: r.modelCount,
+        error: r.error || null,
+        fetchedAt: r.fetchedAt,
+        topModels: (r.models || []).slice(0, 10).map(m => ({
+          model: m.model,
+          inputPrice: m.inputPrice || m.inputRatio,
+          outputPrice: m.outputPrice || m.outputRatio,
+          cachePrice: m.cachePrice || m.cacheRatio
+        }))
+      }))
+    });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/price-changes', (req, res) => {
+  try {
+    if (!fs.existsSync(PRICE_CHANGES_FILE)) {
+      return res.json({ changes: [], message: '暂无价格变动记录。' });
+    }
+    const changes = JSON.parse(fs.readFileSync(PRICE_CHANGES_FILE, 'utf8'));
+    const limit = parseInt(req.query.limit) || 50;
+    const provider = req.query.provider;
+    const type = req.query.type;
+    let filtered = changes;
+    if (provider) filtered = filtered.filter(c => c.provider === provider);
+    if (type) filtered = filtered.filter(c => c.type === type);
+    res.json({
+      total: filtered.length,
+      changes: filtered.slice(-limit).reverse()
+    });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ===== 启动服务器 =====
 app.listen(PORT, () => {
   console.log(`\n  ┌─────────────────────────────────────────────┐`);
@@ -206,7 +321,12 @@ app.listen(PORT, () => {
   console.log(`  POST /api/subscribe        - 订阅价格预警`);
   console.log(`  GET  /api/unsubscribe      - 退订`);
   console.log(`  GET  /api/price-history    - 价格变动历史`);
+  console.log(`  GET  /api/relay-stations   - 获取中转站列表`);
+  console.log(`  POST /api/relay-stations/submit  - 提交新中转站`);
+  console.log(`  POST /api/relay-stations/import  - 批量导入中转站`);
   console.log(`  POST /api/price-change     - 添加价格变动（触发通知）`);
+  console.log(`  GET  /api/price-snapshot   - 获取价格快照`);
+  console.log(`  GET  /api/price-changes    - 获取价格变动记录`);
   console.log(`  POST /api/test-email       - 发送测试邮件`);
   console.log(`  GET  /api/health           - 健康检查\n`);
 

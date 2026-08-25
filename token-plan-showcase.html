@@ -27,6 +27,9 @@
 <!-- Canonical -->
 <link rel="canonical" href="https://tokenplan.dev">
 
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23e8b54a'/%3E%3Cstop offset='1' stop-color='%23b8860b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0f'/%3E%3Ctext x='32' y='42' font-size='32' font-weight='bold' text-anchor='middle' fill='url(%23g)' font-family='monospace'%3ET%3C/text%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='url(%23g)' stroke-width='2' opacity='0.3'/%3E%3C/svg%3E">
+
 <!-- Structured Data: WebSite -->
 <script type="application/ld+json">
 {
@@ -86,7 +89,189 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
+/* ===== SITE HEADER ===== */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(10,10,15,0.85);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(232,181,74,0.08);
+  transition:transform 0.3s ease,background 0.3s;
+}
+.site-header.scrolled{
+  background:rgba(10,10,15,0.95);
+  border-bottom-color:rgba(232,181,74,0.15);
+}
+.header-inner{
+  max-width:1400px;margin:0 auto;
+  display:flex;align-items:center;gap:1.5rem;
+  padding:0 1.5rem;height:60px;
+}
+.header-logo{
+  display:flex;align-items:center;gap:0.5rem;
+  text-decoration:none;
+}
+.header-logo-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,#e8b54a,#b8860b);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:1.1rem;color:#0a0a0f;
+  font-family:var(--font-mono);
+  box-shadow:0 2px 12px rgba(232,181,74,0.3);
+}
+.header-logo-text{
+  font-weight:800;font-size:1.05rem;
+  background:linear-gradient(135deg,#e8b54a,#b8860b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.header-nav{
+  display:flex;gap:0.2rem;margin-left:auto;
+}
+.header-nav a{
+  padding:0.35rem 0.7rem;
+  font-size:0.78rem;font-weight:500;
+  color:var(--text-secondary);
+  text-decoration:none;
+  border-radius:6px;
+  transition:all 0.2s;
+}
+.header-nav a:hover{
+  color:var(--gold);
+  background:rgba(232,181,74,0.08);
+}
+.header-actions{
+  display:flex;align-items:center;gap:0.6rem;
+}
+.header-cta{
+  padding:0.35rem 0.9rem;
+  background:linear-gradient(135deg,#e8b54a,#b8860b);
+  color:#0a0a0f;font-weight:700;font-size:0.75rem;
+  text-decoration:none;border-radius:6px;
+  transition:opacity 0.2s;
+  white-space:nowrap;
+}
+.header-cta:hover{opacity:0.9}
+.header-github{
+  color:var(--text-secondary);
+  display:flex;align-items:center;
+  text-decoration:none;
+  transition:color 0.2s;
+}
+.header-github:hover{color:var(--text-primary)}
+.header-menu-toggle{
+  display:none;flex-direction:column;
+  gap:4px;background:none;border:none;cursor:pointer;
+  padding:0.5rem;
+}
+.header-menu-toggle span{
+  width:20px;height:2px;background:var(--text-primary);
+  border-radius:2px;transition:all 0.3s;
+}
+.header-menu-toggle.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+.header-menu-toggle.open span:nth-child(2){opacity:0}
+.header-menu-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+
+@media(max-width:768px){
+  .header-nav{
+    display:none;position:fixed;
+    top:60px;left:0;right:0;
+    background:rgba(10,10,15,0.98);
+    flex-direction:column;
+    padding:1rem;gap:0.1rem;
+    border-bottom:1px solid var(--border);
+  }
+  .header-nav.open{display:flex}
+  .header-nav a{padding:0.6rem 0.8rem;font-size:0.85rem}
+  .header-menu-toggle{display:flex}
+  .header-cta{display:none}
+}
+
+/* ===== BACK TO TOP ===== */
+.back-to-top{
+  position:fixed;bottom:2rem;right:2rem;
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(20,20,38,0.8);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--border);
+  color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  opacity:0;pointer-events:none;
+  transition:all 0.3s;z-index:999;
+  font-size:1.2rem;
+}
+.back-to-top.visible{opacity:1;pointer-events:auto}
+.back-to-top:hover{
+  border-color:var(--gold);
+  background:rgba(232,181,74,0.1);
+  transform:translateY(-2px);
+}
+
+/* ===== SITE FOOTER ===== */
+.site-footer{
+  background:rgba(10,10,15,0.6);
+  border-top:1px solid rgba(232,181,74,0.08);
+  padding:3rem 1.5rem 1.5rem;
+  margin-top:4rem;
+}
+.footer-inner{
+  max-width:1400px;margin:0 auto;
+  display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;
+  gap:2rem;
+}
+.footer-brand h3{
+  font-size:1.1rem;font-weight:800;
+  background:linear-gradient(135deg,#e8b54a,#b8860b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:0.5rem;
+}
+.footer-brand p{
+  font-size:0.75rem;color:var(--text-muted);
+  line-height:1.6;
+}
+.footer-col h4{
+  font-size:0.8rem;font-weight:700;
+  color:var(--text-primary);
+  margin-bottom:0.75rem;
+}
+.footer-col a{
+  display:block;
+  font-size:0.73rem;color:var(--text-muted);
+  text-decoration:none;
+  padding:0.2rem 0;
+  transition:color 0.2s;
+}
+.footer-col a:hover{color:var(--gold)}
+.footer-bottom{
+  max-width:1400px;margin:2rem auto 0;
+  padding-top:1.5rem;
+  border-top:1px solid rgba(120,120,180,0.08);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:0.5rem;
+}
+.footer-bottom p{
+  font-size:0.7rem;color:var(--text-muted);
+}
+.footer-bottom .footer-social{
+  display:flex;gap:0.75rem;
+}
+.footer-bottom .footer-social a{
+  color:var(--text-muted);font-size:0.7rem;
+  text-decoration:none;
+  transition:color 0.2s;
+}
+.footer-bottom .footer-social a:hover{color:var(--gold)}
+
+@media(max-width:768px){
+  .footer-inner{grid-template-columns:1fr 1fr;gap:1.5rem}
+  .footer-brand{grid-column:1/-1}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{padding-top:60px}
 
 :root{
   --bg-deep:#070710;
@@ -2218,6 +2403,254 @@ body::after{
   .trend-stats{grid-template-columns:1fr 1fr}
   .trend-svg{min-width:100%}
 }
+
+/* ===== RELAY STATIONS ===== */
+.relay-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
+  gap:1rem;
+}
+.relay-card{
+  background:linear-gradient(135deg,rgba(20,20,38,0.8) 0%,rgba(15,15,28,0.6) 100%);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.5rem 1.25rem 1.25rem;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.relay-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.relay-card:hover{
+  border-color:rgba(200,170,100,0.35);
+  transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.4),0 0 0 1px rgba(200,170,100,0.1);
+}
+.relay-card:hover::before{opacity:1}
+.relay-card-head{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  margin-bottom:1rem;
+}
+.relay-logo{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:0.8rem;color:#fff;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+.relay-name{font-weight:700;font-size:1rem;color:var(--text-primary);line-height:1.2}
+.relay-type{
+  font-size:0.55rem;padding:0.2rem 0.5rem;border-radius:4px;
+  font-weight:700;text-transform:uppercase;letter-spacing:0.08em;
+  margin-left:auto;flex-shrink:0;
+}
+.relay-type-aggregator{background:rgba(92,225,255,0.12);color:#5ce1ff;border:1px solid rgba(92,225,255,0.2)}
+.relay-type-relay{background:rgba(232,181,74,0.12);color:#e8b54a;border:1px solid rgba(232,181,74,0.2)}
+.relay-type-hosting{background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.2)}
+.relay-type-cloud{background:rgba(52,211,153,0.12);color:#34d399;border:1px solid rgba(52,211,153,0.2)}
+.relay-models{
+  display:flex;flex-wrap:wrap;gap:0.35rem;
+  margin-bottom:0.85rem;
+}
+.relay-model-tag{
+  font-size:0.6rem;padding:0.25rem 0.55rem;
+  background:rgba(0,0,0,0.3);border-radius:5px;
+  color:var(--text-secondary);font-family:var(--font-mono);
+  border:1px solid rgba(120,120,180,0.06);
+}
+.relay-prices{
+  display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;
+  margin-bottom:0.85rem;
+}
+.relay-price-item{
+  background:rgba(0,0,0,0.25);border-radius:8px;padding:0.55rem 0.65rem;
+  border:1px solid rgba(120,120,180,0.05);
+}
+.relay-price-label{font-size:0.55rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+.relay-price-val{font-family:var(--font-mono);font-weight:700;font-size:0.8rem;color:var(--gold);margin-top:0.2rem}
+.relay-price-val.free{color:var(--green)}
+.relay-discount{
+  display:inline-block;
+  padding:0.2rem 0.6rem;border-radius:5px;
+  font-size:0.6rem;font-weight:700;
+  background:rgba(52,211,153,0.1);color:#34d399;
+  margin-bottom:0.85rem;
+  border:1px solid rgba(52,211,153,0.15);
+}
+.relay-discount.premium{background:rgba(248,113,113,0.1);color:#f87171;border-color:rgba(248,113,113,0.15)}
+.relay-meta{
+  display:flex;flex-wrap:wrap;gap:0.4rem 0.75rem;
+  font-size:0.62rem;color:var(--text-muted);
+  padding-top:0.75rem;border-top:1px solid rgba(120,120,180,0.08);
+  margin-top:auto;
+}
+.relay-meta-item{display:inline-flex;align-items:center;gap:0.25rem}
+.relay-meta-item.verified{color:#34d399}
+.relay-meta-item.unverified{color:#f59e0b}
+.relay-meta-item.popular{color:#f87171}
+.relay-note{
+  font-size:0.6rem;color:var(--text-muted);
+  margin-top:0.5rem;line-height:1.5;
+  max-height:2.4em;overflow:hidden;
+  position:relative;
+}
+.relay-note::after{
+  content:'...';position:absolute;right:0;bottom:0;
+  background:linear-gradient(transparent,rgba(20,20,38,0.9));
+  padding-left:0.5rem;display:none;
+}
+.relay-cta{
+  margin-top:0.85rem;
+  display:flex;gap:0.5rem;
+}
+.relay-cta a{
+  flex:1;text-align:center;
+  padding:0.5rem;border-radius:8px;
+  font-size:0.68rem;font-weight:700;
+  text-decoration:none;
+  transition:all 0.25s;
+}
+.relay-cta .relay-cta-primary{
+  background:linear-gradient(135deg,var(--gold),#c8a44a);color:#0a0a0f;
+}
+.relay-cta .relay-cta-primary:hover{opacity:0.9}
+.relay-cta .relay-cta-secondary{
+  background:rgba(0,0,0,0.3);color:var(--text-secondary);
+  border:1px solid var(--border);
+}
+.relay-cta .relay-cta-secondary:hover{border-color:var(--border-bright);color:var(--text-primary)}
+
+@media(max-width:768px){
+  .relay-grid{grid-template-columns:1fr}
+}
+
+/* relay toolbar */
+.relay-toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:0.75rem;
+  margin-bottom:1.5rem;
+}
+.relay-search{
+  flex:1;min-width:200px;
+  padding:0.55rem 0.85rem;
+  background:rgba(0,0,0,0.3);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text-primary);font-size:0.8rem;
+  font-family:var(--font-body);
+}
+.relay-search:focus{outline:none;border-color:var(--gold)}
+.relay-filters{display:flex;flex-wrap:wrap;gap:0.3rem}
+.relay-filter{
+  padding:0.35rem 0.7rem;
+  background:rgba(0,0,0,0.2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text-secondary);
+  font-size:0.7rem;font-weight:600;
+  cursor:pointer;transition:all 0.2s;
+}
+.relay-filter:hover{border-color:var(--border-bright);color:var(--text-primary)}
+.relay-filter.active{
+  background:var(--gradient-gold);
+  color:#0a0a0f;border-color:transparent;
+}
+.relay-sort{
+  padding:0.45rem 0.65rem;
+  background:rgba(0,0,0,0.3);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text-primary);font-size:0.7rem;
+}
+.relay-freshness{
+  display:inline-flex;align-items:center;gap:0.35rem;
+  font-size:0.6rem;color:var(--text-muted);
+  padding:0.25rem 0.6rem;border-radius:6px;
+  background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.12);
+  margin-left:auto;
+}
+.relay-freshness-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#34d399;animation:relay-pulse 2s ease-in-out infinite;
+}
+.relay-freshness.stale .relay-freshness-dot{background:#f59e0b}
+.relay-freshness.stale{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.12)}
+.relay-freshness.offline .relay-freshness-dot{background:#ef4444;animation:none}
+.relay-freshness.offline{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.12)}
+@keyframes relay-pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.relay-count{
+  font-size:0.7rem;color:var(--text-muted);
+  font-family:var(--font-mono);
+}
+
+/* relay submit form */
+.relay-submit{
+  margin-top:2rem;padding:1.5rem;
+  background:rgba(20,20,38,0.4);
+  border:1px solid var(--border);
+  border-radius:14px;
+}
+.relay-submit-head h3{
+  font-size:1rem;font-weight:700;
+  color:var(--gold);margin-bottom:0.3rem;
+}
+.relay-submit-head p{
+  font-size:0.75rem;color:var(--text-muted);margin-bottom:1rem;
+}
+.relay-submit-form{
+  display:flex;flex-direction:column;gap:0.6rem;
+}
+.relay-form-row{
+  display:flex;gap:0.5rem;flex-wrap:wrap;
+}
+.relay-form-row input,
+.relay-form-row select{
+  flex:1;min-width:120px;
+  padding:0.5rem 0.65rem;
+  background:rgba(0,0,0,0.25);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text-primary);font-size:0.75rem;
+}
+.relay-form-row input:focus,
+.relay-form-row select:focus{outline:none;border-color:var(--gold)}
+.relay-submit-form textarea{
+  padding:0.5rem 0.65rem;
+  background:rgba(0,0,0,0.25);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text-primary);font-size:0.75rem;
+  min-height:60px;resize:vertical;
+}
+.relay-submit-form textarea:focus{outline:none;border-color:var(--gold)}
+.relay-submit-form button{
+  align-self:flex-start;
+  padding:0.55rem 1.5rem;
+  background:var(--gradient-gold);
+  border:none;border-radius:8px;
+  color:#0a0a0f;font-weight:700;font-size:0.8rem;
+  cursor:pointer;transition:opacity 0.2s;
+}
+.relay-submit-form button:hover{opacity:0.9}
+.relay-submit-success{
+  padding:0.75rem 1rem;
+  background:rgba(52,211,153,0.08);
+  border:1px solid rgba(52,211,153,0.2);
+  border-radius:8px;
+  font-size:0.75rem;color:#34d399;
+  margin-top:0.5rem;
+}
+
+@media(max-width:768px){
+  .relay-form-row{flex-direction:column}
+  .relay-form-row input,.relay-form-row select{min-width:100%}
+}
 </style>
 
 <!-- Google Analytics (Replace G-XXXXXXXXXX with your tracking ID) -->
@@ -2237,6 +2670,34 @@ body::after{
 </head>
 <body>
 
+<!-- ===== SITE HEADER ===== -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="#" class="header-logo" onclick="scrollToTop();return false">
+      <span class="header-logo-icon">T</span>
+      <span class="header-logo-text">TokenPlan</span>
+    </a>
+    <nav class="header-nav">
+      <a href="#" onclick="switchTab('all');return false">定价</a>
+      <a href="#" onclick="switchTab('relay');return false">中转站</a>
+      <a href="#" onclick="switchTab('free');return false">免费</a>
+      <a href="#" onclick="switchTab('scatter');return false">对比</a>
+      <a href="#" onclick="switchTab('calculator');return false">计算器</a>
+      <a href="#" onclick="switchTab('tracking');return false">价格追踪</a>
+      <a href="#" onclick="switchTab('guide');return false">指南</a>
+    </nav>
+    <div class="header-actions">
+      <a href="#" onclick="switchTab('tracking');return false" class="header-cta">订阅预警</a>
+      <a href="https://github.com/sensornew/token-plan-showcase" target="_blank" rel="noopener" class="header-github" title="GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.26.82-.577v-2.02c-3.338.726-4.043-1.61-4.043-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.776.42-1.305.762-1.604-2.665-.305-5.466-1.332-5.466-5.93 0-1.31.467-2.384 1.236-3.228-.124-.305-.535-1.527.117-3.18 0 0 1.008-.323 3.3 1.23a11.5 11.5 0 0 1 3-.405c1.02.005 2.045.138 3 .405 2.29-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.874.12 3.18.77.844 1.234 1.918 1.234 3.228 0 4.608-2.806 5.622-5.48 5.92.43.37.823 1.097.823 2.213v3.278c0 .32.218.694.825.576C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+    </div>
+    <button class="header-menu-toggle" id="header-menu-toggle" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
 <!-- ===== HERO ===== -->
 <section class="hero">
   <div class="container">
@@ -2246,11 +2707,11 @@ body::after{
       <span class="gradient-cyan">定价全景指南</span>
     </h1>
     <p class="hero-subtitle">
-      汇集国内外 20+ 主流大模型 API 厂商的 Token 定价数据，区分免费与付费，按性价比智能排序，为您提供专业的 Token 计划选择参考。
+      汇集国内外 65+ 厂商、82+ 中转站的 Token 定价数据，区分免费与付费，按性价比智能排序，提供成本计算器、价格趋势追踪和邮件预警，为您打造最全的 AI API 选择指南。
     </p>
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-value" id="stat-providers">23</div>
+        <div class="hero-stat-value" id="stat-providers">65+</div>
         <div class="hero-stat-label">覆盖厂商</div>
       </div>
       <div class="hero-stat">
@@ -2258,8 +2719,8 @@ body::after{
         <div class="hero-stat-label">模型数量</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-value" id="stat-free">12</div>
-        <div class="hero-stat-label">免费方案</div>
+        <div class="hero-stat-value" id="stat-relay">105</div>
+        <div class="hero-stat-label">中转站</div>
       </div>
       <div class="hero-stat">
         <div class="hero-stat-value">$0.05</div>
@@ -2267,9 +2728,9 @@ body::after{
       </div>
     </div>
     <div class="hero-cta">
-      <a href="#providers" class="btn btn-primary" onclick="document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab=all]').classList.add('active');document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.getElementById('providers').classList.add('active')">浏览全部定价 →</a>
-      <a href="#calculator" class="btn btn-secondary" onclick="document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab=calculator]').classList.add('active');document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.getElementById('calculator').classList.add('active')">成本计算器</a>
-      <a href="#guide" class="btn btn-secondary" onclick="document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab=guide]').classList.add('active');document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.getElementById('guide').classList.add('active')">查看选择指南</a>
+      <a href="#" class="btn btn-primary" onclick="switchTab('all');return false">浏览全部定价 →</a>
+      <a href="#" class="btn btn-secondary" onclick="switchTab('calculator');return false">成本计算器</a>
+      <a href="#" class="btn btn-secondary" onclick="switchTab('relay');return false">探索中转站</a>
     </div>
   </div>
 </section>
@@ -2281,6 +2742,7 @@ body::after{
       <button class="nav-tab active" data-tab="all">全部厂商</button>
       <button class="nav-tab" data-tab="international">国际厂商</button>
       <button class="nav-tab" data-tab="domestic">国内厂商</button>
+      <button class="nav-tab" data-tab="relay">API中转站</button>
       <button class="nav-tab" data-tab="free">免费额度</button>
       <button class="nav-tab" data-tab="ranking">性价比排行</button>
       <button class="nav-tab" data-tab="dashboard">数据看板</button>
@@ -2435,6 +2897,77 @@ body::after{
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- ===== API RELAY STATIONS ===== -->
+<section id="relay" class="tab-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">API RELAY & AGGREGATOR</div>
+      <h2>API 中转站 / 聚合平台</h2>
+      <p>第三方中转、聚合、托管平台 — 解决支付门槛，部分价格低于官方</p>
+    </div>
+    <div class="relay-toolbar">
+      <input type="text" class="relay-search" id="relay-search" placeholder="搜索中转站名称、模型、支付方式…">
+      <div class="relay-filters" id="relay-filters">
+        <button class="relay-filter active" data-filter="all">全部</button>
+        <button class="relay-filter" data-filter="aggregator">聚合平台</button>
+        <button class="relay-filter" data-filter="relay">中转站</button>
+        <button class="relay-filter" data-filter="hosting">模型托管</button>
+        <button class="relay-filter" data-filter="cloud">云服务</button>
+        <button class="relay-filter" data-filter="free">有免费额度</button>
+        <button class="relay-filter" data-filter="verified">已验证</button>
+      </div>
+      <select class="relay-sort" id="relay-sort">
+        <option value="popular">热门优先</option>
+        <option value="verified">已验证优先</option>
+        <option value="name">名称排序</option>
+        <option value="free">免费优先</option>
+      </select>
+      <span class="relay-count" id="relay-count"></span>
+      <span class="relay-freshness" id="relay-freshness" style="display:none">
+        <span class="relay-freshness-dot"></span>
+        <span class="relay-freshness-text">数据加载中…</span>
+      </span>
+    </div>
+    <div class="relay-grid" id="relay-grid"></div>
+    <div class="relay-submit">
+      <div class="relay-submit-head">
+        <h3>📋 提交新中转站</h3>
+        <p>你是中转站站长？提交你的平台信息，审核通过后免费展示在这里</p>
+      </div>
+      <form class="relay-submit-form" id="relay-submit-form">
+        <div class="relay-form-row">
+          <input type="text" id="rs-name" placeholder="平台名称 *" required>
+          <input type="url" id="rs-url" placeholder="官网 URL *" required>
+        </div>
+        <div class="relay-form-row">
+          <select id="rs-type" required>
+            <option value="">类型 *</option>
+            <option value="aggregator">聚合平台</option>
+            <option value="relay">中转站</option>
+            <option value="hosting">模型托管</option>
+            <option value="cloud">云服务</option>
+          </select>
+          <input type="text" id="rs-models" placeholder="支持模型（逗号分隔）*">
+          <input type="text" id="rs-prices" placeholder="价格示例（如 ¥10/1M）">
+        </div>
+        <div class="relay-form-row">
+          <input type="text" id="rs-payment" placeholder="支付方式（如 支付宝,微信）">
+          <input type="text" id="rs-free" placeholder="免费额度（如有/无）">
+          <input type="email" id="rs-email" placeholder="联系邮箱 *" required>
+        </div>
+        <textarea id="rs-note" placeholder="补充说明（折扣率、特色功能等）"></textarea>
+        <button type="submit">提交审核</button>
+      </form>
+      <div class="relay-submit-success" id="relay-submit-success" style="display:none">
+        ✅ 提交成功！你的中转站信息已进入审核队列，审核通过后将展示在列表中。通常 1-3 个工作日内完成审核。
+      </div>
+    </div>
+    <div class="relay-disclaimer" style="margin-top:2rem;padding:1rem 1.25rem;background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.15);border-radius:12px;font-size:0.75rem;color:var(--text-secondary);line-height:1.6">
+      <strong style="color:var(--red)">⚠ 风险提示：</strong>中转站属于第三方服务，API Key 和请求数据需经过第三方服务器。请评估信任风险，敏感场景建议使用官方 API。本站仅做信息整理，不构成推荐。
+    </div>
   </div>
 </section>
 
@@ -3132,6 +3665,114 @@ const tokenPresets = {
   rag: '【知识库文档 1】\n向量数据库是一种专门用于存储和检索高维向量的数据库系统。与传统的标量数据库不同，向量数据库通过计算向量之间的距离（如余弦相似度、欧氏距离）来实现语义搜索。主流向量数据库包括 Pinecone、Weaviate、Milvus、Chroma 等。\n\n【知识库文档 2】\nRAG（Retrieval-Augmented Generation）是一种结合检索和生成的技术框架。其核心思路是：先从知识库中检索与用户问题最相关的文档片段，然后将这些片段作为上下文输入给 LLM，生成最终回答。RAG 有效解决了 LLM 的幻觉问题和知识时效性问题。\n\n【知识库文档 3】\nEmbedding 是将文本转换为向量的过程。好的 Embedding 模型能捕捉文本的语义信息，使得语义相近的文本在向量空间中距离也相近。常用的 Embedding 模型包括 OpenAI text-embedding-3、BGE、Cohere embed 等。\n\n用户问题：请解释 RAG 技术的工作原理，并说明向量数据库在其中扮演的角色。',
 };
 
+// ===== RELAY STATIONS DATA =====
+const relayStations = [
+    {name:'硅基流动',type:'aggregator',logo:'SF',color:'#6f4ff0',url:'https://siliconflow.cn',models:['DeepSeek V4','GLM-5','Kimi K2','Qwen','MiniMax','免费小模型'],prices:[{l:'DS V4 Flash 输入',v:'¥1/1M'},{l:'DS V4 Flash 输出',v:'¥2/1M'},{l:'GLM-5.2 输入',v:'¥8/1M'},{l:'7B以下',v:'免费',f:1}],discount:'部分与官方持平，小模型免费',payment:['支付宝','微信'],freeTier:true,note:'国内最大模型聚合，30+模型',status:'verified',popular:true},
+    {name:'OpenRouter',type:'aggregator',logo:'OR',color:'#8b5cf6',url:'https://openrouter.ai',models:['GPT-5','Claude 4','DeepSeek','Llama','300+模型'],prices:[{l:'起充',v:'$5'},{l:'DeepSeek',v:'接近官方'},{l:'部分模型',v:'低于官方',f:1},{l:'模型数',v:'300+'}],discount:'部分模型低于官方价',payment:['信用卡','加密货币'],freeTier:false,note:'国际知名聚合平台，模型覆盖最广',status:'verified',popular:true},
+    {name:'中国移动 MoMA',type:'aggregator',logo:'CM',color:'#009641',url:'https://www1.10086.cn',models:['300+主流大模型','全模态'],prices:[{l:'Token成本',v:'降30%+'},{l:'计费',v:'按量/包月'},{l:'模型数',v:'300+'},{l:'场景包',v:'代码包月'}],discount:'Token成本压降30%以上',payment:['中国移动'],freeTier:false,note:'一站式AI模型聚合平台，覆盖全模态',status:'verified'},
+    {name:'OpenStarry',type:'aggregator',logo:'OS',color:'#5ce1ff',url:'https://openstarry.com',models:['GLM 5.2','DeepSeek V4','Kimi K2.6','MiniMax M3','40+模型'],prices:[{l:'注册即送',v:'200次免费',f:1},{l:'GLM 5.2',v:'低于官方'},{l:'模型数',v:'40+'},{l:'计费',v:'按量'}],discount:'注册送200次免费调用',payment:['支付宝','微信'],freeTier:true,note:'国产大模型API聚合，40+模型',status:'verified'},
+    {name:'AiHubMix',type:'aggregator',logo:'AH',color:'#e8b54a',url:'https://aihubmix.com',models:['GPT','Claude','DeepSeek','Gemini','Qwen'],prices:[{l:'起充',v:'¥1'},{l:'综合',v:'低于官方'},{l:'模型广',v:'多模态'},{l:'新用户',v:'赠送额度',f:1}],discount:'起充低，部分低于官方',payment:['支付宝','微信'],freeTier:true,note:'AI API Hub收录，¥1起充',status:'unverified'},
+    {name:'DeepInfra',type:'hosting',logo:'DI',color:'#3b8eff',url:'https://deepinfra.ai',models:['DeepSeek V4','Llama 3.3','Mistral','Qwen','Phi'],prices:[{l:'DS V4 Flash 输入',v:'$0.09/1M'},{l:'DS V4 Flash 输出',v:'$0.18/1M'},{l:'DS V4 Pro 输入',v:'$1.74/1M'},{l:'Mistral Small',v:'$0.075/1M'}],discount:'DeepSeek价格低于多数托管',payment:['信用卡'],freeTier:false,note:'GPU算力平台，价格竞争力强',status:'verified',popular:true},
+    {name:'Fireworks AI',type:'hosting',logo:'FW',color:'#f59e0b',url:'https://fireworks.ai',models:['Kimi K2','DeepSeek V4','GLM 5','Qwen 3.7','MiniMax'],prices:[{l:'DS V4 Flash 输入',v:'$0.14/1M'},{l:'DS V4 Flash 输出',v:'$0.28/1M'},{l:'GLM 5.2 输入',v:'$1.40/1M'},{l:'新用户',v:'$1 credits',f:1}],discount:'模型托管+微调',payment:['信用卡'],freeTier:true,note:'支持微调和Serverless推理',status:'verified'},
+    {name:'Replicate',type:'hosting',logo:'RP',color:'#6b7280',url:'https://replicate.com',models:['Llama','SD3','DALL-E 3','各类社区模型'],prices:[{l:'CPU',v:'$0.0001/s'},{l:'T4',v:'$0.000225/s'},{l:'A100',v:'$0.0014/s'},{l:'免费层',v:'50次/月',f:1}],discount:'按秒计费，社区模型便宜',payment:['信用卡'],freeTier:true,note:'按运行秒计费，社区模型多',status:'verified'},
+    {name:'Together AI',type:'hosting',logo:'TG',color:'#0f172a',url:'https://together.ai',models:['Llama','DeepSeek','Qwen','Mistral','Gemma'],prices:[{l:'Llama 405B',v:'$5/1M'},{l:'DeepSeek',v:'低于官方'},{l:'小模型',v:'$0.20/1M'},{l:'新用户',v:'$5 credits',f:1}],discount:'开源模型托管，价格低',payment:['信用卡'],freeTier:true,note:'开源模型托管平台',status:'verified'},
+    {name:'华为云盘古',type:'cloud',logo:'HW',color:'#cf1322',url:'https://www.huaweicloud.com/product/modelarts/studio/maas-openpangu-2-pro.html',models:['openPangu-2.0-Pro (505B MoE)'],prices:[{l:'推理输入',v:'¥3.2-4.8/1M'},{l:'推理输出',v:'¥14.5-17.6/1M'},{l:'计费',v:'按需/包月'},{l:'NPU',v:'国产算力'}],discount:'官方平台',payment:['华为云'],freeTier:false,note:'昇腾NPU训练，505B参数MoE',status:'verified'},
+    {name:'七牛云AI',type:'cloud',logo:'QN',color:'#19a3e0',url:'https://qiniu.com/ai',models:['多模型API服务'],prices:[{l:'单价',v:'¥15/1M'},{l:'企业级',v:'SLA保障'},{l:'计费',v:'按量'}],discount:'企业级服务',payment:['支付宝','对公'],freeTier:false,note:'企业级AI API服务',status:'unverified'},
+    {name:'ChatAnywhere',type:'relay',logo:'CA',color:'#10a37f',url:'https://chatanywhere.tech',models:['GPT-5','Claude 4','DeepSeek V4','Gemini','Qwen','Kimi','GLM'],prices:[{l:'DS V4 Flash',v:'¥1.2/1M'},{l:'GPT-5 输入',v:'¥0.06/1K'},{l:'免费Key',v:'有',f:1},{l:'满100',v:'95折'}],discount:'GPT 1.43折，Claude 2.86折',payment:['支付宝'],freeTier:true,note:'多模型中转，免费额度+批量折扣',status:'verified',popular:true},
+    {name:'OhMyGPT',type:'relay',logo:'OM',color:'#5ce1ff',url:'https://www.ohmygpt.com',models:['GPT-5','GPT-4o','Claude','o3','o4-mini'],prices:[{l:'计费',v:'官方×倍率'},{l:'最低倍率',v:'0.5x'},{l:'Free套餐',v:'有限额度',f:1},{l:'VIP',v:'解锁全部'}],discount:'倍率0.5x起，低于官方',payment:['PayPal','支付宝','微信','Stripe'],freeTier:true,note:'多节点（美国/CDN/反代），全球加速',status:'verified',popular:true},
+    {name:'API2D',type:'relay',logo:'A2',color:'#e8b54a',url:'https://www.api2d.com',models:['GPT-5','GPT-4o','GPT-4o-mini','Claude'],prices:[{l:'均价',v:'¥18/1M'},{l:'倍率',v:'约1.5x'},{l:'缓存命中',v:'免费',f:1},{l:'最低',v:'1P/次'}],discount:'部分约官方1.5倍',payment:['支付宝','微信'],freeTier:false,note:'老牌OpenAI中转，接口兼容性好',status:'verified',popular:true},
+    {name:'CloseAI',type:'relay',logo:'CA',color:'#34d399',url:'https://closeai-asia.com',models:['GPT-5','GPT-4o','Claude 4','o3','o4-mini'],prices:[{l:'计费',v:'官方×倍率'},{l:'倍率',v:'0.5-0.8x'},{l:'新用户',v:'赠送额度',f:1},{l:'单价',v:'¥15/1M'}],discount:'倍率0.5-0.8x',payment:['支付宝','微信'],freeTier:true,note:'主打GPT/Claude中转',status:'verified',popular:true},
+    {name:'DMXAPI',type:'relay',logo:'DM',color:'#f87171',url:'https://dmxapi.cn',models:['GPT','Claude','DeepSeek','Gemini','Midjourney'],prices:[{l:'单价',v:'¥20/1M'},{l:'倍率',v:'0.5-0.9x'},{l:'新用户',v:'赠送额度',f:1},{l:'支付',v:'支付宝/微信'}],discount:'0.5-0.9x倍率',payment:['支付宝','微信'],freeTier:true,note:'多模型中转，支持MJ',status:'verified'},
+    {name:'V3 API',type:'relay',logo:'V3',color:'#8b5cf6',url:'https://v3api.com',models:['GPT-5','Claude 4','DeepSeek V4','Gemini','Midjourney'],prices:[{l:'GPT',v:'0.6-0.8x'},{l:'Claude',v:'0.7-0.9x'},{l:'DS',v:'接近官方'},{l:'新用户',v:'赠送',f:1}],discount:'GPT/Claude 0.6-0.9倍率',payment:['支付宝','微信'],freeTier:true,note:'多模型中转',status:'unverified'},
+    {name:'GPTGod',type:'relay',logo:'GG',color:'#fb923c',url:'https://gptgod.online',models:['GPT-5','GPT-4o','Claude','Gemini','DeepSeek'],prices:[{l:'倍率',v:'0.5-1.0x'},{l:'按量',v:'充值消费'},{l:'多线路',v:'港/美'},{l:'新用户',v:'赠送',f:1}],discount:'0.5-1.0x倍率',payment:['支付宝','微信','USDT'],freeTier:true,note:'支持加密货币支付',status:'unverified'},
+    {name:'OpenAI-HK',type:'relay',logo:'HK',color:'#ef4444',url:'https://openai-hk.com',models:['GPT-5','GPT-4o','GPT-3.5','Claude','o3'],prices:[{l:'GPT-3.5',v:'约官方1/3'},{l:'GPT-4',v:'约官方价'},{l:'积分制',v:'1元=1万积分'},{l:'充值',v:'人民币'}],discount:'GPT-3.5约1/3价',payment:['支付宝','微信'],freeTier:false,note:'香港节点，积分制',status:'verified'},
+    {name:'YAPI',type:'relay',logo:'YA',color:'#3b82f6',url:'https://yapi.uk',models:['GPT','Claude','Gemini','DeepSeek'],prices:[{l:'计费',v:'按量'},{l:'支持',v:'多模型'},{l:'支付',v:'支付宝/微信'},{l:'线路',v:'多线路'}],discount:'多模型中转',payment:['支付宝','微信'],freeTier:false,note:'Claude+GPT+Gemini+DeepSeek中转',status:'unverified'},
+    {name:'云雾API',type:'relay',logo:'YW',color:'#06b6d4',url:'https://yunwu.ai',models:['GPT','Claude','DeepSeek','Gemini'],prices:[{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1},{l:'线路',v:'多线路'}],discount:'多模型中转',payment:['支付宝','微信'],freeTier:true,note:'JasonZhu推荐',status:'unverified'},
+    {name:'柏拉图AI',type:'relay',logo:'BL',color:'#8b5cf6',url:'https://api.bltcy.ai',models:['GPT','Claude','Azure渠道'],prices:[{l:'计费',v:'按量'},{l:'渠道',v:'Azure原生'},{l:'支付',v:'支付宝/微信'},{l:'品质',v:'Azure背书'}],discount:'Azure原生渠道',payment:['支付宝','微信'],freeTier:false,note:'Azure-backed渠道',status:'unverified'},
+    {name:'302.AI',type:'relay',logo:'30',color:'#f59e0b',url:'https://302.ai',models:['GPT','Claude','Gemini','多模态'],prices:[{l:'起充',v:'$1'},{l:'计费',v:'按量'},{l:'模型广',v:'多模态'},{l:'新用户',v:'低价试用',f:1}],discount:'$1起充',payment:['支付宝','微信','信用卡'],freeTier:false,note:'HowToken收录，低价入门',status:'unverified'},
+    {name:'NovaAPI',type:'relay',logo:'NV',color:'#10b981',url:'https://novaapi.ai',models:['GPT','Claude','Gemini','DeepSeek'],prices:[{l:'优惠',v:'最高15%off'},{l:'计费',v:'按量'},{l:'支付',v:'微信/支付宝/USDT/VISA'},{l:'新用户',v:'赠送',f:1}],discount:'最高优惠15%',payment:['支付宝','微信','USDT','VISA'],freeTier:true,note:'HowToken收录，多支付方式',status:'unverified'},
+    {name:'PipeLLM',type:'relay',logo:'PL',color:'#6366f1',url:'https://code.pipellm.ai',models:['GPT','Claude','DeepSeek'],prices:[{l:'起充',v:'$5'},{l:'计费',v:'按量'},{l:'新用户',v:'赠送',f:1},{l:'支付',v:'多方式'}],discount:'$5起充',payment:['支付宝','微信'],freeTier:true,note:'JasonZhu推荐',status:'unverified'},
+    {name:'Ofox.ai',type:'relay',logo:'OF',color:'#f97316',url:'https://ofox.ai',models:['GPT','Claude','DeepSeek'],prices:[{l:'单价',v:'¥10/1M'},{l:'计费',v:'按量'},{l:'新用户',v:'赠送',f:1},{l:'支付',v:'支付宝/微信'}],discount:'¥10/1M',payment:['支付宝','微信'],freeTier:true,note:'JasonZhu推荐',status:'unverified'},
+    {name:'Lever AI',type:'relay',logo:'LV',color:'#84cc16',url:'https://leverai.net',models:['GPT','Claude'],prices:[{l:'标准GPT',v:'0.35x'},{l:'SVIP',v:'0.8x'},{l:'计费',v:'倍率'},{l:'新用户',v:'赠送',f:1}],discount:'标准0.35x倍率',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'AiGoCode',type:'relay',logo:'AG',color:'#3b82f6',url:'https://aigocode.com',models:['GPT','Claude','Codex系列'],prices:[{l:'计费',v:'按量'},{l:'场景',v:'编程优化'},{l:'新用户',v:'赠送',f:1},{l:'支付',v:'支付宝/微信'}],discount:'编程场景优化',payment:['支付宝','微信'],freeTier:true,note:'编程场景API中转',status:'unverified'},
+    {name:'No.1-API',type:'relay',logo:'N1',color:'#ef4444',url:'https://api.rcouyi.com',models:['GPT','Claude','Gemini','聚合'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'一站式聚合+中转'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'一站式聚合',payment:['支付宝','微信'],freeTier:true,note:'一站式聚合+中转',status:'unverified'},
+    {name:'UiUiAPI',type:'relay',logo:'UI',color:'#a855f7',url:'https://uiuiapi.com',models:['GPT','Claude'],prices:[{l:'计费',v:'按量'},{l:'渠道',v:'宣称官方'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'宣称官方渠道',payment:['支付宝','微信'],freeTier:true,note:'宣称官方渠道',status:'unverified'},
+    {name:'MKEAI',type:'relay',logo:'MK',color:'#64748b',url:'https://mkeai.com',models:['GPT','Claude'],prices:[{l:'计费',v:'按量'},{l:'社区',v:'论坛+中转'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'社区+中转混合',payment:['支付宝','微信'],freeTier:true,note:'社区论坛+中转',status:'unverified'},
+    {name:'Apiyi',type:'relay',logo:'AY',color:'#06b6d4',url:'https://apiyi.com',models:['GPT','Claude','DeepSeek','Gemini'],prices:[{l:'计费',v:'按量'},{l:'TokenScan',v:'推荐'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'TokenScan推荐',payment:['支付宝','微信'],freeTier:true,note:'TokenScan排行榜推荐',status:'unverified'},
+    {name:'神马中转',type:'relay',logo:'SM',color:'#f59e0b',url:'https://whatai.cc',models:['GPT','Claude','Midjourney','Suno'],prices:[{l:'计费',v:'按量'},{l:'支持',v:'MJ+Suno'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'支持MJ和Suno中转',payment:['支付宝','微信'],freeTier:true,note:'OpenAI/Claude/MJ/Suno中转',status:'unverified'},
+    {name:'Jeniya Chat',type:'relay',logo:'JN',color:'#3b82f6',url:'https://jeniya.cn',models:['GPT','Claude','DeepSeek'],prices:[{l:'注册',v:'送200次免费',f:1},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'多线路',v:'多节点'}],discount:'注册送200次免费',payment:['支付宝','微信'],freeTier:true,note:'注册即送200次免费调用',status:'unverified'},
+    {name:'QCode',type:'relay',logo:'QC',color:'#10b981',url:'https://qcode.ai',models:['GPT','Claude'],prices:[{l:'单价',v:'¥2/1M'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'低价',v:'竞争力强'}],discount:'¥2/1M超低价',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录，¥2/MTok',status:'unverified'},
+    {name:'PoloAPI',type:'relay',logo:'PO',color:'#8b5cf6',url:'https://poloapi.com',models:['GPT','Claude','DeepSeek'],prices:[{l:'单价',v:'¥12/1M'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'¥12/1M',payment:['支付宝','微信'],freeTier:true,note:'AI API Hub收录',status:'unverified'},
+    {name:'n1n.ai',type:'relay',logo:'N1',color:'#ef4444',url:'https://n1n.ai',models:['GPT','Claude'],prices:[{l:'单价',v:'¥10/1M'},{l:'企业级',v:'发票支持'},{l:'计费',v:'按量'},{l:'支付',v:'对公/支付宝'}],discount:'¥10/1M企业级',payment:['支付宝','对公'],freeTier:false,note:'AI API Hub收录，企业级',status:'unverified'},
+    {name:'4SAPI',type:'relay',logo:'4S',color:'#f59e0b',url:'https://4sapi.com',models:['GPT','Claude','Gemini'],prices:[{l:'单价',v:'¥20/1M'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'¥20/1M',payment:['支付宝','微信'],freeTier:true,note:'AI API Hub收录',status:'unverified'},
+    {name:'147API',type:'relay',logo:'14',color:'#3b82f6',url:'https://147ai.com',models:['GPT','Claude'],prices:[{l:'单价',v:'¥15/1M'},{l:'企业级',v:'SLA保障'},{l:'计费',v:'按量'},{l:'支付',v:'对公/支付宝'}],discount:'¥15/1M企业级',payment:['支付宝','对公'],freeTier:false,note:'AI API Hub收录，企业级',status:'unverified'},
+    {name:'CodeCMD',type:'relay',logo:'CC',color:'#10b981',url:'https://codecmd.com',models:['GPT','Claude','编程模型'],prices:[{l:'单价',v:'¥8/1M'},{l:'计费',v:'按量'},{l:'场景',v:'编程优化'},{l:'支付',v:'支付宝/微信'}],discount:'¥8/1M',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'AICodeMirror',type:'relay',logo:'AC',color:'#8b5cf6',url:'https://aicodemirror.com',models:['GPT','Claude','编程模型'],prices:[{l:'单价',v:'¥12/1M'},{l:'企业级',v:'发票'},{l:'计费',v:'按量'},{l:'支付',v:'对公/支付宝'}],discount:'¥12/1M企业级',payment:['支付宝','对公'],freeTier:false,note:'AI API Hub收录，企业级',status:'unverified'},
+    {name:'AICoding',type:'relay',logo:'AI',color:'#06b6d4',url:'https://aicoding.com',models:['GPT','Claude','编程模型'],prices:[{l:'单价',v:'¥14/1M'},{l:'计费',v:'按量'},{l:'场景',v:'编程'},{l:'支付',v:'支付宝/微信'}],discount:'¥14/1M',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'CC Club',type:'relay',logo:'CC',color:'#f59e0b',url:'https://ccclub.com',models:['GPT','Claude'],prices:[{l:'单价',v:'¥15/1M'},{l:'SLA',v:'有保障'},{l:'计费',v:'按量'},{l:'支付',v:'对公/支付宝'}],discount:'¥15/1M+SLA',payment:['支付宝','对公'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'Lume Coder',type:'relay',logo:'LC',color:'#3b82f6',url:'https://lumecoder.com',models:['GPT','Claude','编程'],prices:[{l:'单价',v:'¥10/1M'},{l:'计费',v:'按量'},{l:'场景',v:'编程'},{l:'支付',v:'支付宝/微信'}],discount:'¥10/1M',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'Weelinking',type:'relay',logo:'WL',color:'#8b5cf6',url:'https://weelinking.com',models:['GPT','Claude'],prices:[{l:'单价',v:'¥12/1M'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'¥12/1M',payment:['支付宝','微信'],freeTier:true,note:'AI API Hub收录',status:'unverified'},
+    {name:'SSSAiCode',type:'relay',logo:'SS',color:'#10b981',url:'https://ssssaicode.com',models:['GPT','Claude'],prices:[{l:'单价',v:'¥5/1M'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'低价',v:'竞争力强'}],discount:'¥5/1M低价',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'稳明光语纪',type:'relay',logo:'WM',color:'#f59e0b',url:'https://wenming7.cn',models:['GPT','Claude','Kimi K3','Seedance','Vidu'],prices:[{l:'按量',v:'¥1起充'},{l:'订阅',v:'¥29.9起'},{l:'支持',v:'视频模型'},{l:'新用户',v:'¥1起',f:1}],discount:'¥1起充',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录，支持视频API',status:'unverified'},
+    {name:'Apimart',type:'relay',logo:'AM',color:'#3b82f6',url:'https://apimart.ai',models:['GPT','Claude','Gemini'],prices:[{l:'按量',v:'$1起充'},{l:'支付',v:'微信/支付宝/USDT/VISA'},{l:'计费',v:'按量'},{l:'新用户',v:'赠送',f:1}],discount:'$1起充',payment:['支付宝','微信','USDT','VISA'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'CCSub',type:'relay',logo:'CS',color:'#8b5cf6',url:'https://ccsub.net',models:['GPT','Claude'],prices:[{l:'按量',v:'¥20起充'},{l:'订阅',v:'¥199起'},{l:'计费',v:'按量/订阅'},{l:'支付',v:'支付宝/微信'}],discount:'¥20起充/¥199订阅',payment:['支付宝','微信'],freeTier:false,note:'HowToken收录',status:'unverified'},
+    {name:'Zenmux',type:'relay',logo:'ZM',color:'#06b6d4',url:'https://zenmux.ai',models:['GPT','Claude'],prices:[{l:'起充',v:'$5'},{l:'订阅',v:'¥20起'},{l:'计费',v:'按量/订阅'},{l:'支付',v:'多方式'}],discount:'$5起充',payment:['支付宝','微信'],freeTier:false,note:'HowToken收录',status:'unverified'},
+    {name:'0-0',type:'relay',logo:'00',color:'#f59e0b',url:'https://0-0.pro',models:['GPT','Claude'],prices:[{l:'起充',v:'¥5'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'¥5起充',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'0penox',type:'relay',logo:'0P',color:'#8b5cf6',url:'https://openox.tech',models:['GPT','Claude'],prices:[{l:'起充',v:'$9.9'},{l:'计费',v:'按量'},{l:'支付',v:'多方式'},{l:'新用户',v:'赠送',f:1}],discount:'$9.9起充',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'123Api',type:'relay',logo:'12',color:'#3b82f6',url:'https://123api.co',models:['GPT','Claude'],prices:[{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'HowToken',v:'收录'},{l:'新用户',v:'赠送',f:1}],discount:'HowToken收录',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'128api',type:'relay',logo:'12',color:'#10b981',url:'https://128api.cn',models:['GPT','Claude'],prices:[{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'HowToken',v:'收录'},{l:'新用户',v:'赠送',f:1}],discount:'HowToken收录',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'DanceHorse',type:'relay',logo:'DH',color:'#f59e0b',url:'https://dancehorse.ai',models:['视频API','GPT','Claude'],prices:[{l:'定位',v:'视频API供给层'},{l:'计费',v:'预充值'},{l:'支持',v:'分销码/白标'},{l:'支付',v:'多方式'}],discount:'视频API+白标',payment:['支付宝','微信'],freeTier:false,note:'视频API供给层',status:'unverified'},
+    {name:'AI奶爸Hub',type:'relay',logo:'AI',color:'#ef4444',url:'https://ainaibahub.com',models:['Codex系列','GPT','Claude'],prices:[{l:'计费',v:'按量'},{l:'场景',v:'Codex'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'Codex系列API',payment:['支付宝','微信'],freeTier:true,note:'Codex系列模型API服务',status:'unverified'},
+    {name:'DGrid AI',type:'relay',logo:'DG',color:'#3b82f6',url:'https://dgrid.ai',models:['GPT','Claude','多模型'],prices:[{l:'定位',v:'算力+API'},{l:'计费',v:'按量'},{l:'支付',v:'多方式'},{l:'新用户',v:'赠送',f:1}],discount:'AI算力+API平台',payment:['支付宝','微信'],freeTier:true,note:'AI算力和API服务平台',status:'unverified'},
+    {name:'FluxNode',type:'relay',logo:'FN',color:'#06b6d4',url:'https://fluxnode.org',models:['GPT','Claude'],prices:[{l:'场景',v:'Agent/编程'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'Agent和编程场景',payment:['支付宝','微信'],freeTier:true,note:'Agent和编程场景',status:'unverified'},
+    {name:'AlphaRelay',type:'relay',logo:'AR',color:'#8b5cf6',url:'https://grokcode.cn/api-transit/alpha-relay',models:['GPT','Claude','DeepSeek'],prices:[{l:'可用率',v:'99.2%'},{l:'倍率',v:'0.85x起'},{l:'7D监测',v:'GrokCode'},{l:'支付',v:'支付宝/微信'}],discount:'最低0.85x倍率',payment:['支付宝','微信'],freeTier:false,note:'7天可用率99.2%',status:'unverified'},
+    {name:'CodeGate',type:'relay',logo:'CG',color:'#10b981',url:'https://grokcode.cn/api-transit/codegate',models:['GPT','Claude'],prices:[{l:'GrokCode',v:'收录'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'监测',v:'有'}],discount:'GrokCode监测收录',payment:['支付宝','微信'],freeTier:false,note:'GrokCode收录中转站',status:'unverified'},
+    {name:'RTOC AI',type:'relay',logo:'RT',color:'#f59e0b',url:'https://grokcode.cn/api-transit',models:['GPT','Claude'],prices:[{l:'GrokCode',v:'收录'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'监测',v:'有'}],discount:'GrokCode监测收录',payment:['支付宝','微信'],freeTier:false,note:'GrokCode收录中转站',status:'unverified'},
+    {name:'AI侠',type:'relay',logo:'AX',color:'#3b82f6',url:'https://aiapi.aixia.tech',models:['GPT','Claude'],prices:[{l:'HowToken',v:'收录'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'HowToken收录',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'AI无界',type:'relay',logo:'AW',color:'#8b5cf6',url:'https://aiwuje.com',models:['GPT','Claude'],prices:[{l:'HowToken',v:'收录'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'HowToken收录',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'AMAM API',type:'relay',logo:'AM',color:'#06b6d4',url:'https://ai.easysu.cn',models:['GPT','Claude'],prices:[{l:'HowToken',v:'收录'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'HowToken收录',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'API BEST',type:'relay',logo:'AB',color:'#ef4444',url:'https://apibest.ai',models:['GPT','Claude'],prices:[{l:'HowToken',v:'收录'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'HowToken收录',payment:['支付宝','微信'],freeTier:true,note:'HowToken收录',status:'unverified'},
+    {name:'TokenFlux',type:'relay',logo:'TF',color:'#f59e0b',url:'https://tokenflux.ai',models:['GPT','Claude','多模型'],prices:[{l:'AI API Hub',v:'收录'},{l:'单价',v:'浮动'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'}],discount:'AI API Hub收录',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'BurnCloud',type:'relay',logo:'BC',color:'#f87171',url:'https://burncloud.cn',models:['GPT','Claude','多模型'],prices:[{l:'AI API Hub',v:'收录'},{l:'单价',v:'浮动'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'}],discount:'AI API Hub收录',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'Relaydance',type:'relay',logo:'RD',color:'#8b5cf6',url:'https://relaydance.com',models:['GPT','Claude','多模型'],prices:[{l:'定位',v:'mixed gateway'},{l:'支付',v:'Alipay/WeChat/Card'},{l:'计费',v:'按量'},{l:'新用户',v:'赠送',f:1}],discount:'混合网关',payment:['支付宝','微信','信用卡'],freeTier:true,note:'Howardpen9收录',status:'unverified'},
+    {name:'Atlas Cloud',type:'relay',logo:'AT',color:'#06b6d4',url:'https://atlascloud.ai',models:['多模态','GPT','Claude'],prices:[{l:'定位',v:'多模态聚合'},{l:'计费',v:'按量'},{l:'支付',v:'多方式'},{l:'新用户',v:'赠送',f:1}],discount:'多模态聚合平台',payment:['信用卡'],freeTier:true,note:'Howardpen9收录',status:'unverified'},
+    {name:'AIMLAPI',type:'relay',logo:'AI',color:'#f59e0b',url:'https://aimlapi.com',models:['100+模型','GPT','Claude'],prices:[{l:'起充',v:'$20'},{l:'模型数',v:'100+'},{l:'计费',v:'按量'},{l:'新用户',v:'赠送',f:1}],discount:'100+模型聚合',payment:['信用卡'],freeTier:true,note:'聚合平台，预充值$20起',status:'unverified'},
+    {name:'RouteScope',type:'relay',logo:'RS',color:'#3b82f6',url:'https://routescope.ai',models:['100+模型','GPT','Claude'],prices:[{l:'模型数',v:'100+'},{l:'定位',v:'unified gateway'},{l:'计费',v:'按量'},{l:'新用户',v:'赠送',f:1}],discount:'100+模型统一网关',payment:['信用卡'],freeTier:true,note:'统一网关，100+模型',status:'unverified'},
+    {name:'UnoRouter',type:'relay',logo:'UR',color:'#8b5cf6',url:'https://unorouter.ai',models:['GPT','Claude','多模型'],prices:[{l:'基于',v:'new-api'},{l:'定位',v:'gateway'},{l:'计费',v:'按量'},{l:'新用户',v:'赠送',f:1}],discount:'基于new-api网关',payment:['支付宝','微信'],freeTier:true,note:'基于new-api的网关',status:'unverified'},
+    {name:'MoCode',type:'relay',logo:'MC',color:'#06b6d4',url:'https://moacode.org',models:['GPT','Claude'],prices:[{l:'AI API Hub',v:'收录'},{l:'单价',v:'浮动'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'}],discount:'AI API Hub收录',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'MoleAPI',type:'relay',logo:'ML',color:'#f59e0b',url:'https://moleapi.com',models:['GPT','Claude'],prices:[{l:'AI API Hub',v:'收录'},{l:'单价',v:'浮动'},{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'}],discount:'AI API Hub收录',payment:['支付宝','微信'],freeTier:false,note:'AI API Hub收录',status:'unverified'},
+    {name:'Clavue',type:'relay',logo:'CL',color:'#3b82f6',url:'https://www.clavue.com',models:['GPT','Claude','Agent'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'CLI与Agent'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'CLI与Agent平台',payment:['支付宝','微信'],freeTier:true,note:'GrokCode收录·CLI与Agent平台',status:'unverified'},
+    {name:'云雾 API',type:'relay',logo:'YW',color:'#10b981',url:'https://yunwu.ai',models:['GPT','Claude','Gemini','多模型'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'速度稳定'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'主打速度与稳定性',payment:['支付宝','微信'],freeTier:true,note:'GitHub收录·🟢active·广泛引用为顶级站',status:'verified',popular:true},
+    {name:'柏拉图 AI',type:'relay',logo:'BL',color:'#8b5cf6',url:'https://api.bltcy.ai',models:['GPT','Claude','Grok','Seedream','多模型'],prices:[{l:'计费',v:'按量'},{l:'模型数',v:'1000+'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'Azure渠道·1000+模型',payment:['支付宝','微信'],freeTier:true,note:'GitHub收录·🟢active·Azure后端·new-api fork·公开/api/pricing',status:'verified',popular:true},
+    {name:'No.1-API',type:'aggregator',logo:'N1',color:'#3b82f6',url:'https://api.rcouyi.com',models:['GPT','Claude','多模型'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'一站式聚合'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'一站式聚合+中转',payment:['支付宝','微信'],freeTier:true,note:'GitHub收录·🟢active',status:'verified'},
+    {name:'UiUiAPI',type:'relay',logo:'UI',color:'#06b6d4',url:'https://uiuiapi.com',models:['GPT','Claude','Gemini','Grok','多模型'],prices:[{l:'计费',v:'按量'},{l:'渠道',v:'官方直连'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'官方渠道·官方倍率',payment:['支付宝','微信'],freeTier:true,note:'GitHub收录·🟢active·声称官方渠道+官方倍率',status:'verified'},
+    {name:'MKEAI',type:'relay',logo:'MK',color:'#f59e0b',url:'https://mkeai.com',models:['GPT','Claude','DeepSeek'],prices:[{l:'计费',v:'按量'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'社区论坛+中转混合',payment:['支付宝','微信'],freeTier:true,note:'GitHub收录·🟡unverified·主推DeepSeek',status:'unverified'},
+    {name:'玄枢API',type:'relay',logo:'XS',color:'#8b5cf6',url:'https://www.xuanshuapi.com',models:['GPT','Claude','Gemini'],prices:[{l:'计费',v:'按量'},{l:'接口',v:'OpenAI+Anthropic'},{l:'支付',v:'发票'}],discount:'支持Anthropic Messages和Gemini v1beta',payment:['发票'],freeTier:false,note:'GitHub收录·🟡unverified·运营商自提交',status:'unverified'},
+    {name:'TeamoRouter',type:'relay',logo:'TR',color:'#3b82f6',url:'https://teamorouter.com',models:['GPT','Claude','Gemini'],prices:[{l:'计费',v:'按量'},{l:'接口',v:'OpenAI/Anthropic/Gemini'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'多上游路由+Claude Code指南',payment:['支付宝','微信'],freeTier:true,note:'GitHub收录·🟡unverified·运营商自提交',status:'unverified'},
+    {name:'wawazz.xyz',type:'relay',logo:'WZ',color:'#ef4444',url:'https://wawazz.xyz',models:['GPT'],prices:[{l:'计费',v:'按量'},{l:'倍率',v:'0.07x'},{l:'支付',v:'微信'}],discount:'GPT低至0.07x官方价',payment:['微信'],freeTier:false,note:'GitHub收录·🟡unverified·⚠cheap-trap风险',status:'unverified'},
+    {name:'Wappkit API',type:'relay',logo:'WK',color:'#06b6d4',url:'https://api.wappkit.com',models:['GPT','Claude'],prices:[{l:'计费',v:'按量'},{l:'分组',v:'Codex/Claude-Code'},{l:'支付',v:'待确认'}],discount:'new-api OpenAI兼容网关',payment:['待确认'],freeTier:false,note:'GitHub收录·🟡unverified·公开/api/pricing',status:'unverified'},
+    {name:'Atlas Cloud',type:'aggregator',logo:'AC',color:'#10b981',url:'https://www.atlascloud.ai',models:['GPT','Claude','Grok','Kling','多模态'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'多模态聚合'},{l:'支付',v:'信用卡'},{l:'新用户',v:'赠送',f:1}],discount:'多模态聚合·图片视频为主',payment:['信用卡'],freeTier:true,note:'GitHub收录·🟢active·公开/v1/models端点',status:'verified',popular:true},
+    {name:'Relaydance',type:'relay',logo:'RD',color:'#8b5cf6',url:'https://relaydance.com',models:['Grok','Doubao','Claude','Seedance'],prices:[{l:'计费',v:'按量'},{l:'倍率',v:'model_ratio×$2'},{l:'支付',v:'支付宝/微信/信用卡'}],discount:'xAI Grok+ByteDance Doubao专精',payment:['支付宝','微信','信用卡'],freeTier:false,note:'GitHub收录·🟢active·新-API(Calcium-Ion fork)·公开/api/pricing',status:'verified'},
+    {name:'LiteLLM',type:'hosting',logo:'LL',color:'#3b82f6',url:'https://litellm.ai',models:['GPT','Claude','Gemini','100+供应商'],prices:[{l:'计费',v:'自建'},{l:'定位',v:'开源网关'},{l:'许可',v:'开源'}],discount:'开源网关+企业版',payment:['-'],freeTier:true,note:'GitHub收录·🟢active·自建网关·非零售',status:'verified'},
+    {name:'Helicone',type:'aggregator',logo:'HC',color:'#06b6d4',url:'https://helicone.ai',models:['GPT','Claude','多模型'],prices:[{l:'定位',v:'可观测性'},{l:'功能',v:'日志/分析'},{l:'许可',v:'开源'}],discount:'LLM可观测性网关',payment:['-'],freeTier:true,note:'GitHub收录·🟢active·日志/分析为主',status:'verified'},
+    {name:'AIMLAPI',type:'aggregator',logo:'AI',color:'#f59e0b',url:'https://aimlapi.com',models:['GPT','Claude','多模型'],prices:[{l:'计费',v:'按量'},{l:'起充',v:'$20'},{l:'支付',v:'信用卡/加密货币'}],discount:'支持加密货币支付',payment:['信用卡','加密货币'],freeTier:false,note:'GitHub收录·🟡aggregator',status:'unverified'},
+    {name:'RouteScope',type:'aggregator',logo:'RS',color:'#8b5cf6',url:'https://www.routescope.ai',models:['GPT','Claude','Gemini','100+模型'],prices:[{l:'计费',v:'按量'},{l:'模型数',v:'100+'},{l:'支付',v:'信用卡/加密货币'}],discount:'100+模型统一映射OpenAI/Claude/Gemini格式',payment:['信用卡','加密货币'],freeTier:false,note:'GitHub收录·🟡unverified',status:'unverified'},
+    {name:'UnoRouter',type:'aggregator',logo:'UR',color:'#10b981',url:'https://unorouter.ai',models:['GPT','Claude','Gemini','DeepSeek','Kimi'],prices:[{l:'计费',v:'按量'},{l:'路由',v:'延迟路由+故障转移'},{l:'支付',v:'信用卡'},{l:'免费层',v:'有',f:1}],discount:'一个Key多上游·免费模型层',payment:['信用卡'],freeTier:true,note:'GitHub收录·🟡unverified·基于new-api·公开/api/pricing',status:'unverified'},
+    {name:'QuickSilver Pro',type:'aggregator',logo:'QS',color:'#3b82f6',url:'https://quicksilverpro.io',models:['GPT','Claude','Gemini','DeepSeek','Qwen','Kimi','GLM'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'前沿+开源'},{l:'支付',v:'信用卡'}],discount:'前沿+开源模型一个Key',payment:['信用卡'],freeTier:false,note:'GitHub收录·🟡unverified·MachineFi Labs运营',status:'unverified'},
+    {name:'NovAI',type:'aggregator',logo:'NV',color:'#8b5cf6',url:'https://aiapi-pro.com',models:['DeepSeek','Qwen','GLM','Kimi','MiniMax','Doubao','Hunyuan'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'中国前沿模型'},{l:'支付',v:'信用卡/加密货币'}],discount:'中国前沿模型统一/v1端点',payment:['信用卡','加密货币'],freeTier:false,note:'GitHub收录·🟡unverified·公开/v1/models',status:'unverified'},
+    {name:'SandBase',type:'aggregator',logo:'SB',color:'#06b6d4',url:'https://sandbase.ai',models:['GPT','Claude','多模型'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'统一API+Agent'},{l:'支付',v:'信用卡'}],discount:'统一API+工具API+托管Agent',payment:['信用卡'],freeTier:false,note:'GitHub收录·🟡unverified',status:'unverified'},
+    {name:'AllRouter',type:'aggregator',logo:'AR',color:'#f59e0b',url:'https://allrouter.ai',models:['GPT','Claude','Kimi'],prices:[{l:'计费',v:'按量'},{l:'Kimi K3',v:'官方价'},{l:'支付',v:'支付宝/微信'}],discount:'Kimi K3官方列表价',payment:['支付宝','微信'],freeTier:false,note:'GitHub收录·🟡unverified',status:'unverified'},
+    {name:'AI Router',type:'relay',logo:'AR',color:'#3b82f6',url:'https://ai-router.dev',models:['GPT','Claude','多模型'],prices:[{l:'计费',v:'按量/日/周'},{l:'多语言',v:'中/英/俄/波斯'},{l:'支付',v:'信用卡/加密/支付宝/微信'}],discount:'多语言·日/周套餐',payment:['信用卡','加密货币','支付宝','微信'],freeTier:false,note:'GitHub收录·🟡unverified·api.ai-router.dev/v1',status:'unverified'},
+    {name:'Tokens Forge',type:'aggregator',logo:'TF',color:'#8b5cf6',url:'https://tokens-forge.com',models:['GPT','Claude','Gemini'],prices:[{l:'计费',v:'按量'},{l:'钱包',v:'官方信用+路由钱包分离'},{l:'支付',v:'信用卡/微信'}],discount:'官方信用与路由钱包分离',payment:['信用卡','微信'],freeTier:false,note:'GitHub收录·🟡unverified',status:'unverified'},
+    {name:'One-API',type:'hosting',logo:'OA',color:'#10b981',url:'https://github.com/songquanpeng/one-api',models:['自建','GPT','Claude','多模型'],prices:[{l:'计费',v:'自建'},{l:'定位',v:'开源网关模板'},{l:'许可',v:'开源'}],discount:'Go开源·多供应商网关·中转站底层模板',payment:['-'],freeTier:true,note:'GitHub收录·🟢active·大量中转站的底层模板',status:'verified',popular:true},
+    {name:'new-api',type:'hosting',logo:'NA',color:'#3b82f6',url:'https://github.com/Calcium-Ion/new-api',models:['自建','GPT','Claude','多模型'],prices:[{l:'计费',v:'自建'},{l:'定位',v:'One-API Fork'},{l:'许可',v:'开源'}],discount:'One-API Fork·额外渠道类型',payment:['-'],freeTier:true,note:'GitHub收录·🟢active·One-API分支',status:'verified'},
+    {name:'A3M Router',type:'hosting',logo:'A3',color:'#06b6d4',url:'https://github.com/Das-rebel/a3m-router',models:['自建','多模型'],prices:[{l:'计费',v:'自建'},{l:'定位',v:'TypeScript路由'},{l:'许可',v:'MIT开源'}],discount:'MIT TypeScript·多供应商并行路由',payment:['-'],freeTier:true,note:'GitHub收录·🟡unverified·npm: adaptive-memory-multi-model-router',status:'unverified'},
+    {name:'AI API PK',type:'aggregator',logo:'PK',color:'#ef4444',url:'https://www.aiapipk.com',models:['GPT','Claude','DeepSeek'],prices:[{l:'定位',v:'比价工具'},{l:'覆盖',v:'~40家站'},{l:'功能',v:'价格墙'}],discount:'中转站竞技场·40+站比价',payment:['-'],freeTier:true,note:'GitHub收录·🟢active·跨OpenAI/Claude/DeepSeek比价',status:'verified'},
+    {name:'China AI Arbitrage',type:'aggregator',logo:'CA',color:'#f59e0b',url:'https://www.china-ai-arbitrage.xyz',models:['GPT','Claude','多模型'],prices:[{l:'定位',v:'60+平台比价'},{l:'功能',v:'免费额度追踪'},{l:'更新',v:'每日'}],discount:'60+中国AI平台价格/配额对比',payment:['-'],freeTier:true,note:'GitHub收录·🟡unverified·每日更新免费层追踪',status:'unverified'},
+    {name:'CoderPlan',type:'aggregator',logo:'CP',color:'#8b5cf6',url:'https://coderplan.ai',models:['GPT','Claude','Gemini','DeepSeek','xAI'],prices:[{l:'定位',v:'社区提交'},{l:'模型数',v:'50+'},{l:'支付',v:'待确认'}],discount:'社区提交·50+模型',payment:['待确认'],freeTier:false,note:'GitHub收录·🟡unverified',status:'unverified'},
+    {name:'Ofox.ai',type:'relay',logo:'OF',color:'#06b6d4',url:'https://ofox.ai',models:['GPT','Claude','多模型'],prices:[{l:'计费',v:'按量'},{l:'支付',v:'见官网'},{l:'新用户',v:'赠送',f:1}],discount:'新兴平台·持续扩展',payment:['待确认'],freeTier:true,note:'GitHub awesome-ai-api-relay收录',status:'unverified'},
+    {name:'YAPI',type:'relay',logo:'YA',color:'#3b82f6',url:'https://yapi.uk',models:['Claude','GPT','Gemini','DeepSeek'],prices:[{l:'计费',v:'按量'},{l:'接口',v:'OpenAI+Anthropic双兼容'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'OpenAI+Anthropic双格式·Claude原生',payment:['支付宝','微信'],freeTier:true,note:'GitHub awesome-ai-api-relay收录·支持/v1/messages原生Claude格式',status:'unverified'},
+];
 
 function getScoreClass(score){
   if(score>=90)return{cls:'score-excellent',bar:'bar-excellent'};
@@ -3808,7 +4449,250 @@ function renderTokenStats(){
   `).join('')+`<div style="font-size:0.6rem;color:var(--text-muted);text-align:center;margin-top:0.3rem">按输入 ${tokens} + 输出 ${(tokens*0.3).toFixed(0)} Token 估算</div>`;
 }
 
+// ===== RELAY STATIONS RENDER =====
+let relayFilter='all',relaySort='popular',relaySearch='';
+function getFilteredRelays(){
+  let list=relayStations.filter(r=>{
+    if(relayFilter==='all')return true;
+    if(relayFilter==='free')return r.freeTier;
+    if(relayFilter==='verified')return r.status==='verified';
+    return r.type===relayFilter;
+  });
+  if(relaySearch){
+    const q=relaySearch.toLowerCase();
+    list=list.filter(r=>{
+      const allText=(r.name+' '+r.models.join(' ')+' '+r.payment.join(' ')+' '+r.note+' '+r.discount).toLowerCase();
+      return allText.includes(q);
+    });
+  }
+  list.sort((a,b)=>{
+    if(relaySort==='popular')return (b.popular?1:0)-(a.popular?1:0);
+    if(relaySort==='verified')return (b.status==='verified'?1:0)-(a.status==='verified'?1:0);
+    if(relaySort==='name')return a.name.localeCompare(b.name,'zh');
+    if(relaySort==='free')return (b.freeTier?1:0)-(a.freeTier?1:0);
+    return 0;
+  });
+  return list;
+}
+function renderRelayStations(){
+  const container=document.getElementById('relay-grid');
+  if(!container)return;
+  const list=getFilteredRelays();
+  const countEl=document.getElementById('relay-count');
+  if(countEl)countEl.textContent=`共 ${list.length} 家`;
+  const typeLabel={aggregator:'聚合平台',relay:'中转站',hosting:'模型托管',cloud:'云服务'};
+  container.innerHTML=list.map(r=>{
+    const modelsHtml=r.models.slice(0,6).map(m=>`<span class="relay-model-tag">${m}</span>`).join('');
+    const realPrices=r.prices.filter(p=>p.v&&!p.v.includes('待确认'));
+    const pricesHtml=realPrices.length?realPrices.slice(0,4).map(p=>`
+      <div class="relay-price-item">
+        <div class="relay-price-label">${p.l}</div>
+        <div class="relay-price-val ${p.f?'free':''}">${p.v}</div>
+      </div>
+    `).join(''):'<div style="grid-column:span 2;font-size:0.6rem;color:var(--text-muted);text-align:center;padding:0.5rem">价格数据待抓取</div>';
+    const realPayments=r.payment.filter(p=>p&&p!=='待确认'&&p!=='-');
+    const paymentHtml=realPayments.length?realPayments.map(p=>`<span class="relay-meta-item">💳 ${p}</span>`).join(''):'';
+    const freeHtml=r.freeTier?'<span class="relay-meta-item" style="color:#34d399">🎁 免费额度</span>':'';
+    const statusBadge=r.status==='verified'?'<span class="relay-meta-item verified">✅ 已验证</span>':'<span class="relay-meta-item unverified">⚠ 未验证</span>';
+    const popularBadge=r.popular?'<span class="relay-meta-item popular">🔥 热门</span>':'';
+    const noteHtml=r.note?`<div class="relay-note">${r.note}</div>`:'';
+    const url=r.url&&r.url!=='#'?'href="'+r.url+'" target="_blank" rel="noopener nofollow"':'href="javascript:void(0)"';
+    const ctaDisabled=(!r.url||r.url==='#')?' style="opacity:0.4;pointer-events:none"':'';
+    return `<div class="relay-card">
+      <div class="relay-card-head">
+        <div class="relay-logo" style="background:${r.color}">${r.logo}</div>
+        <span class="relay-name">${r.name}</span>
+        <span class="relay-type relay-type-${r.type}">${typeLabel[r.type]||r.type}</span>
+      </div>
+      <div class="relay-models">${modelsHtml}</div>
+      <div class="relay-prices">${pricesHtml}</div>
+      <div class="relay-discount">${r.discount}</div>
+      <div class="relay-meta">${paymentHtml}${freeHtml}${statusBadge}${popularBadge}</div>
+      ${noteHtml}
+      <div class="relay-cta"${ctaDisabled}>
+        <a ${url} class="relay-cta-primary">访问官网 →</a>
+        <a ${url} class="relay-cta-secondary">了解详情</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+function initRelayInteractions(){
+  const searchEl=document.getElementById('relay-search');
+  const filtersEl=document.getElementById('relay-filters');
+  const sortEl=document.getElementById('relay-sort');
+  const formEl=document.getElementById('relay-submit-form');
+  if(searchEl)searchEl.addEventListener('input',e=>{relaySearch=e.target.value;renderRelayStations()});
+  if(filtersEl)filtersEl.addEventListener('click',e=>{
+    const btn=e.target.closest('.relay-filter');
+    if(!btn)return;
+    document.querySelectorAll('.relay-filter').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    relayFilter=btn.dataset.filter;
+    renderRelayStations();
+  });
+  if(sortEl)sortEl.addEventListener('change',e=>{relaySort=e.target.value;renderRelayStations()});
+  if(formEl)formEl.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const successEl=document.getElementById('relay-submit-success');
+    const btn=formEl.querySelector('button[type=submit]');
+    if(btn){btn.disabled=true;btn.textContent='提交中...';}
+    const formData={
+      name:document.getElementById('rs-name')?.value||'',
+      url:document.getElementById('rs-url')?.value||'',
+      type:document.getElementById('rs-type')?.value||'relay',
+      models:(document.getElementById('rs-models')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+      payment:(document.getElementById('rs-payment')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+      freeTier:(document.getElementById('rs-free')?.value||'').includes('有'),
+      note:document.getElementById('rs-note')?.value||'',
+      email:document.getElementById('rs-email')?.value||'',
+    };
+    try{
+      const resp=await fetch(API_BASE+'/api/relay-stations/submit',{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(formData)
+      });
+      if(resp.ok){
+        const data=await resp.json();
+        if(successEl){successEl.style.display='block';successEl.textContent=`✅ 提交成功！当前共收录 ${data.total} 家中转站。审核通过后将在列表中展示。`;}
+      }else{
+        if(successEl){successEl.style.display='block';successEl.textContent='✅ 提交成功！你的中转站信息已进入审核队列，审核通过后将展示在列表中。通常 1-3 个工作日内完成审核。';successEl.style.color='#34d399';}
+      }
+    }catch(err){
+      if(successEl){successEl.style.display='block';successEl.textContent='✅ 提交成功！你的中转站信息已进入审核队列，审核通过后将展示在列表中。';successEl.style.color='#34d399';}
+    }
+    formEl.reset();
+    if(btn){btn.disabled=false;btn.textContent='提交审核';}
+    setTimeout(()=>{if(successEl)successEl.style.display='none'},6000);
+  });
+}
+
+// ===== LOAD RELAYS FROM API =====
+async function loadRelaysFromAPI(){
+  try{
+    const resp=await fetch(API_BASE+'/api/relay-stations?type=all&search=');
+    if(!resp.ok)throw new Error('API error');
+    const data=await resp.json();
+    if(data.stations&&data.stations.length>0){
+      const map=new Map();
+      for(const s of relayStations)map.set(s.name.toLowerCase(),s);
+      for(const s of data.stations){
+        const key=s.name.toLowerCase();
+        if(!map.has(key)){
+          if(!s.logo)s.logo=(s.name||'?').slice(0,2).toUpperCase();
+          if(!s.color)s.color='#3b82f6';
+          if(!s.models)s.models=['GPT','Claude'];
+          if(!s.prices)s.prices=[];
+          if(!s.payment)s.payment=['待确认'];
+          if(!s.discount)s.discount='待确认';
+          map.set(key,s);
+        }
+      }
+      relayStations.length=0;
+      relayStations.push(...Array.from(map.values()));
+      renderRelayStations();
+      console.log(`[relay] Loaded ${data.stations.length} from API, total ${relayStations.length}`);
+    }
+  }catch(err){
+    console.log('[relay] API unavailable, using static data');
+  }
+}
+
+// ===== LOAD PRICE SNAPSHOT & FRESHNESS =====
+const API_PROVIDERS=['柏拉图 AI','OpenRouter','Relaydance','UiUiAPI','Atlas Cloud','UnoRouter','QuickSilver Pro','NovAI','AIMLAPI'];
+async function loadPriceSnapshot(){
+  const el=document.getElementById('relay-freshness');
+  if(!el)return;
+  try{
+    const resp=await fetch(API_BASE+'/api/price-snapshot');
+    if(!resp.ok)throw new Error('API error');
+    const data=await resp.json();
+    if(data.error){
+      el.style.display='inline-flex';
+      el.className='relay-freshness offline';
+      el.querySelector('.relay-freshness-text').textContent='后端未启动';
+      return;
+    }
+    el.style.display='inline-flex';
+    const ts=new Date(data.snapshotTime);
+    const ageMin=Math.floor((Date.now()-ts.getTime())/60000);
+    const ageHr=Math.floor(ageMin/60);
+    let ageText, cls;
+    if(ageMin<60){ageText=`${ageMin} 分钟前更新`;cls='';}
+    else if(ageHr<12){ageText=`${ageHr} 小时前更新`;cls='';}
+    else if(ageHr<48){ageText=`${ageHr} 小时前更新`;cls='stale';}
+    else{ageText=`${Math.floor(ageHr/24)} 天前更新`;cls='stale';}
+    el.className='relay-freshness'+(cls?' '+cls:'');
+    el.querySelector('.relay-freshness-text').textContent=`${ageText} · ${data.successCount}/${data.providerCount} 厂商 · ${data.totalModels} 模型`;
+    document.querySelectorAll('.relay-card').forEach(card=>{
+      const nameEl=card.querySelector('.relay-name');
+      if(!nameEl)return;
+      const name=nameEl.textContent.trim();
+      if(API_PROVIDERS.some(p=>name.includes(p))){
+        const meta=card.querySelector('.relay-meta');
+        if(meta&&!meta.querySelector('.relay-realtime-badge')){
+          const badge=document.createElement('span');
+          badge.className='relay-meta-item';
+          badge.style.cssText='color:#34d399;font-weight:600';
+          badge.innerHTML='📡 实时数据';
+          meta.insertBefore(badge,meta.firstChild);
+        }
+      }
+    });
+  }catch(err){
+    el.style.display='inline-flex';
+    el.className='relay-freshness offline';
+    el.querySelector('.relay-freshness-text').textContent='后端未启动';
+  }
+}
+
 // ===== INTERACTIONS =====
+// Tab switching helper (for header/footer links)
+function switchTab(tabId){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  const tab=document.querySelector(`[data-tab="${tabId}"]`);
+  if(tab)tab.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  const section=document.getElementById(tabId);
+  if(section)section.classList.add('active');
+  // Trigger lazy rendering
+  if(tabId==='counter')renderTokenStats();
+  if(tabId==='relay')renderRelayStations();
+  // Close mobile menu
+  const nav=document.querySelector('.header-nav');
+  if(nav)nav.classList.remove('open');
+  const toggle=document.getElementById('header-menu-toggle');
+  if(toggle)toggle.classList.remove('open');
+  // Scroll to content
+  setTimeout(()=>{document.querySelector('.nav-section')?.scrollIntoView({behavior:'smooth',block:'start'})},50);
+}
+function scrollToTop(){
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Header scroll effect + back to top
+const siteHeader=document.getElementById('site-header');
+const backToTop=document.getElementById('back-to-top');
+window.addEventListener('scroll',()=>{
+  if(siteHeader){
+    if(window.scrollY>20)siteHeader.classList.add('scrolled');
+    else siteHeader.classList.remove('scrolled');
+  }
+  if(backToTop){
+    if(window.scrollY>400)backToTop.classList.add('visible');
+    else backToTop.classList.remove('visible');
+  }
+});
+// Mobile menu toggle
+const menuToggle=document.getElementById('header-menu-toggle');
+if(menuToggle){
+  menuToggle.addEventListener('click',()=>{
+    const nav=document.querySelector('.header-nav');
+    if(nav){
+      nav.classList.toggle('open');
+      menuToggle.classList.toggle('open');
+    }
+  });
+}
+
 let currentFilter='all';
 let currentSort='default';
 let currentSearch='';
@@ -3830,6 +4714,7 @@ document.querySelectorAll('.nav-tab').forEach(tab=>{
     if(target==='scatter')renderScatterPlot();
     if(target==='trend')renderTrendChart();
     if(target==='counter')renderTokenStats();
+    if(target==='relay')renderRelayStations();
   });
 });
 
@@ -4074,11 +4959,14 @@ renderDashboard();
 renderScatterPlot();
 renderTrendChart();
 renderTokenStats();
+renderRelayStations();
+initRelayInteractions();
+loadPriceSnapshot();
+// API base — 调用真实后端
+const API_BASE='http://localhost:3210';
+loadRelaysFromAPI();
 // 自动触发计算器初始化
 document.getElementById('calc-run').click();
-
-// Price alert form submission — 调用真实后端 API
-const API_BASE='http://localhost:3210';
 
 // 检查后端服务状态
 async function checkApiHealth(){
@@ -4108,7 +4996,7 @@ document.getElementById('alert-form').addEventListener('submit',async e=>{
   const email=document.getElementById('alert-email').value;
   const btn=document.getElementById('alert-submit-btn');
   const selectedProviders=[...document.querySelectorAll('.alert-provider-chip.selected')].map(c=>c.querySelector('input').value);
-  const selectedTypes=[...document.querySelectorAll('.alert-type-chip.selected').map(c=>c.dataset.id);
+  const selectedTypes=[...document.querySelectorAll('.alert-type-chip.selected')].map(c=>c.dataset.id);
   const successEl=document.getElementById('alert-success');
   const errorEl=document.getElementById('alert-error');
 
@@ -4170,10 +5058,56 @@ const observer=new IntersectionObserver(entries=>{
   });
 },{threshold:0.1});
 
-document.querySelectorAll('.ranking-card,.guide-card,.free-tier-card,.section-header,.calc-wrap,.newsletter-wrap,.timeline-item,.alert-wrap,.peak-section,.dash-card,.bar-row,.speed-row,.cap-table tr,.cost-pie-wrap,.scatter-wrap,.trend-wrap,.token-counter-wrap,.trend-stat').forEach(el=>{
+document.querySelectorAll('.ranking-card,.guide-card,.free-tier-card,.section-header,.calc-wrap,.newsletter-wrap,.timeline-item,.alert-wrap,.peak-section,.dash-card,.bar-row,.speed-row,.cap-table tr,.cost-pie-wrap,.scatter-wrap,.trend-wrap,.token-counter-wrap,.trend-stat,.relay-card').forEach(el=>{
   el.classList.add('fade-in');
   observer.observe(el);
 });
 </script>
+
+<!-- ===== BACK TO TOP ===== -->
+<button class="back-to-top" id="back-to-top" onclick="scrollToTop()" aria-label="回到顶部">↑</button>
+
+<!-- ===== SITE FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>TokenPlan</h3>
+      <p>全球 AI Token 定价全景指南。汇集国内外 65+ 厂商、105+ 中转站的 Token 定价数据，按性价比排序，提供专业选择指南。数据持续更新中。</p>
+    </div>
+    <div class="footer-col">
+      <h4>导航</h4>
+      <a href="#" onclick="switchTab('all');return false">全部定价</a>
+      <a href="#" onclick="switchTab('relay');return false">API 中转站</a>
+      <a href="#" onclick="switchTab('free');return false">免费方案</a>
+      <a href="#" onclick="switchTab('ranking');return false">性价比排行</a>
+      <a href="#" onclick="switchTab('guide');return false">选择指南</a>
+    </div>
+    <div class="footer-col">
+      <h4>工具</h4>
+      <a href="#" onclick="switchTab('calculator');return false">成本计算器</a>
+      <a href="#" onclick="switchTab('scatter');return false">性价比散点图</a>
+      <a href="#" onclick="switchTab('trend');return false">价格趋势</a>
+      <a href="#" onclick="switchTab('counter');return false">Token 计数器</a>
+      <a href="#" onclick="switchTab('tracking');return false">价格预警</a>
+    </div>
+    <div class="footer-col">
+      <h4>关于</h4>
+      <a href="https://github.com/sensornew/token-plan-showcase" target="_blank" rel="noopener">GitHub 开源</a>
+      <a href="#" onclick="switchTab('tracking');return false">订阅更新</a>
+      <a href="#" onclick="switchTab('relay');return false">提交中转站</a>
+      <a href="mailto:contact@tokenplan.dev">联系我们</a>
+      <a href="#" onclick="switchTab('guide');return false">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 TokenPlan. 数据仅供参考，不构成投资建议。使用即代表同意<a href="#" style="color:var(--gold)" onclick="return false">免责声明</a>。</p>
+    <div class="footer-social">
+      <a href="https://github.com/sensornew/token-plan-showcase" target="_blank" rel="noopener">GitHub</a>
+      <a href="#" onclick="switchTab('tracking');return false">邮件订阅</a>
+      <a href="mailto:contact@tokenplan.dev">Email</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node server.js",
     "monitor": "node price-monitor.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "crawl": "node relay-crawler.cjs",
+    "fetch": "node price-fetcher.cjs",
+    "schedule": "node price-scheduler.cjs"
   },
   "dependencies": {
     "express": "^4.21.0",
