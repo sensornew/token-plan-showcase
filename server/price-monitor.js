@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
-import { currentPriceBaseline, providerPricingUrls } from './price-data.js';
+import { createRequire } from 'module';
+import { currentPriceBaseline } from './price-data.js';
 import {
   addPriceChange,
   getSubscriptionsByProvider,
@@ -10,6 +11,12 @@ import {
 import { sendPriceChangeEmail, isEmailConfigured } from './email-service.js';
 
 dotenv.config();
+
+const _require = createRequire(import.meta.url);
+const { runFetcher } = _require('./price-fetcher.cjs');
+const path = _require('path');
+const fs = _require('fs');
+const SNAPSHOT_FILE = path.join(path.dirname(_require('url').fileURLToPath(import.meta.url)), 'data', 'price-snapshot.json');
 
 const CHECK_INTERVAL = process.env.MONITOR_INTERVAL
   ? parseInt(process.env.MONITOR_INTERVAL) * 60 * 1000
@@ -25,61 +32,46 @@ function loadNotifiedSet() {
   });
 }
 
-// 模拟价格变动检测
-// 实际生产中，这里应该抓取各厂商定价页面并解析最新价格
-// 由于各家页面结构不同，此处提供框架，可按需扩展具体厂商的抓取逻辑
-async function fetchProviderPrice(providerName) {
-  const url = providerPricingUrls[providerName];
-  if (!url) return null;
-
-  try {
-    const resp = await fetch(url, {
-      headers: { 'User-Agent': 'TokenPlan-Price-Monitor/1.0' },
-      signal: AbortSignal.timeout(15000),
-    });
-    if (!resp.ok) return null;
-    const html = await resp.text();
-    return parsePriceFromHtml(providerName, html);
-  } catch (err) {
-    console.warn(`[监控] 抓取 ${providerName} 失败:`, err.message);
-    return null;
-  }
-}
-
-// 价格解析框架 — 按厂商扩展
-function parsePriceFromHtml(providerName, html) {
-  // 各厂商页面结构不同，需要定制解析逻辑
-  // 这里提供 DeepSeek 的示例框架，其他厂商可按需扩展
-  const parsers = {
-    'DeepSeek': (text) => {
-      // DeepSeek 定价页有 JSON-LD 或表格结构
-      // 实际实现需要根据页面结构调整
-      return null; // 返回 null 表示未检测到变动
-    },
-    // 其他厂商解析器可在此添加
-  };
-
-  const parser = parsers[providerName];
-  if (parser) return parser(html);
-  return null;
-}
-
-// 对比价格变动
-function detectChange(baseline, latest) {
+// 从最新快照中提取价格变动，与基线对比
+function detectChangesFromSnapshot(snapshot) {
+  if (!snapshot || !snapshot.results) return [];
   const changes = [];
-  for (const key of ['inputRMB', 'outputRMB', 'inputUSD', 'outputUSD']) {
-    if (baseline[key] != null && latest[key] != null) {
-      const oldVal = baseline[key];
-      const newVal = latest[key];
-      if (oldVal !== newVal) {
-        const isDrop = newVal < oldVal;
-        const pct = Math.abs(((newVal - oldVal) / oldVal) * 100).toFixed(1);
+  const baselineProviders = currentPriceBaseline.providers;
+
+  for (const result of snapshot.results) {
+    if (result.error || !result.models) continue;
+
+    // 检查该中转站是否有对应的基线数据
+    const baseline = baselineProviders.find(b =>
+      b.name === result.name || b.name === result.provider
+    );
+    if (!baseline) continue;
+
+    for (const model of result.models) {
+      const changeKey = `${result.name}|${model.model}|${new Date().toISOString().slice(0, 10)}`;
+      if (notifiedChanges.has(changeKey)) continue;
+
+      const inputPrice = model.inputPrice || model.inputRatio;
+      const outputPrice = model.outputPrice || model.outputRatio;
+
+      // 构建变动记录
+      if (inputPrice > 0 || outputPrice > 0) {
+        const changeText = [];
+        if (inputPrice > 0) changeText.push(`输入: ${formatPrice(inputPrice)}`);
+        if (outputPrice > 0) changeText.push(`输出: ${formatPrice(outputPrice)}`);
+
         changes.push({
-          field: key,
-          oldVal,
-          newVal,
-          isDrop,
-          pct,
+          key: changeKey,
+          record: {
+            provider: result.name,
+            model: model.model,
+            type: 'snapshot',
+            change: changeText.join(', '),
+            note: `自动抓取价格快照`,
+            date: new Date().toISOString().slice(0, 10),
+            tag: '最新价格',
+            tagClass: 'tag-new',
+          }
         });
       }
     }
@@ -87,14 +79,17 @@ function detectChange(baseline, latest) {
   return changes;
 }
 
+function formatPrice(val) {
+  if (val < 1) return val.toFixed(3);
+  if (val < 10) return val.toFixed(2);
+  return val.toFixed(1);
+}
+
 // 通知订阅用户
 async function notifySubscribers(changeRecord) {
   const providerSubs = getSubscriptionsByProvider(changeRecord.provider);
-  const alertType = changeRecord.type === 'drop' ? 'price-drop'
-    : changeRecord.type === 'new' ? 'new-model'
-    : 'price-rise';
   const typeSubs = getActiveSubscriptions().filter(s =>
-    s.alertTypes.includes(alertType) || s.alertTypes.includes('all')
+    s.alertTypes.includes('all')
   );
   const allSubs = [...new Map([...providerSubs, ...typeSubs].map(s => [s.email, s])).values()];
 
@@ -113,53 +108,47 @@ async function notifySubscribers(changeRecord) {
 // 执行一轮价格检查
 async function runPriceCheck() {
   console.log(`\n[${new Date().toISOString()}] 开始价格检查...`);
-  const baseline = currentPriceBaseline.providers;
+
+  // 1. 运行价格抓取器
+  let snapshot;
+  try {
+    console.log('  [抓取] 开始抓取中转站价格...');
+    snapshot = await runFetcher();
+    console.log(`  [抓取] 完成: ${snapshot.successCount}/${snapshot.providerCount} 家中转站`);
+  } catch (err) {
+    // runFetcher 失败时尝试读取已有的快照
+    console.warn(`  [抓取] 抓取异常: ${err.message}，尝试读取已有快照...`);
+    try {
+      if (fs.existsSync(SNAPSHOT_FILE)) {
+        snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf8'));
+      }
+    } catch {}
+  }
+
+  if (!snapshot) {
+    console.log('  [抓取] 无可用快照，跳过价格对比');
+    return 0;
+  }
+
+  // 2. 检测变动
+  const snapshotChanges = detectChangesFromSnapshot(snapshot);
+  if (snapshotChanges.length === 0) {
+    console.log('  无新价格变动');
+    setLastChecked(new Date().toISOString());
+    return 0;
+  }
+
+  // 3. 记录并通知
   let changeCount = 0;
-
-  for (const provider of baseline) {
-    const key = provider.name;
-    console.log(`  检查 ${key} ${provider.model}...`);
-
-    const latest = await fetchProviderPrice(key);
-    if (!latest) {
-      continue;
-    }
-
-    const changes = detectChange(provider, latest);
-    if (changes.length === 0) continue;
-
-    const changeKey = `${provider.name}|${provider.model}|${new Date().toISOString().slice(0, 10)}`;
-    if (notifiedChanges.has(changeKey)) {
-      console.log(`  → 已通知过，跳过`);
-      continue;
-    }
-    notifiedChanges.add(changeKey);
-
-    const changeText = changes.map(c => {
-      const currency = c.field.includes('RMB') ? '¥' : '$';
-      const arrow = c.isDrop ? '↓' : '↑';
-      return `${c.field}: ${currency}${c.oldVal} → ${currency}${c.newVal} (${arrow}${c.pct}%)`;
-    }).join('，');
-
-    const isDrop = changes.every(c => c.isDrop);
-    const changeRecord = {
-      provider: provider.name,
-      model: provider.model,
-      type: isDrop ? 'drop' : 'rise',
-      change: changeText,
-      note: `自动检测到价格变动（${changes.length} 项）`,
-      date: new Date().toISOString().slice(0, 10),
-      tag: isDrop ? '降价' : '涨价',
-      tagClass: isDrop ? 'tag-drop' : 'tag-rise',
-    };
-
-    addPriceChange(changeRecord);
+  for (const { key, record } of snapshotChanges) {
+    notifiedChanges.add(key);
+    addPriceChange(record);
 
     if (isEmailConfigured()) {
-      const notified = await notifySubscribers(changeRecord);
-      console.log(`  → 检测到变动！已通知 ${notified} 位订阅用户`);
+      const notified = await notifySubscribers(record);
+      console.log(`  → ${record.provider}/${record.model}: ${record.change} (通知 ${notified} 人)`);
     } else {
-      console.log(`  → 检测到变动！邮件服务未配置，跳过通知`);
+      console.log(`  → ${record.provider}/${record.model}: ${record.change} (邮件未配置，跳过通知)`);
     }
     changeCount++;
   }
@@ -182,21 +171,30 @@ async function startMonitor() {
   console.log(`\n  ┌─────────────────────────────────────────────┐`);
   console.log(`  │  TokenPlan 价格监控服务                      │`);
   console.log(`  │  检查间隔: ${CHECK_INTERVAL / 60000} 分钟                          │`);
-  console.log(`  │  监控厂商: ${currentPriceBaseline.providers.length} 家                        │`);
-  console.log(`  │  邮件服务: ${isEmailConfigured() ? '✅ 已配置' : '⚠️  未配置'}              │`);
+  console.log(`  │  基线厂商: ${currentPriceBaseline.providers.length} 家                        │`);
+  console.log(`  │  邮件服务: ${isEmailConfigured() ? '已配置' : '未配置'}              │`);
   console.log(`  └─────────────────────────────────────────────┘\n`);
 
   // 启动时先检查一次
   await runPriceCheck();
 
-  // 定时检查
+  // 定时检查（防重叠）
+  let running = false;
   setInterval(async () => {
+    if (running) { console.log('[监控] 上次检查仍在运行，跳过本次'); return; }
+    running = true;
     try {
       await runPriceCheck();
     } catch (err) {
-      console.error('[监控] 检查异常:', err);
+      console.error('[监控] 检查异常:', err.message);
+    } finally {
+      running = false;
     }
   }, CHECK_INTERVAL);
+
+  // 优雅关闭
+  process.on('SIGINT', () => { console.log('\n[监控] SIGINT，正在退出...'); process.exit(0); });
+  process.on('SIGTERM', () => { console.log('\n[监控] SIGTERM，正在退出...'); process.exit(0); });
 }
 
 const mode = process.argv[2];

@@ -290,7 +290,7 @@ body{padding-top:60px}
   --orange:#fb923c;
   --text-primary:#f0f0f8;
   --text-secondary:#a0a0b8;
-  --text-muted:#606078;
+  --text-muted:#7878a0;
   --gradient-gold:linear-gradient(135deg,#e8b54a,#ffd76a);
   --gradient-cyan:linear-gradient(135deg,#3b8eff,#5ce1ff);
   --gradient-hero:radial-gradient(ellipse at top,rgba(139,92,246,0.15),transparent 50%),radial-gradient(ellipse at bottom right,rgba(232,181,74,0.1),transparent 50%),radial-gradient(ellipse at bottom left,rgba(59,142,255,0.1),transparent 50%);
@@ -495,9 +495,29 @@ body::after{
 
 .nav-tabs{
   display:flex;
-  gap:0.5rem;
+  flex-wrap:wrap;
+  gap:0.5rem 1rem;
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
+}
+
+.nav-tab-group{
+  display:flex;
+  align-items:center;
+  gap:0.35rem;
+  flex-wrap:wrap;
+}
+
+.nav-tab-group-label{
+  font-family:var(--font-mono);
+  font-size:0.65rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  padding-right:0.25rem;
+  border-right:1px solid var(--border);
+  margin-right:0.25rem;
+  white-space:nowrap;
 }
 
 .nav-tab{
@@ -645,6 +665,8 @@ body::after{
   opacity:0.4;
   font-size:0.85em;
 }
+.provider-table thead th.sort-asc .sort-icon::after{content:' ↑';opacity:1}
+.provider-table thead th.sort-desc .sort-icon::after{content:' ↓';opacity:1}
 
 .provider-table tbody tr{
   border-bottom:1px solid rgba(120,120,180,0.08);
@@ -661,6 +683,93 @@ body::after{
   padding:1rem 1.25rem;
   vertical-align:middle;
 }
+
+/* 对比浮动栏 */
+.compare-bar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(7,7,16,0.95);
+  border-top:1px solid var(--border-bright);
+  padding:1rem 2rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1rem;
+  z-index:200;
+  backdrop-filter:blur(20px);
+  transform:translateY(100%);
+  transition:transform 0.3s;
+}
+.compare-bar.show{transform:translateY(0)}
+.compare-bar-info{font-size:0.85rem;color:var(--text-secondary)}
+.compare-bar-info #compare-names{margin-left:0.5rem;color:var(--gold-bright);font-weight:600}
+
+/* 对比弹窗 */
+.compare-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  z-index:300;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(5px);
+}
+.compare-modal.show{display:flex}
+.compare-modal-content{
+  background:var(--bg-card);
+  border:1px solid var(--border-bright);
+  border-radius:20px;
+  padding:2rem;
+  max-width:800px;
+  width:90%;
+  max-height:85vh;
+  overflow-y:auto;
+  position:relative;
+}
+.compare-modal-close{
+  position:absolute;
+  top:1rem;
+  right:1rem;
+  background:none;
+  border:none;
+  color:var(--text-secondary);
+  font-size:1.5rem;
+  cursor:pointer;
+}
+.compare-modal-close:hover{color:var(--text)}
+.compare-modal-body{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.5rem;
+  margin-top:1.5rem;
+}
+.compare-col{
+  background:var(--bg-darker);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.25rem;
+}
+.compare-col h4{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  margin-bottom:1rem;
+  font-size:1rem;
+}
+.compare-row{
+  display:flex;
+  justify-content:space-between;
+  padding:0.5rem 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.85rem;
+}
+.compare-row:last-child{border-bottom:none}
+.compare-row .label{color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem}
+.compare-row .val{color:var(--text);font-weight:500}
+.compare-winner{color:var(--green);font-weight:600}
 
 .provider-name{
   display:flex;
@@ -1359,6 +1468,8 @@ body::after{
 .calc-action{
   display:flex;
   justify-content:center;
+  gap:0.75rem;
+  flex-wrap:wrap;
   margin-top:1.5rem;
 }
 
@@ -1780,11 +1891,121 @@ body::after{
 
 .alert-header p{color:var(--text-secondary);font-size:0.9rem}
 
-.alert-providers{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+.sub-mgmt-wrap{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:2.5rem;
+  margin-top:2rem;
+  backdrop-filter:blur(15px);
+}
+.sub-mgmt-form{
+  display:flex;
   gap:0.75rem;
+  max-width:500px;
+  margin:0 auto;
+}
+.sub-mgmt-form input{
+  flex:1;
+  padding:0.75rem 1rem;
+  background:var(--bg-darker);
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--text);
+  font-family:var(--font-mono);
+  font-size:0.9rem;
+}
+.sub-mgmt-form button{
+  padding:0.75rem 1.5rem;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:opacity 0.2s;
+}
+.sub-mgmt-form button:hover{opacity:0.85}
+.sub-mgmt-form button:disabled{opacity:0.5;cursor:not-allowed}
+.sub-mgmt-result{
+  margin-top:1.5rem;
+  text-align:center;
+}
+.sub-mgmt-info{
+  display:inline-block;
+  text-align:left;
+  background:var(--bg-darker);
+  border:1px solid var(--border-bright);
+  border-radius:12px;
+  padding:1.25rem 1.5rem;
+  max-width:500px;
+  width:100%;
+}
+.sub-mgmt-info-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0.4rem 0;
+  font-size:0.85rem;
+}
+.sub-mgmt-info-label{color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em}
+.sub-mgmt-info-value{color:var(--text);font-weight:500}
+.sub-mgmt-unsub-btn{
+  margin-top:0.75rem;
+  padding:0.5rem 1.25rem;
+  background:transparent;
+  color:#f87171;
+  border:1px solid #f87171;
+  border-radius:8px;
+  font-size:0.85rem;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.sub-mgmt-unsub-btn:hover{background:#f87171;color:#fff}
+.sub-mgmt-empty{color:var(--text-muted);font-size:0.9rem;padding:1rem}
+.sub-mgmt-error{color:#f87171;font-size:0.9rem;padding:1rem}
+
+.alert-providers{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
   margin-bottom:2rem;
+}
+.alert-provider-group{
+  background:rgba(20,20,38,0.4);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1rem;
+}
+.alert-provider-group-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:0.75rem;
+}
+.alert-provider-group-label{
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+}
+.alert-provider-group-toggle{
+  background:none;
+  border:1px solid var(--border);
+  color:var(--text-secondary);
+  font-size:0.7rem;
+  padding:0.2rem 0.6rem;
+  border-radius:6px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.alert-provider-group-toggle:hover{border-color:var(--gold);color:var(--gold)}
+.alert-provider-group-chips{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:0.5rem;
 }
 
 .alert-provider-chip{
@@ -1964,6 +2185,13 @@ body::after{
   .alert-providers{grid-template-columns:1fr 1fr}
   .peak-table{font-size:0.7rem}
   .peak-table th,.peak-table td{padding:0.5rem}
+  .nav-section{padding:0.5rem 0}
+  .nav-tab{padding:0.45rem 0.8rem;font-size:0.75rem}
+  .nav-tab-group-label{font-size:0.55rem;padding-right:0.15rem;margin-right:0.15rem}
+  .nav-tab-group{gap:0.25rem}
+  .nav-tabs{gap:0.35rem 0.5rem}
+  .alert-provider-group-chips{grid-template-columns:1fr 1fr}
+  .compare-modal-body{grid-template-columns:1fr}
 }
 
 /* ===== PRICE CHARTS ===== */
@@ -2657,10 +2885,12 @@ body::after{
 <!-- Google Analytics (Replace G-XXXXXXXXXX with your tracking ID) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
+  // TODO: 部署前替换为你的实际 Google Analytics 测量 ID
+  // 获取方式: https://support.google.com/analytics/answer/9539598
   window.dataLayer=window.dataLayer||[];
   function gtag(){dataLayer.push(arguments)}
   gtag('js',new Date());
-  gtag('config','G-XXXXXXXXXX');
+  gtag('config','G-XXXXXXXXXX',{send_page_view:false});
 </script>
 
 <!-- Baidu Analytics (Replace with your tracking ID) -->
@@ -2674,21 +2904,21 @@ body::after{
 <!-- ===== SITE HEADER ===== -->
 <header class="site-header" id="site-header">
   <div class="header-inner">
-    <a href="#" class="header-logo" onclick="scrollToTop();return false">
+    <a href="#" class="header-logo" data-action="scroll-top">
       <span class="header-logo-icon">T</span>
       <span class="header-logo-text">TokenPlan</span>
     </a>
     <nav class="header-nav">
-      <a href="#" onclick="switchTab('all');return false">定价</a>
-      <a href="#" onclick="switchTab('relay');return false">中转站</a>
-      <a href="#" onclick="switchTab('free');return false">免费</a>
-      <a href="#" onclick="switchTab('scatter');return false">对比</a>
-      <a href="#" onclick="switchTab('calculator');return false">计算器</a>
-      <a href="#" onclick="switchTab('tracking');return false">价格追踪</a>
-      <a href="#" onclick="switchTab('guide');return false">指南</a>
+      <a href="#" data-tab-link="all">定价</a>
+      <a href="#" data-tab-link="relay">中转站</a>
+      <a href="#" data-tab-link="free">免费</a>
+      <a href="#" data-tab-link="scatter">对比</a>
+      <a href="#" data-tab-link="calculator">计算器</a>
+      <a href="#" data-tab-link="tracking">价格追踪</a>
+      <a href="#" data-tab-link="guide">指南</a>
     </nav>
     <div class="header-actions">
-      <a href="#" onclick="switchTab('tracking');return false" class="header-cta">订阅预警</a>
+      <a href="#" data-tab-link="tracking" class="header-cta">订阅预警</a>
       <a href="https://github.com/sensornew/token-plan-showcase" target="_blank" rel="noopener" class="header-github" title="GitHub">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.26.82-.577v-2.02c-3.338.726-4.043-1.61-4.043-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.776.42-1.305.762-1.604-2.665-.305-5.466-1.332-5.466-5.93 0-1.31.467-2.384 1.236-3.228-.124-.305-.535-1.527.117-3.18 0 0 1.008-.323 3.3 1.23a11.5 11.5 0 0 1 3-.405c1.02.005 2.045.138 3 .405 2.29-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.874.12 3.18.77.844 1.234 1.918 1.234 3.228 0 4.608-2.806 5.622-5.48 5.92.43.37.823 1.097.823 2.213v3.278c0 .32.218.694.825.576C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
       </a>
@@ -2708,7 +2938,7 @@ body::after{
       <span class="gradient-cyan">定价全景指南</span>
     </h1>
     <p class="hero-subtitle">
-      汇集国内外 65+ 厂商、82+ 中转站的 Token 定价数据，区分免费与付费，按性价比智能排序，提供成本计算器、价格趋势追踪和邮件预警，为您打造最全的 AI API 选择指南。
+      汇集国内外 65+ 厂商、93+ 中转站的 Token 定价数据，区分免费与付费，按性价比智能排序，提供成本计算器、价格趋势追踪和邮件预警，为您打造最全的 AI API 选择指南。
     </p>
     <div class="hero-stats">
       <div class="hero-stat">
@@ -2729,9 +2959,9 @@ body::after{
       </div>
     </div>
     <div class="hero-cta">
-      <a href="#" class="btn btn-primary" onclick="switchTab('all');return false">浏览全部定价 →</a>
-      <a href="#" class="btn btn-secondary" onclick="switchTab('calculator');return false">成本计算器</a>
-      <a href="#" class="btn btn-secondary" onclick="switchTab('relay');return false">探索中转站</a>
+      <a href="#" class="btn btn-primary" data-tab-link="all">浏览全部定价 →</a>
+      <a href="#" class="btn btn-secondary" data-tab-link="calculator">成本计算器</a>
+      <a href="#" class="btn btn-secondary" data-tab-link="relay">探索中转站</a>
     </div>
   </div>
 </section>
@@ -2740,22 +2970,31 @@ body::after{
 <div class="nav-section">
   <div class="container">
     <div class="nav-tabs">
-      <button class="nav-tab active" data-tab="all">全部厂商</button>
-      <button class="nav-tab" data-tab="international">国际厂商</button>
-      <button class="nav-tab" data-tab="domestic">国内厂商</button>
-      <button class="nav-tab" data-tab="relay">API中转站</button>
-      <button class="nav-tab" data-tab="free">免费额度</button>
-      <button class="nav-tab" data-tab="ranking">性价比排行</button>
-      <button class="nav-tab" data-tab="dashboard">数据看板</button>
-      <button class="nav-tab" data-tab="charts">价格图表</button>
-      <button class="nav-tab" data-tab="capabilities">能力矩阵</button>
-      <button class="nav-tab" data-tab="speed">速度基准</button>
-      <button class="nav-tab" data-tab="scatter">性价比散点图</button>
-      <button class="nav-tab" data-tab="trend">价格趋势</button>
-      <button class="nav-tab" data-tab="counter">Token计数器</button>
-      <button class="nav-tab" data-tab="calculator">成本计算器</button>
-      <button class="nav-tab" data-tab="tracking">价格追踪</button>
-      <button class="nav-tab" data-tab="guide">选择指南</button>
+      <div class="nav-tab-group">
+        <span class="nav-tab-group-label">定价数据</span>
+        <button class="nav-tab active" data-tab="all">全部厂商</button>
+        <button class="nav-tab" data-tab="international">国际厂商</button>
+        <button class="nav-tab" data-tab="domestic">国内厂商</button>
+        <button class="nav-tab" data-tab="relay">API中转站</button>
+        <button class="nav-tab" data-tab="free">免费额度</button>
+      </div>
+      <div class="nav-tab-group">
+        <span class="nav-tab-group-label">可视化分析</span>
+        <button class="nav-tab" data-tab="ranking">性价比排行</button>
+        <button class="nav-tab" data-tab="dashboard">数据看板</button>
+        <button class="nav-tab" data-tab="charts">价格图表</button>
+        <button class="nav-tab" data-tab="capabilities">能力矩阵</button>
+        <button class="nav-tab" data-tab="speed">速度基准</button>
+        <button class="nav-tab" data-tab="scatter">散点图</button>
+        <button class="nav-tab" data-tab="trend">价格趋势</button>
+      </div>
+      <div class="nav-tab-group">
+        <span class="nav-tab-group-label">工具与指南</span>
+        <button class="nav-tab" data-tab="counter">Token计数器</button>
+        <button class="nav-tab" data-tab="calculator">成本计算器</button>
+        <button class="nav-tab" data-tab="tracking">价格追踪</button>
+        <button class="nav-tab" data-tab="guide">选择指南</button>
+      </div>
     </div>
   </div>
 </div>
@@ -2805,6 +3044,7 @@ body::after{
       <table class="provider-table" id="provider-table">
         <thead>
           <tr>
+            <th style="width:40px">对比</th>
             <th data-sort="provider">厂商 / 模型</th>
             <th data-sort="region">地区</th>
             <th data-sort="type">类型</th>
@@ -2818,6 +3058,25 @@ body::after{
         </thead>
         <tbody id="provider-tbody"></tbody>
       </table>
+    </div>
+
+    <!-- 对比浮动栏 -->
+    <div class="compare-bar" id="compare-bar">
+      <div class="compare-bar-info">
+        <span id="compare-count">0</span> / 2 已选
+        <span id="compare-names"></span>
+      </div>
+      <button class="btn btn-primary" id="compare-btn" disabled>开始对比</button>
+      <button class="btn btn-secondary" id="compare-clear">清除</button>
+    </div>
+
+    <!-- 对比弹窗 -->
+    <div class="compare-modal" id="compare-modal">
+      <div class="compare-modal-content">
+        <button class="compare-modal-close" id="compare-close">×</button>
+        <h3>厂商对比</h3>
+        <div class="compare-modal-body" id="compare-modal-body"></div>
+      </div>
     </div>
 
     <!-- DeepSeek Peak/Off-Peak Detail -->
@@ -3217,6 +3476,19 @@ body::after{
       <div class="alert-success" id="alert-success">价格预警订阅成功！您关注的厂商价格变动时将第一时间收到邮件通知。</div>
       <div class="alert-error" id="alert-error"></div>
     </div>
+
+    <!-- 订阅管理 -->
+    <div class="sub-mgmt-wrap">
+      <div class="alert-header">
+        <h3>订阅管理</h3>
+        <p>输入您的邮箱查看当前订阅状态，或一键退订</p>
+      </div>
+      <form class="sub-mgmt-form" id="sub-mgmt-form">
+        <input type="email" id="sub-mgmt-email" placeholder="输入已订阅的邮箱地址" required>
+        <button type="submit" id="sub-mgmt-btn">查询订阅</button>
+      </form>
+      <div class="sub-mgmt-result" id="sub-mgmt-result"></div>
+    </div>
   </div>
 </section>
 
@@ -3267,6 +3539,8 @@ body::after{
       </div>
       <div class="calc-action">
         <button class="btn btn-primary" id="calc-run">计算并推荐 →</button>
+        <button class="btn btn-secondary" id="calc-save">保存配置</button>
+        <button class="btn btn-secondary" id="calc-share">分享结果</button>
       </div>
       <div class="calc-results" id="calc-results" style="margin-top:2rem"></div>
       <div class="cost-pie-wrap" id="cost-pie-wrap" style="display:none">
@@ -3304,47 +3578,13 @@ body::after{
 <section class="container">
   <div class="share-section">
     <span class="share-label">分享：</span>
-    <button class="share-btn" onclick="shareToTwitter()">Twitter</button>
-    <button class="share-btn" onclick="shareToWechat()">微信</button>
-    <button class="share-btn" onclick="shareToWeibo()">微博</button>
-    <button class="share-btn" onclick="copyLink()">复制链接</button>
+    <button class="share-btn" data-share="twitter">Twitter</button>
+    <button class="share-btn" data-share="wechat">微信</button>
+    <button class="share-btn" data-share="weibo">微博</button>
+    <button class="share-btn" data-share="copy">复制链接</button>
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
-<footer class="footer">  <div class="container">
-    <div class="footer-content">
-      <div>
-        <h4>关于 TokenPlan 指南</h4>
-        <p>本网站致力于为开发者、研究者和企业提供全面的 AI 大模型 Token 定价信息。所有数据均来源于各厂商官方定价页面及第三方可靠来源，力求准确、全面、及时。</p>
-        <p style="margin-top:0.75rem">数据更新时间：2026年8月 · 汇率参考：1 USD ≈ 7.25 RMB</p>
-        <p style="margin-top:0.5rem;font-size:0.7rem;color:var(--text-muted)">声明：本站部分注册链接包含推广返佣，不影响排序和推荐结果。如有定价变动请联系我们更新。</p>
-      </div>
-      <div>
-        <h4>数据来源</h4>
-        <ul>
-          <li>各厂商官方定价页</li>
-          <li>CostBench / TokenMix</li>
-          <li>OpenRouter / Cloudflare</li>
-          <li>阿里云 / 火山引擎 / 腾讯云</li>
-          <li>第三方价格聚合平台</li>
-        </ul>
-        <h4 style="margin-top:1rem">网站功能</h4>
-        <ul>
-          <li>Token 定价数据库</li>
-          <li>成本计算器</li>
-          <li>性价比排行</li>
-          <li>免费方案汇总</li>
-          <li>价格周报订阅</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 TokenPlan · 仅供参考，实际价格以厂商官网为准</span>
-      <span>Made with precision · 数据驱动决策</span>
-    </div>
-  </div>
-</footer>
 
 <script>
 // ===== DATA =====
@@ -3358,10 +3598,10 @@ const providers = [
   {name:'OpenAI',model:'GPT-4o-mini (legacy)',region:'international',type:'paid',inputUSD:0.15,outputUSD:0.75,inputRMB:null,outputRMB:null,context:'128K',freeTier:false,features:['经典轻量'],logo:'OA',color:'#10a37f',score:75,note:'已被 GPT-5.4-mini 替代'},
 
   // --- Anthropic ---
-  {name:'Anthropic',model:'Claude Opus 4.6',region:'international',type:'paid',inputUSD:5,outputUSD:25,inputRMB:null,outputRMB:null,context:'1M',freeTier:false,features:['超长上下文','顶级推理','代码'],logo:'AN',color:'#d97757',score:45,note:'1M 上下文旗舰'},
+  {name:'Anthropic',model:'Claude Opus 4.6',region:'international',type:'paid',inputUSD:2.50,outputUSD:12.50,inputRMB:null,outputRMB:null,context:'1M',freeTier:false,features:['超长上下文','顶级推理','代码'],logo:'AN',color:'#d97757',score:55,note:'1M 上下文旗舰'},
   {name:'Anthropic',model:'Claude Sonnet 4.6',region:'international',type:'paid',inputUSD:3,outputUSD:15,inputRMB:null,outputRMB:null,context:'1M',freeTier:false,features:['超长上下文','高性价比'],logo:'AN',color:'#d97757',score:55,note:'1M 上下文中端'},
   {name:'Anthropic',model:'Claude Haiku 4.5',region:'international',type:'paid',inputUSD:1,outputUSD:5,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['快速','高效'],logo:'AN',color:'#d97757',score:65,note:'中端轻量'},
-  {name:'Anthropic',model:'Claude Haiku 3',region:'international',type:'paid',inputUSD:0.25,outputUSD:1.25,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['低成本'],logo:'AN',color:'#d97757',score:78,note:'Anthropic 最低价'},
+  {name:'Anthropic',model:'Claude Haiku 3 (deprecated)',region:'international',type:'paid',inputUSD:0.25,outputUSD:1.25,inputRMB:null,outputRMB:null,context:'200K',freeTier:false,features:['已废弃'],logo:'AN',color:'#d97757',score:78,note:'已废弃，建议使用 Haiku 4.5'},
 
   // --- Google Gemini ---
   {name:'Google',model:'Gemini 3.7 Flash',region:'international',type:'paid',inputUSD:0.75,outputUSD:3.75,inputRMB:null,outputRMB:null,context:'1M',freeTier:true,features:['免费层','1M上下文','多模态'],logo:'GG',color:'#4285f4',score:82,note:'限时优惠价'},
@@ -3377,7 +3617,7 @@ const providers = [
   // --- Cohere ---
   {name:'Cohere',model:'Command R+',region:'international',type:'paid',inputUSD:2.5,outputUSD:10,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['RAG专用','试用Key'],logo:'CO',color:'#39594d',score:55,note:'RAG 场景首选'},
   {name:'Cohere',model:'Command R',region:'international',type:'paid',inputUSD:0.50,outputUSD:1.50,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['RAG优化','试用Key'],logo:'CO',color:'#39594d',score:72,note:'中端 RAG'},
-  {name:'Cohere',model:'Command-light',region:'international',type:'paid',inputUSD:0.30,outputUSD:0.60,inputRMB:null,outputRMB:null,context:'128K',freeTier:false,features:['轻量'],logo:'CO',color:'#39594d',score:75,note:'Cohere 最低价'},
+  {name:'Cohere',model:'Command-light (retired)',region:'international',type:'paid',inputUSD:0.30,outputUSD:0.60,inputRMB:null,outputRMB:null,context:'128K',freeTier:false,features:['已下线'],logo:'CO',color:'#39594d',score:75,note:'已下线，建议使用 Command R'},
 
   // --- xAI Grok ---
   {name:'xAI',model:'Grok 4.6',region:'international',type:'paid',inputUSD:2,outputUSD:6,inputRMB:null,outputRMB:null,context:'500K',freeTier:false,features:['超长上下文','实时数据'],logo:'XA',color:'#000000',score:60,note:'500K 上下文'},
@@ -3385,11 +3625,11 @@ const providers = [
 
   // --- Together AI ---
   {name:'Together AI',model:'GPT-OSS 120B',region:'international',type:'paid',inputUSD:0.15,outputUSD:0.60,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['开源模型','免费1M tokens/月'],logo:'TG',color:'#0f6fff',score:85,note:'新用户免费额度'},
-  {name:'Together AI',model:'DeepSeek V4 Pro',region:'international',type:'paid',inputUSD:2.10,outputUSD:4.40,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['第三方托管','免费额度'],logo:'TG',color:'#0f6fff',score:62,note:'DeepSeek 托管版'},
+  {name:'Together AI',model:'DeepSeek V4 Pro',region:'international',type:'paid',inputUSD:1.32,outputUSD:3.96,inputRMB:null,outputRMB:null,context:'1M',freeTier:true,features:['第三方托管','免费额度'],logo:'TG',color:'#0f6fff',score:68,note:'Together AI 托管 DeepSeek 模型'},
   {name:'Together AI',model:'Llama 3.3 70B',region:'international',type:'paid',inputUSD:1.04,outputUSD:1.04,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['开源','输入输出同价'],logo:'TG',color:'#0f6fff',score:72,note:'输入输出同价'},
 
   // --- Groq ---
-  {name:'Groq',model:'Llama 3.1 8B',region:'international',type:'free',inputUSD:0.05,outputUSD:0.08,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['免费层','超低延迟','LPU'],logo:'GQ',color:'#f55036',score:95,note:'全球最低输入价 + 免费层'},
+  {name:'Groq',model:'Llama 3.1 8B (deprecated)',region:'international',type:'paid',inputUSD:0.05,outputUSD:0.08,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['免费层','超低延迟','LPU','已废弃'],logo:'GQ',color:'#f55036',score:90,note:'已废弃(deprecated 2026-08-16)，建议使用 Llama 3.3 70B'},
   {name:'Groq',model:'Llama 3.3 70B',region:'international',type:'paid',inputUSD:0.59,outputUSD:0.79,inputRMB:null,outputRMB:null,context:'128K',freeTier:true,features:['免费层','超低延迟'],logo:'GQ',color:'#f55036',score:85,note:'70B 最便宜方案'},
 
   // --- Perplexity ---
@@ -3530,12 +3770,12 @@ const guides = [
 const priceHistory = [
   {date:'2026-08-15',provider:'DeepSeek',model:'V4 Flash',type:'drop',change:'输入价 ¥2 → <span class="price-drop">¥1.5</span>（非高峰），输出 ¥8 → <span class="price-drop">¥4.5</span>',note:'DeepSeek V4 发布峰谷定价，非高峰时段直降 50%，1M 上下文',tag:'降价',tagClass:'tag-drop'},
   {date:'2026-08-10',provider:'阿里云 Qwen',model:'qwen-turbo',type:'drop',change:'输入价 ¥0.5 → <span class="price-drop">¥0.3</span>，输出 ¥1 → <span class="price-drop">¥0.6</span>',note:'阿里云百炼全系降价，qwen-turbo 成为国内最低输入价',tag:'降价',tagClass:'tag-drop'},
-  {date:'2026-08-01',provider:'Google',model:'Gemini 3.7 Flash',type:'new',change:'输入 <span class="price-new">$0.75</span> / 输出 <span class="price-new">$3.75</span>（至 2026.12 限时优惠）',note:'Gemini 3.7 Flash 发布，1M 上下文，免费层保留',tag:'新模型',tagClass:'tag-new'},
+  {date:'2026-05-19',provider:'Google',model:'Gemini 3.7 Flash',type:'new',change:'输入 <span class="price-new">$0.75</span> / 输出 <span class="price-new">$3.75</span>（至 2026.12 限时优惠）',note:'Gemini 3.7 Flash 发布，1M 上下文，免费层保留',tag:'新模型',tagClass:'tag-new'},
   {date:'2026-07-28',provider:'OpenAI',model:'GPT-5.5',type:'new',change:'输入 <span class="price-new">$5.00</span> / 输出 <span class="price-new">$30.00</span>，200K 上下文',note:'GPT-5.5 发布，替代 GPT-4o 系列成为旗舰',tag:'新模型',tagClass:'tag-new'},
-  {date:'2026-07-20',provider:'Anthropic',model:'Claude Opus 4.6',type:'new',change:'输入 <span class="price-new">$5.00</span> / 输出 <span class="price-new">$25.00</span>，1M 上下文',note:'Claude 4.6 系列发布，Opus 支持 1M 上下文窗口',tag:'新模型',tagClass:'tag-new'},
-  {date:'2026-07-15',provider:'xAI',model:'Grok 4.1 Fast',type:'new',change:'输入 <span class="price-new">$0.20</span> / 输出 <span class="price-new">$0.50</span>，2M 上下文',note:'Grok 4.1 Fast 发布，2M 超长上下文 + 超低价格',tag:'新模型',tagClass:'tag-new'},
+  {date:'2026-02-05',provider:'Anthropic',model:'Claude Opus 4.6',type:'new',change:'输入 <span class="price-new">$2.50</span> / 输出 <span class="price-new">$12.50</span>，1M 上下文',note:'Claude 4.6 系列发布，Opus 支持 1M 上下文窗口',tag:'新模型',tagClass:'tag-new'},
+  {date:'2025-11-19',provider:'xAI',model:'Grok 4.1 Fast',type:'new',change:'输入 <span class="price-new">$0.20</span> / 输出 <span class="price-new">$0.50</span>，2M 上下文',note:'Grok 4.1 Fast 发布，2M 超长上下文 + 超低价格',tag:'新模型',tagClass:'tag-new'},
   {date:'2026-07-10',provider:'智谱 GLM',model:'GLM-4-Flash',type:'drop',change:'从限时免费 → <span class="price-drop">永久免费</span>，无 Token 上限',note:'智谱宣布 GLM-4-Flash 永久免费，30 QPS 并发',tag:'免费',tagClass:'tag-drop'},
-  {date:'2026-06-28',provider:'Mistral',model:'Ministral 8B',type:'new',change:'输入 <span class="price-new">$0.10</span> / 输出 <span class="price-new">$0.10</span>（输入输出同价）',note:'Mistral 发布 Ministral 系列，输入输出同价极低',tag:'新模型',tagClass:'tag-new'},
+  {date:'2024-10-15',provider:'Mistral',model:'Ministral 8B',type:'new',change:'输入 <span class="price-new">$0.10</span> / 输出 <span class="price-new">$0.10</span>（输入输出同价）',note:'Mistral 发布 Ministral 系列，输入输出同价极低',tag:'新模型',tagClass:'tag-new'},
   {date:'2026-06-15',provider:'字节豆包',model:'doubao-2.0-lite',type:'drop',change:'输入价 ¥1 → <span class="price-drop">¥0.6</span>，输出 ¥6 → <span class="price-drop">¥3.6</span>',note:'火山引擎豆包全线降价，缓存命中 ¥0.12/1M',tag:'降价',tagClass:'tag-drop'},
   {date:'2026-06-01',provider:'Groq',model:'Llama 3.1 8B',type:'drop',change:'输入 <span class="price-drop">$0.05</span> / 输出 <span class="price-drop">$0.08</span>，成为全球最低输入价',note:'Groq 推出 LPU 加速 + 最低价 + 免费层',tag:'降价',tagClass:'tag-drop'},
   {date:'2026-05-20',provider:'百度文心',model:'ERNIE Speed',type:'drop',change:'从付费 → <span class="price-drop">永久免费</span>',note:'百度宣布 ERNIE Speed/Lite 永久免费开放',tag:'免费',tagClass:'tag-drop'},
@@ -3671,13 +3911,13 @@ const tokenPresets = {
 
 // ===== RELAY STATIONS DATA =====
 const relayStations = [
-      {name:'硅基流动',type:'aggregator',logo:'SF',color:'#6f4ff0',url:'https://siliconflow.cn',models:['DeepSeek V4','GLM-5','Kimi K2','Qwen','MiniMax','免费小模型'],prices:[{l:'DS V4 Flash 输入',v:'¥1/1M'},{l:'DS V4 Flash 输出',v:'¥2/1M'},{l:'GLM-5.2 输入',v:'¥8/1M'},{l:'7B以下',v:'免费',f:1}],discount:'部分与官方持平，小模型免费',payment:['支付宝','微信'],freeTier:true,note:'国内最大模型聚合，30+模型',status:'verified',popular:true},
+      {name:'硅基流动',type:'aggregator',logo:'SF',color:'#6f4ff0',url:'https://siliconflow.cn',models:['DeepSeek V4','GLM-4','Kimi K2','Qwen','MiniMax','免费小模型'],prices:[{l:'DS V4 Flash 输入',v:'¥1/1M'},{l:'DS V4 Flash 输出',v:'¥2/1M'},{l:'GLM-4-Plus 输入',v:'¥8/1M'},{l:'7B以下',v:'免费',f:1}],discount:'部分与官方持平，小模型免费',payment:['支付宝','微信'],freeTier:true,note:'国内最大模型聚合，30+模型',status:'verified',popular:true},
       {name:'OpenRouter',type:'aggregator',logo:'OR',color:'#8b5cf6',url:'https://openrouter.ai',models:['GPT-5','Claude 4','DeepSeek','Llama','300+模型'],prices:[{l:'起充',v:'$5'},{l:'DeepSeek',v:'接近官方'},{l:'部分模型',v:'低于官方',f:1},{l:'模型数',v:'300+'}],discount:'部分模型低于官方价',payment:['信用卡','加密货币'],freeTier:false,note:'国际知名聚合平台，模型覆盖最广',status:'verified',popular:true},
       {name:'中国移动 MoMA',type:'aggregator',logo:'CM',color:'#009641',url:'https://www1.10086.cn',models:['300+主流大模型','全模态'],prices:[{l:'Token成本',v:'降30%+'},{l:'计费',v:'按量/包月'},{l:'模型数',v:'300+'},{l:'场景包',v:'代码包月'}],discount:'Token成本压降30%以上',payment:['中国移动'],freeTier:false,note:'一站式AI模型聚合平台，覆盖全模态',status:'verified'},
-      {name:'OpenStarry',type:'aggregator',logo:'OS',color:'#5ce1ff',url:'https://openstarry.com',models:['GLM 5.2','DeepSeek V4','Kimi K2.6','MiniMax M3','40+模型'],prices:[{l:'注册即送',v:'200次免费',f:1},{l:'GLM 5.2',v:'低于官方'},{l:'模型数',v:'40+'},{l:'计费',v:'按量'}],discount:'注册送200次免费调用',payment:['支付宝','微信'],freeTier:true,note:'国产大模型API聚合，40+模型',status:'verified'},
+      {name:'OpenStarry',type:'aggregator',logo:'OS',color:'#5ce1ff',url:'https://openstarry.com',models:['GLM-4-Plus','DeepSeek V4','Kimi K2.6','MiniMax M3','40+模型'],prices:[{l:'注册即送',v:'200次免费',f:1},{l:'GLM-4-Plus',v:'低于官方'},{l:'模型数',v:'40+'},{l:'计费',v:'按量'}],discount:'注册送200次免费调用',payment:['支付宝','微信'],freeTier:true,note:'国产大模型API聚合，40+模型',status:'verified'},
       {name:'AiHubMix',type:'aggregator',logo:'AH',color:'#e8b54a',url:'https://aihubmix.com',models:['GPT','Claude','DeepSeek','Gemini','Qwen'],prices:[{l:'起充',v:'¥1'},{l:'综合',v:'低于官方'},{l:'模型广',v:'多模态'},{l:'新用户',v:'赠送额度',f:1}],discount:'起充低，部分低于官方',payment:['支付宝','微信'],freeTier:true,note:'AI API Hub收录，¥1起充',status:'unverified'},
       {name:'DeepInfra',type:'hosting',logo:'DI',color:'#3b8eff',url:'https://deepinfra.ai',models:['DeepSeek V4','Llama 3.3','Mistral','Qwen','Phi'],prices:[{l:'DS V4 Flash 输入',v:'$0.09/1M'},{l:'DS V4 Flash 输出',v:'$0.18/1M'},{l:'DS V4 Pro 输入',v:'$1.74/1M'},{l:'Mistral Small',v:'$0.075/1M'}],discount:'DeepSeek价格低于多数托管',payment:['信用卡'],freeTier:false,note:'GPU算力平台，价格竞争力强',status:'verified',popular:true},
-      {name:'Fireworks AI',type:'hosting',logo:'FW',color:'#f59e0b',url:'https://fireworks.ai',models:['Kimi K2','DeepSeek V4','GLM 5','Qwen 3.7','MiniMax'],prices:[{l:'DS V4 Flash 输入',v:'$0.14/1M'},{l:'DS V4 Flash 输出',v:'$0.28/1M'},{l:'GLM 5.2 输入',v:'$1.40/1M'},{l:'新用户',v:'$1 credits',f:1}],discount:'模型托管+微调',payment:['信用卡'],freeTier:true,note:'支持微调和Serverless推理',status:'verified'},
+      {name:'Fireworks AI',type:'hosting',logo:'FW',color:'#f59e0b',url:'https://fireworks.ai',models:['Kimi K2','DeepSeek V4','GLM-4','Qwen','MiniMax'],prices:[{l:'DS V4 Flash 输入',v:'$0.14/1M'},{l:'DS V4 Flash 输出',v:'$0.28/1M'},{l:'GLM-4-Plus 输入',v:'$1.40/1M'},{l:'新用户',v:'$1 credits',f:1}],discount:'模型托管+微调',payment:['信用卡'],freeTier:true,note:'支持微调和Serverless推理',status:'verified'},
       {name:'Replicate',type:'hosting',logo:'RP',color:'#6b7280',url:'https://replicate.com',models:['Llama','SD3','DALL-E 3','各类社区模型'],prices:[{l:'CPU',v:'$0.0001/s'},{l:'T4',v:'$0.000225/s'},{l:'A100',v:'$0.0014/s'},{l:'免费层',v:'50次/月',f:1}],discount:'按秒计费，社区模型便宜',payment:['信用卡'],freeTier:true,note:'按运行秒计费，社区模型多',status:'verified'},
       {name:'Together AI',type:'hosting',logo:'TG',color:'#0f172a',url:'https://together.ai',models:['Llama','DeepSeek','Qwen','Mistral','Gemma'],prices:[{l:'Llama 405B',v:'$5/1M'},{l:'DeepSeek',v:'低于官方'},{l:'小模型',v:'$0.20/1M'},{l:'新用户',v:'$5 credits',f:1}],discount:'开源模型托管，价格低',payment:['信用卡'],freeTier:true,note:'开源模型托管平台',status:'verified'},
       {name:'华为云盘古',type:'cloud',logo:'HW',color:'#cf1322',url:'https://www.huaweicloud.com/product/modelarts/studio/maas-openpangu-2-pro.html',models:['openPangu-2.0-Pro (505B MoE)'],prices:[{l:'推理输入',v:'¥3.2-4.8/1M'},{l:'推理输出',v:'¥14.5-17.6/1M'},{l:'计费',v:'按需/包月'},{l:'NPU',v:'国产算力'}],discount:'官方平台',payment:['华为云'],freeTier:false,note:'昇腾NPU训练，505B参数MoE',status:'verified'},
@@ -3749,7 +3989,7 @@ const relayStations = [
       {name:'玄枢API',type:'relay',logo:'XS',color:'#8b5cf6',url:'https://www.xuanshuapi.com',models:['GPT','Claude','Gemini'],prices:[{l:'计费',v:'按量'},{l:'接口',v:'OpenAI+Anthropic'},{l:'支付',v:'发票'}],discount:'支持Anthropic Messages和Gemini v1beta',payment:['发票'],freeTier:false,note:'GitHub收录·🟡unverified·运营商自提交',status:'unverified'},
       {name:'TeamoRouter',type:'relay',logo:'TR',color:'#3b82f6',url:'https://teamorouter.com',models:['GPT','Claude','Gemini'],prices:[{l:'计费',v:'按量'},{l:'接口',v:'OpenAI/Anthropic/Gemini'},{l:'支付',v:'支付宝/微信'},{l:'新用户',v:'赠送',f:1}],discount:'多上游路由+Claude Code指南',payment:['支付宝','微信'],freeTier:true,note:'GitHub收录·🟡unverified·运营商自提交',status:'unverified'},
       {name:'wawazz.xyz',type:'relay',logo:'WZ',color:'#ef4444',url:'https://wawazz.xyz',models:['GPT'],prices:[{l:'计费',v:'按量'},{l:'倍率',v:'0.07x'},{l:'支付',v:'微信'}],discount:'GPT低至0.07x官方价',payment:['微信'],freeTier:false,note:'GitHub收录·🟡unverified·⚠cheap-trap风险',status:'unverified'},
-      {name:'Wappkit API',type:'relay',logo:'WK',color:'#06b6d4',url:'https://api.wappkit.com',models:['GPT','Claude'],prices:[{l:'计费',v:'按量'},{l:'分组',v:'Codex/Claude-Code'},{l:'支付',v:'待确认'}],discount:'new-api OpenAI兼容网关',payment:['待确认'],freeTier:false,note:'GitHub收录·🟡unverified·公开/api/pricing',status:'unverified'},
+      {name:'Wappkit API',type:'relay',logo:'WK',color:'#06b6d4',url:'https://api.wappkit.com',models:['GPT','Claude'],prices:[{l:'计费',v:'按量'},{l:'分组',v:'Codex/Claude-Code'},{l:'API',v:'/api/pricing'}],discount:'new-api OpenAI兼容网关',payment:['未知'],freeTier:false,note:'GitHub收录·🟡unverified·公开/api/pricing',status:'unverified'},
       {name:'LiteLLM',type:'hosting',logo:'LL',color:'#3b82f6',url:'https://litellm.ai',models:['GPT','Claude','Gemini','100+供应商'],prices:[{l:'计费',v:'自建'},{l:'定位',v:'开源网关'},{l:'许可',v:'开源'}],discount:'开源网关+企业版',payment:['-'],freeTier:true,note:'GitHub收录·🟢active·自建网关·非零售',status:'verified'},
       {name:'Helicone',type:'aggregator',logo:'HC',color:'#06b6d4',url:'https://helicone.ai',models:['GPT','Claude','多模型'],prices:[{l:'定位',v:'可观测性'},{l:'功能',v:'日志/分析'},{l:'许可',v:'开源'}],discount:'LLM可观测性网关',payment:['-'],freeTier:true,note:'GitHub收录·🟢active·日志/分析为主',status:'verified'},
       {name:'QuickSilver Pro',type:'aggregator',logo:'QS',color:'#3b82f6',url:'https://quicksilverpro.io',models:['GPT','Claude','Gemini','DeepSeek','Qwen','Kimi','GLM'],prices:[{l:'计费',v:'按量'},{l:'定位',v:'前沿+开源'},{l:'支付',v:'信用卡'}],discount:'前沿+开源模型一个Key',payment:['信用卡'],freeTier:false,note:'GitHub收录·🟡unverified·MachineFi Labs运营',status:'unverified'},
@@ -3763,7 +4003,7 @@ const relayStations = [
       {name:'A3M Router',type:'hosting',logo:'A3',color:'#06b6d4',url:'https://github.com/Das-rebel/a3m-router',models:['自建','多模型'],prices:[{l:'计费',v:'自建'},{l:'定位',v:'TypeScript路由'},{l:'许可',v:'MIT开源'}],discount:'MIT TypeScript·多供应商并行路由',payment:['-'],freeTier:true,note:'GitHub收录·🟡unverified·npm: adaptive-memory-multi-model-router',status:'unverified'},
       {name:'AI API PK',type:'aggregator',logo:'PK',color:'#ef4444',url:'https://www.aiapipk.com',models:['GPT','Claude','DeepSeek'],prices:[{l:'定位',v:'比价工具'},{l:'覆盖',v:'~40家站'},{l:'功能',v:'价格墙'}],discount:'中转站竞技场·40+站比价',payment:['-'],freeTier:true,note:'GitHub收录·🟢active·跨OpenAI/Claude/DeepSeek比价',status:'verified'},
       {name:'China AI Arbitrage',type:'aggregator',logo:'CA',color:'#f59e0b',url:'https://www.china-ai-arbitrage.xyz',models:['GPT','Claude','多模型'],prices:[{l:'定位',v:'60+平台比价'},{l:'功能',v:'免费额度追踪'},{l:'更新',v:'每日'}],discount:'60+中国AI平台价格/配额对比',payment:['-'],freeTier:true,note:'GitHub收录·🟡unverified·每日更新免费层追踪',status:'unverified'},
-      {name:'CoderPlan',type:'aggregator',logo:'CP',color:'#8b5cf6',url:'https://coderplan.ai',models:['GPT','Claude','Gemini','DeepSeek','xAI'],prices:[{l:'定位',v:'社区提交'},{l:'模型数',v:'50+'},{l:'支付',v:'待确认'}],discount:'社区提交·50+模型',payment:['待确认'],freeTier:false,note:'GitHub收录·🟡unverified',status:'unverified'},
+      {name:'CoderPlan',type:'aggregator',logo:'CP',color:'#8b5cf6',url:'https://coderplan.ai',models:['GPT','Claude','Gemini','DeepSeek','xAI'],prices:[{l:'定位',v:'社区提交'},{l:'模型数',v:'50+'},{l:'支付',v:'未知'}],discount:'社区提交·50+模型',payment:['未知'],freeTier:false,note:'GitHub收录·🟡unverified',status:'unverified'},
 ];
 
 function getScoreClass(score){
@@ -3828,12 +4068,17 @@ function renderProviderTable(filter='all',sort='default',search=''){
     return parseCtx(b.context)-parseCtx(a.context);
   });
 
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:3rem;color:var(--text-muted)">未找到匹配的厂商，请尝试其他搜索条件或筛选器</td></tr>`;
+    return;
+  }
   tbody.innerHTML=filtered.map(p=>{
     const scoreInfo=getScoreClass(p.score);
     const typeBadge=p.type==='free'?'<span class="badge badge-free">免费</span>':'<span class="badge badge-paid">付费</span>';
     const regionBadge=p.region==='international'?'<span class="badge badge-intl">国际</span>':'<span class="badge badge-cn">国内</span>';
     const freeBadge=p.freeTier?'<span class="badge badge-free">有免费层</span>':'';
     return `<tr>
+      <td style="text-align:center"><input type="checkbox" class="compare-cb" data-name="${p.name}" style="cursor:pointer;accent-color:var(--gold)"></td>
       <td>
         <div class="provider-name">
           <div class="provider-logo" style="background:${p.color}">${p.logo}</div>
@@ -3953,6 +4198,10 @@ function renderPriceTimeline(items){
   const container=document.getElementById('price-timeline');
   if(!container)return;
   const data=items||priceHistory;
+  if (data.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted)">暂无价格变动记录，订阅价格预警后将自动记录变动</div>';
+    return;
+  }
   container.innerHTML=data.map(h=>`
     <div class="timeline-item ${h.type==='drop'?'drop':h.type==='rise'?'rise':''}">
       <div class="timeline-date">${h.date}</div>
@@ -3991,17 +4240,37 @@ async function loadPriceHistoryFromAPI(){
 function renderAlertProviders(){
   const container=document.getElementById('alert-providers');
   if(!container)return;
-  container.innerHTML=alertProviders.map(p=>{
-    const color=Object.keys(providerUrls).includes(p)?'#e8b54a':'#606078';
-    return `<label class="alert-provider-chip">
-      <input type="checkbox" value="${p}">
-      <span>${p}</span>
-    </label>`;
-  }).join('');
+  const intlProviders = alertProviders.slice(0, 9);
+  const cnProviders = alertProviders.slice(9);
+  const renderGroup = (label, list) => `
+    <div class="alert-provider-group">
+      <div class="alert-provider-group-header">
+        <span class="alert-provider-group-label">${label}</span>
+        <button type="button" class="alert-provider-group-toggle" data-group="${label}">全选</button>
+      </div>
+      <div class="alert-provider-group-chips">
+        ${list.map(p=>{
+          const color=Object.keys(providerUrls).includes(p)?'#e8b54a':'#606078';
+          return `<label class="alert-provider-chip">
+            <input type="checkbox" value="${p}">
+            <span>${p}</span>
+          </label>`;
+        }).join('')}
+      </div>
+    </div>`;
+  container.innerHTML = renderGroup('国际厂商', intlProviders) + renderGroup('国内厂商', cnProviders);
 
   container.querySelectorAll('.alert-provider-chip').forEach(chip=>{
     chip.addEventListener('click',()=>{
       chip.classList.toggle('selected');
+    });
+  });
+  container.querySelectorAll('.alert-provider-group-toggle').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const chips=btn.closest('.alert-provider-group').querySelectorAll('.alert-provider-chip');
+      const allSelected=[...chips].every(c=>c.classList.contains('selected'));
+      chips.forEach(c=>c.classList.toggle('selected',!allSelected));
+      btn.textContent=allSelected?'全选':'清空';
     });
   });
 }
@@ -4472,33 +4741,38 @@ function renderRelayStations(){
   const list=getFilteredRelays();
   const countEl=document.getElementById('relay-count');
   if(countEl)countEl.textContent=`共 ${list.length} 家`;
+  if (list.length === 0) {
+    container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted)">未找到匹配的中转站，请尝试其他搜索条件或筛选器</div>';
+    return;
+  }
   const typeLabel={aggregator:'聚合平台',relay:'中转站',hosting:'模型托管',cloud:'云服务'};
   container.innerHTML=list.map(r=>{
-    const modelsHtml=r.models.slice(0,6).map(m=>`<span class="relay-model-tag">${m}</span>`).join('');
+    const modelsHtml=r.models.slice(0,6).map(m=>`<span class="relay-model-tag">${escapeHtml(m)}</span>`).join('');
     const realPrices=r.prices.filter(p=>p.v&&!p.v.includes('待确认'));
     const pricesHtml=realPrices.length?realPrices.slice(0,4).map(p=>`
       <div class="relay-price-item">
-        <div class="relay-price-label">${p.l}</div>
-        <div class="relay-price-val ${p.f?'free':''}">${p.v}</div>
+        <div class="relay-price-label">${escapeHtml(p.l)}</div>
+        <div class="relay-price-val ${p.f?'free':''}">${escapeHtml(p.v)}</div>
       </div>
     `).join(''):'<div style="grid-column:span 2;font-size:0.6rem;color:var(--text-muted);text-align:center;padding:0.5rem">价格数据待抓取</div>';
     const realPayments=r.payment.filter(p=>p&&p!=='待确认'&&p!=='-');
-    const paymentHtml=realPayments.length?realPayments.map(p=>`<span class="relay-meta-item">💳 ${p}</span>`).join(''):'';
+    const paymentHtml=realPayments.length?realPayments.map(p=>`<span class="relay-meta-item">💳 ${escapeHtml(p)}</span>`).join(''):'';
     const freeHtml=r.freeTier?'<span class="relay-meta-item" style="color:#34d399">🎁 免费额度</span>':'';
     const statusBadge=r.status==='verified'?'<span class="relay-meta-item verified">✅ 已验证</span>':'<span class="relay-meta-item unverified">⚠ 未验证</span>';
     const popularBadge=r.popular?'<span class="relay-meta-item popular">🔥 热门</span>':'';
-    const noteHtml=r.note?`<div class="relay-note">${r.note}</div>`:'';
-    const url=r.url&&r.url!=='#'?'href="'+r.url+'" target="_blank" rel="noopener nofollow"':'href="javascript:void(0)"';
-    const ctaDisabled=(!r.url||r.url==='#')?' style="opacity:0.4;pointer-events:none"':'';
+    const noteHtml=r.note?`<div class="relay-note">${escapeHtml(r.note)}</div>`:'';
+    const safeHref=safeUrl(r.url);
+    const url=safeHref?'href="'+safeHref+'" target="_blank" rel="noopener nofollow"':'href="javascript:void(0)"';
+    const ctaDisabled=!safeHref?' style="opacity:0.4;pointer-events:none"':'';
     return `<div class="relay-card">
       <div class="relay-card-head">
-        <div class="relay-logo" style="background:${r.color}">${r.logo}</div>
-        <span class="relay-name">${r.name}</span>
-        <span class="relay-type relay-type-${r.type}">${typeLabel[r.type]||r.type}</span>
+        <div class="relay-logo" style="background:${r.color}">${escapeHtml(r.logo)}</div>
+        <span class="relay-name">${escapeHtml(r.name)}</span>
+        <span class="relay-type relay-type-${r.type}">${escapeHtml(typeLabel[r.type]||r.type)}</span>
       </div>
       <div class="relay-models">${modelsHtml}</div>
       <div class="relay-prices">${pricesHtml}</div>
-      <div class="relay-discount${/^\d+(\.\d+)?(x|折|%)/.test(r.discount)||r.discount.includes('倍率')||r.discount.includes('免费')?'':' relay-discount-neutral'}">${r.discount}</div>
+      <div class="relay-discount${/^\d+(\.\d+)?(x|折|%)/.test(r.discount)||r.discount.includes('倍率')||r.discount.includes('免费')?'':' relay-discount-neutral'}">${escapeHtml(r.discount)}</div>
       <div class="relay-meta">${paymentHtml}${freeHtml}${statusBadge}${popularBadge}</div>
       ${noteHtml}
       <div class="relay-cta"${ctaDisabled}>
@@ -4544,12 +4818,14 @@ function initRelayInteractions(){
       });
       if(resp.ok){
         const data=await resp.json();
-        if(successEl){successEl.style.display='block';successEl.textContent=`✅ 提交成功！当前共收录 ${data.total} 家中转站。审核通过后将在列表中展示。`;}
+        if(successEl){successEl.style.display='block';successEl.textContent=`✅ 提交成功！当前共收录 ${data.total} 家中转站。审核通过后将在列表中展示。`;successEl.style.color='#34d399';}
       }else{
-        if(successEl){successEl.style.display='block';successEl.textContent='✅ 提交成功！你的中转站信息已进入审核队列，审核通过后将展示在列表中。通常 1-3 个工作日内完成审核。';successEl.style.color='#34d399';}
+        let errMsg='提交失败，请稍后重试';
+        try{const errData=await resp.json();if(errData.error)errMsg=errData.error;}catch{}
+        if(successEl){successEl.style.display='block';successEl.textContent='❌ '+errMsg;successEl.style.color='#f87171';}
       }
     }catch(err){
-      if(successEl){successEl.style.display='block';successEl.textContent='✅ 提交成功！你的中转站信息已进入审核队列，审核通过后将展示在列表中。';successEl.style.color='#34d399';}
+      if(successEl){successEl.style.display='block';successEl.textContent='❌ 提交失败，请检查网络连接后重试。';successEl.style.color='#f87171';}
     }
     formEl.reset();
     if(btn){btn.disabled=false;btn.textContent='提交审核';}
@@ -4636,18 +4912,61 @@ async function loadPriceSnapshot(){
   }
 }
 
+// ===== UTILITY =====
+function escapeHtml(str){
+  const div=document.createElement('div');
+  div.textContent=str;
+  return div.innerHTML;
+}
+function safeUrl(url){
+  if(!url||url==='#')return null;
+  return /^https?:\/\//i.test(url)?url:null;
+}
+
 // ===== INTERACTIONS =====
 // Tab switching helper (for header/footer links)
+// ===== 懒加载：按需渲染 tab 内容 =====
+const renderedTabs = new Set(['all']);
+function ensureRendered(tabId) {
+  if (renderedTabs.has(tabId)) return;
+  renderedTabs.add(tabId);
+  switch (tabId) {
+    case 'free': renderFreeTiers(); break;
+    case 'ranking': renderRankings(); break;
+    case 'guide': renderGuides(); break;
+    case 'tracking': renderPriceTimeline(); renderAlertProviders(); renderAlertTypes(); break;
+    case 'charts': renderBarChart(); break;
+    case 'capabilities': renderCapabilityMatrix(); break;
+    case 'speed': renderSpeedBenchmark(); break;
+    case 'dashboard': renderDashboard(); break;
+    case 'scatter': renderScatterPlot(); break;
+    case 'trend': renderTrendChart(); break;
+    case 'counter': renderTokenStats(); break;
+    case 'relay': renderRelayStations(); break;
+  }
+}
+
 function switchTab(tabId){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   const tab=document.querySelector(`[data-tab="${tabId}"]`);
   if(tab)tab.classList.add('active');
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  const section=document.getElementById(tabId);
-  if(section)section.classList.add('active');
+  // Map tab IDs that share the providers section
+  if(tabId==='all'||tabId==='international'||tabId==='domestic'){
+    const providersSection=document.getElementById('providers');
+    if(providersSection)providersSection.classList.add('active');
+    // Set filter accordingly and re-render table
+    if(tabId==='international'){currentFilter='international';renderProviderTable(currentFilter,currentSort,currentSearch);}
+    else if(tabId==='domestic'){currentFilter='domestic';renderProviderTable(currentFilter,currentSort,currentSearch);}
+    else{currentFilter='all';renderProviderTable(currentFilter,currentSort,currentSearch);}
+    // Sync filter chips
+    document.querySelectorAll('.filter-chip').forEach(c=>{c.classList.toggle('active',c.dataset.filter===currentFilter);});
+  }else{
+    const section=document.getElementById(tabId);
+    if(section)section.classList.add('active');
+  }
   // Trigger lazy rendering
-  if(tabId==='counter')renderTokenStats();
-  if(tabId==='relay')renderRelayStations();
+  ensureRendered(tabId);
   // Close mobile menu
   const nav=document.querySelector('.header-nav');
   if(nav)nav.classList.remove('open');
@@ -4696,17 +5015,27 @@ document.querySelectorAll('.nav-tab').forEach(tab=>{
     tab.classList.add('active');
     const target=tab.dataset.tab;
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-    if(target==='all')document.getElementById('providers').classList.add('active');
-    else document.getElementById(target).classList.add('active');
-    // 懒渲染：切换到图表类标签页时重新触发动画
-    if(target==='charts')renderBarChart();
-    if(target==='speed')renderSpeedBenchmark();
-    if(target==='capabilities')renderCapabilityMatrix();
-    if(target==='dashboard')renderDashboard();
-    if(target==='scatter')renderScatterPlot();
-    if(target==='trend')renderTrendChart();
-    if(target==='counter')renderTokenStats();
-    if(target==='relay')renderRelayStations();
+    // Map tabs that share the providers section with filtering
+    if(target==='all'){
+      document.getElementById('providers').classList.add('active');
+      currentFilter='all';
+      renderProviderTable(currentFilter,currentSort,currentSearch);
+    }else if(target==='international'){
+      document.getElementById('providers').classList.add('active');
+      currentFilter='international';
+      renderProviderTable(currentFilter,currentSort,currentSearch);
+    }else if(target==='domestic'){
+      document.getElementById('providers').classList.add('active');
+      currentFilter='domestic';
+      renderProviderTable(currentFilter,currentSort,currentSearch);
+    }else{
+      const section=document.getElementById(target);
+      if(section)section.classList.add('active');
+    }
+    // Sync filter chips
+    document.querySelectorAll('.filter-chip').forEach(c=>{c.classList.toggle('active',c.dataset.filter===currentFilter);});
+    // 懒渲染：首次切换时渲染内容
+    ensureRendered(target);
   });
 });
 
@@ -4780,12 +5109,138 @@ document.querySelectorAll('.filter-chip').forEach(chip=>{
 document.getElementById('sort-select').addEventListener('change',e=>{
   currentSort=e.target.value;
   renderProviderTable(currentFilter,currentSort,currentSearch);
+  updateSortIndicators();
+});
+
+// Table header click sorting
+function updateSortIndicators(){
+  document.querySelectorAll('#provider-table thead th[data-sort]').forEach(th=>{
+    th.classList.remove('sort-active','sort-asc','sort-desc');
+    const s=th.dataset.sort;
+    if((s==='input'&&(currentSort==='input-asc'||currentSort==='input-desc'))||
+       (s==='output'&&(currentSort==='output-asc'||currentSort==='output-desc'))||
+       (s==='context'&&currentSort==='context-desc')||
+       (s==='value'&&currentSort==='value-desc')){
+      th.classList.add('sort-active');
+      if(currentSort.endsWith('asc'))th.classList.add('sort-asc');
+      if(currentSort.endsWith('desc'))th.classList.add('sort-desc');
+    }
+  });
+}
+document.querySelectorAll('#provider-table thead th[data-sort]').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const s=th.dataset.sort;
+    const sortMap={
+      input: currentSort==='input-asc'?'input-desc':'input-asc',
+      output: currentSort==='output-asc'?'output-desc':'output-asc',
+      context: 'context-desc',
+      value: 'value-desc',
+      provider: 'default',
+      region: 'default',
+      type: 'default',
+    };
+    const newSort=sortMap[s]||'default';
+    currentSort=newSort;
+    document.getElementById('sort-select').value=newSort;
+    renderProviderTable(currentFilter,currentSort,currentSearch);
+    updateSortIndicators();
+  });
 });
 
 // Search
 document.getElementById('search-input').addEventListener('input',e=>{
   currentSearch=e.target.value;
   renderProviderTable(currentFilter,currentSort,currentSearch);
+});
+
+// ===== 厂商对比功能 =====
+const compareSelected = [];
+function updateCompareBar() {
+  const bar = document.getElementById('compare-bar');
+  const countEl = document.getElementById('compare-count');
+  const namesEl = document.getElementById('compare-names');
+  const btn = document.getElementById('compare-btn');
+  countEl.textContent = compareSelected.length;
+  namesEl.textContent = compareSelected.length ? compareSelected.map(p=>p.name).join(' vs ') : '';
+  btn.disabled = compareSelected.length !== 2;
+  bar.classList.toggle('show', compareSelected.length > 0);
+}
+function toggleCompare(name, checked) {
+  if (checked) {
+    if (compareSelected.length >= 2) {
+      compareSelected.shift();
+    }
+    const p = providers.find(x => x.name === name);
+    if (p) compareSelected.push(p);
+  } else {
+    const idx = compareSelected.findIndex(x => x.name === name);
+    if (idx >= 0) compareSelected.splice(idx, 1);
+  }
+  updateCompareBar();
+}
+document.getElementById('provider-tbody').addEventListener('change', e => {
+  if (e.target.classList.contains('compare-cb')) {
+    const name = e.target.dataset.name;
+    const checked = e.target.checked;
+    if (checked && compareSelected.length >= 2) {
+      e.target.checked = false;
+      return;
+    }
+    toggleCompare(name, checked);
+  }
+});
+document.getElementById('compare-clear').addEventListener('click', () => {
+  compareSelected.length = 0;
+  document.querySelectorAll('.compare-cb').forEach(cb => cb.checked = false);
+  updateCompareBar();
+});
+document.getElementById('compare-btn').addEventListener('click', () => {
+  if (compareSelected.length !== 2) return;
+  const [a, b] = compareSelected;
+  const fmt = p => p != null ? `¥${p}` : '-';
+  const fmtUSD = p => p != null ? `$${p}` : '-';
+  const row = (label, va, vb) => `<div class="compare-row"><span class="label">${label}</span><span class="val">${va}</span><span class="val">${vb}</span></div>`;
+  const winner = (label, va, vb, lowerBetter) => {
+    const aNum = typeof va === 'number' ? va : Infinity;
+    const bNum = typeof vb === 'number' ? vb : Infinity;
+    const aWin = lowerBetter ? aNum < bNum : aNum > bNum;
+    const bWin = lowerBetter ? bNum < aNum : bNum > aNum;
+    return `<div class="compare-row"><span class="label">${label}</span><span class="val ${aWin?'compare-winner':''}">${va}</span><span class="val ${bWin?'compare-winner':''}">${vb}</span></div>`;
+  };
+  document.getElementById('compare-modal-body').innerHTML = `
+    <div class="compare-col">
+      <h4><div class="provider-logo" style="background:${a.color};width:28px;height:28px;font-size:0.7rem">${a.logo}</div>${a.name}</h4>
+      ${row('模型', a.model, '')}
+      ${row('地区', a.region==='international'?'国际':'国内', '')}
+      ${row('类型', a.type==='free'?'免费':'付费', '')}
+      ${row('输入价(RMB)', fmt(a.inputRMB), '')}
+      ${row('输出价(RMB)', fmt(a.outputRMB), '')}
+      ${row('输入价(USD)', fmtUSD(a.inputUSD), '')}
+      ${row('输出价(USD)', fmtUSD(a.outputUSD), '')}
+      ${row('上下文', a.context, '')}
+      ${row('性价比', a.score, '')}
+      ${row('免费层', a.freeTier?'有':'无', '')}
+    </div>
+    <div class="compare-col">
+      <h4><div class="provider-logo" style="background:${b.color};width:28px;height:28px;font-size:0.7rem">${b.logo}</div>${b.name}</h4>
+      ${row('模型', '', b.model)}
+      ${row('地区', '', b.region==='international'?'国际':'国内')}
+      ${row('类型', '', b.type==='free'?'免费':'付费')}
+      ${row('输入价(RMB)', '', fmt(b.inputRMB))}
+      ${row('输出价(RMB)', '', fmt(b.outputRMB))}
+      ${row('输入价(USD)', '', fmtUSD(b.inputUSD))}
+      ${row('输出价(USD)', '', fmtUSD(b.outputUSD))}
+      ${row('上下文', '', b.context)}
+      ${row('性价比', '', b.score)}
+      ${row('免费层', '', b.freeTier?'有':'无')}
+    </div>`;
+  document.getElementById('compare-modal').classList.add('show');
+});
+document.getElementById('compare-close').addEventListener('click', () => {
+  document.getElementById('compare-modal').classList.remove('show');
+});
+document.getElementById('compare-modal').addEventListener('click', e => {
+  if (e.target.id === 'compare-modal') e.target.classList.remove('show');
 });
 
 // ===== COST CALCULATOR =====
@@ -4888,9 +5343,84 @@ document.getElementById('calc-run').addEventListener('click',()=>{
   renderCostPie(results,calcCurrency);
 });
 
-// 滑块拖动时实时计算
-document.getElementById('calc-input-slider').addEventListener('change',()=>document.getElementById('calc-run').click());
-document.getElementById('calc-output-slider').addEventListener('change',()=>document.getElementById('calc-run').click());
+// 滑块拖动时实时计算（rAF 节流）
+let calcRafId = null;
+function scheduleCalc() {
+  if (calcRafId) cancelAnimationFrame(calcRafId);
+  calcRafId = requestAnimationFrame(() => {
+    document.getElementById('calc-run').click();
+    calcRafId = null;
+  });
+}
+document.getElementById('calc-input-slider').addEventListener('input', scheduleCalc);
+document.getElementById('calc-output-slider').addEventListener('input', scheduleCalc);
+document.getElementById('calc-input-tokens').addEventListener('input', scheduleCalc);
+document.getElementById('calc-output-tokens').addEventListener('input', scheduleCalc);
+
+// ===== 计算器保存/分享 =====
+function getCalcState() {
+  return {
+    in: parseFloat(document.getElementById('calc-input-tokens').value) || 0,
+    out: parseFloat(document.getElementById('calc-output-tokens').value) || 0,
+    pref: document.getElementById('calc-preference').value,
+    cur: calcCurrency,
+  };
+}
+
+function setCalcState(s) {
+  if (!s) return;
+  if (s.in != null) document.getElementById('calc-input-tokens').value = s.in;
+  if (s.out != null) document.getElementById('calc-output-tokens').value = s.out;
+  if (s.pref) document.getElementById('calc-preference').value = s.pref;
+  if (s.cur) {
+    calcCurrency = s.cur;
+    document.querySelectorAll('.calc-currency-toggle button').forEach(b => {
+      b.classList.toggle('active', b.dataset.currency === s.cur);
+    });
+  }
+  document.getElementById('calc-input-slider').value = s.in || 0;
+  document.getElementById('calc-output-slider').value = s.out || 0;
+  document.getElementById('calc-run').click();
+}
+
+document.getElementById('calc-save').addEventListener('click', () => {
+  try {
+    localStorage.setItem('tokenplan_calc', JSON.stringify(getCalcState()));
+    const btn = document.getElementById('calc-save');
+    const orig = btn.textContent;
+    btn.textContent = '已保存 ✓';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  } catch {}
+});
+
+document.getElementById('calc-share').addEventListener('click', async () => {
+  const s = getCalcState();
+  const hash = `#calc=${s.in},${s.out},${s.pref},${s.cur}`;
+  const url = window.location.origin + window.location.pathname + hash;
+  try {
+    await navigator.clipboard.writeText(url);
+    const btn = document.getElementById('calc-share');
+    const orig = btn.textContent;
+    btn.textContent = '链接已复制 ✓';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  } catch {
+    window.location.hash = hash;
+  }
+});
+
+// 从 URL hash 或 localStorage 恢复计算器状态
+(function restoreCalc() {
+  const hashMatch = window.location.hash.match(/^#calc=([\d.]+),([\d.]+),(\w+),(\w+)/);
+  if (hashMatch) {
+    setCalcState({ in: parseFloat(hashMatch[1]), out: parseFloat(hashMatch[2]), pref: hashMatch[3], cur: hashMatch[4] });
+    document.querySelector('.nav-tab[data-tab="calculator"]')?.click();
+    return;
+  }
+  try {
+    const saved = localStorage.getItem('tokenplan_calc');
+    if (saved) setCalcState(JSON.parse(saved));
+  } catch {}
+})();
 
 // ===== NEWSLETTER =====
 document.getElementById('newsletter-form').addEventListener('submit',e=>{
@@ -4936,26 +5466,38 @@ function copyLink(){
   });
 }
 
-// ===== INIT =====
+// ===== 事件委托：处理 data-tab-link / data-share / data-action =====
+document.addEventListener('click', e => {
+  const tabLink = e.target.closest('[data-tab-link]');
+  if (tabLink) {
+    e.preventDefault();
+    switchTab(tabLink.dataset.tabLink);
+    return;
+  }
+  const share = e.target.closest('[data-share]');
+  if (share) {
+    const type = share.dataset.share;
+    if (type === 'twitter') shareToTwitter();
+    else if (type === 'wechat') shareToWechat();
+    else if (type === 'weibo') shareToWeibo();
+    else if (type === 'copy') copyLink();
+    return;
+  }
+  const action = e.target.closest('[data-action]');
+  if (action) {
+    if (action.dataset.action === 'scroll-top') {
+      e.preventDefault();
+      scrollToTop();
+    }
+  }
+});
+
+// ===== INIT（懒加载：仅渲染默认 tab） =====
 renderProviderTable();
-renderFreeTiers();
-renderRankings();
-renderGuides();
-renderPriceTimeline();
-renderAlertProviders();
-renderAlertTypes();
-renderBarChart();
-renderCapabilityMatrix();
-renderSpeedBenchmark();
-renderDashboard();
-renderScatterPlot();
-renderTrendChart();
-renderTokenStats();
-renderRelayStations();
 initRelayInteractions();
 loadPriceSnapshot();
 // API base — 调用真实后端
-const API_BASE='http://localhost:3210';
+const API_BASE = window.location.hostname==='localhost'?'http://localhost:3210':'';
 loadRelaysFromAPI();
 // 自动触发计算器初始化
 document.getElementById('calc-run').click();
@@ -5043,6 +5585,79 @@ document.getElementById('alert-form').addEventListener('submit',async e=>{
   }
 });
 
+// ===== 订阅管理 =====
+document.getElementById('sub-mgmt-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('sub-mgmt-email').value.trim();
+  const btn = document.getElementById('sub-mgmt-btn');
+  const resultEl = document.getElementById('sub-mgmt-result');
+
+  if (!email) return;
+
+  btn.disabled = true;
+  btn.textContent = '查询中...';
+  resultEl.innerHTML = '';
+
+  try {
+    const resp = await fetch(`${API_BASE}/api/subscriptions?email=${encodeURIComponent(email)}`, {
+      signal: AbortSignal.timeout(10000),
+    });
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      resultEl.innerHTML = `<div class="sub-mgmt-error">${data.error || '查询失败'}</div>`;
+      return;
+    }
+
+    if (!data.active) {
+      resultEl.innerHTML = '<div class="sub-mgmt-empty">该邮箱当前无有效订阅</div>';
+      return;
+    }
+
+    const providerList = (data.providers && data.providers.length) ? data.providers.join('、') : '全部厂商';
+    const typeList = (data.alertTypes && data.alertTypes.length) ? data.alertTypes.join('、') : '全部类型';
+    const created = data.createdAt ? new Date(data.createdAt).toLocaleDateString('zh-CN') : '-';
+
+    resultEl.innerHTML = `
+      <div class="sub-mgmt-info">
+        <div class="sub-mgmt-info-row"><span class="sub-mgmt-info-label">订阅邮箱</span><span class="sub-mgmt-info-value">${email}</span></div>
+        <div class="sub-mgmt-info-row"><span class="sub-mgmt-info-label">关注厂商</span><span class="sub-mgmt-info-value">${providerList}</span></div>
+        <div class="sub-mgmt-info-row"><span class="sub-mgmt-info-label">预警类型</span><span class="sub-mgmt-info-value">${typeList}</span></div>
+        <div class="sub-mgmt-info-row"><span class="sub-mgmt-info-label">订阅时间</span><span class="sub-mgmt-info-value">${created}</span></div>
+        <div style="text-align:center"><button class="sub-mgmt-unsub-btn" id="sub-mgmt-unsub">退订</button></div>
+      </div>`;
+
+    document.getElementById('sub-mgmt-unsub').addEventListener('click', async () => {
+      const unsubBtn = document.getElementById('sub-mgmt-unsub');
+      unsubBtn.disabled = true;
+      unsubBtn.textContent = '退订中...';
+      try {
+        const r = await fetch(`${API_BASE}/api/unsubscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+          signal: AbortSignal.timeout(10000),
+        });
+        const d = await r.json();
+        if (r.ok && d.success) {
+          resultEl.innerHTML = '<div class="sub-mgmt-empty">已成功退订，您将不再收到价格预警邮件。</div>';
+          document.getElementById('sub-mgmt-email').value = '';
+        } else {
+          resultEl.innerHTML = `<div class="sub-mgmt-error">${d.error || '退订失败'}</div>`;
+        }
+      } catch {
+        resultEl.innerHTML = '<div class="sub-mgmt-error">无法连接服务器，请稍后重试</div>';
+      }
+    });
+  } catch {
+    resultEl.innerHTML = '<div class="sub-mgmt-error">无法连接服务器，请确认后端服务已启动</div>';
+    checkApiHealth();
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '查询订阅';
+  }
+});
+
 // Scroll fade-in
 const observer=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -5050,14 +5665,14 @@ const observer=new IntersectionObserver(entries=>{
   });
 },{threshold:0.1});
 
-document.querySelectorAll('.ranking-card,.guide-card,.free-tier-card,.section-header,.calc-wrap,.newsletter-wrap,.timeline-item,.alert-wrap,.peak-section,.dash-card,.bar-row,.speed-row,.cap-table tr,.cost-pie-wrap,.scatter-wrap,.trend-wrap,.token-counter-wrap,.trend-stat,.relay-card').forEach(el=>{
+document.querySelectorAll('.ranking-card,.guide-card,.free-tier-card,.section-header,.calc-wrap,.newsletter-wrap,.timeline-item,.alert-wrap,.sub-mgmt-wrap,.peak-section,.dash-card,.bar-row,.speed-row,.cap-table tr,.cost-pie-wrap,.scatter-wrap,.trend-wrap,.token-counter-wrap,.trend-stat,.relay-card').forEach(el=>{
   el.classList.add('fade-in');
   observer.observe(el);
 });
 </script>
 
 <!-- ===== BACK TO TOP ===== -->
-<button class="back-to-top" id="back-to-top" onclick="scrollToTop()" aria-label="回到顶部">↑</button>
+<button class="back-to-top" id="back-to-top" data-action="scroll-top" aria-label="回到顶部">↑</button>
 
 <!-- ===== SITE FOOTER ===== -->
 <footer class="site-footer">
@@ -5065,37 +5680,39 @@ document.querySelectorAll('.ranking-card,.guide-card,.free-tier-card,.section-he
     <div class="footer-brand">
       <h3>TokenPlan</h3>
       <p>全球 AI Token 定价全景指南。汇集国内外 65+ 厂商、93+ 中转站的 Token 定价数据，按性价比排序，提供专业选择指南。数据持续更新中。</p>
+      <p style="margin-top:0.5rem;font-size:0.7rem;color:var(--text-muted)">数据更新时间：2026年8月 · 汇率参考：1 USD ≈ 7.25 RMB</p>
+      <p style="margin-top:0.3rem;font-size:0.65rem;color:var(--text-muted)">声明：本站部分注册链接包含推广返佣，不影响排序和推荐结果。如有定价变动请联系我们更新。</p>
     </div>
     <div class="footer-col">
       <h4>导航</h4>
-      <a href="#" onclick="switchTab('all');return false">全部定价</a>
-      <a href="#" onclick="switchTab('relay');return false">API 中转站</a>
-      <a href="#" onclick="switchTab('free');return false">免费方案</a>
-      <a href="#" onclick="switchTab('ranking');return false">性价比排行</a>
-      <a href="#" onclick="switchTab('guide');return false">选择指南</a>
+      <a href="#" data-tab-link="all">全部定价</a>
+      <a href="#" data-tab-link="relay">API 中转站</a>
+      <a href="#" data-tab-link="free">免费方案</a>
+      <a href="#" data-tab-link="ranking">性价比排行</a>
+      <a href="#" data-tab-link="guide">选择指南</a>
     </div>
     <div class="footer-col">
       <h4>工具</h4>
-      <a href="#" onclick="switchTab('calculator');return false">成本计算器</a>
-      <a href="#" onclick="switchTab('scatter');return false">性价比散点图</a>
-      <a href="#" onclick="switchTab('trend');return false">价格趋势</a>
-      <a href="#" onclick="switchTab('counter');return false">Token 计数器</a>
-      <a href="#" onclick="switchTab('tracking');return false">价格预警</a>
+      <a href="#" data-tab-link="calculator">成本计算器</a>
+      <a href="#" data-tab-link="scatter">性价比散点图</a>
+      <a href="#" data-tab-link="trend">价格趋势</a>
+      <a href="#" data-tab-link="counter">Token 计数器</a>
+      <a href="#" data-tab-link="tracking">价格预警</a>
     </div>
     <div class="footer-col">
       <h4>关于</h4>
       <a href="https://github.com/sensornew/token-plan-showcase" target="_blank" rel="noopener">GitHub 开源</a>
-      <a href="#" onclick="switchTab('tracking');return false">订阅更新</a>
-      <a href="#" onclick="switchTab('relay');return false">提交中转站</a>
+      <a href="#" data-tab-link="tracking">订阅更新</a>
+      <a href="#" data-tab-link="relay">提交中转站</a>
       <a href="mailto:contact@tokenplan.dev">联系我们</a>
-      <a href="#" onclick="switchTab('guide');return false">FAQ</a>
+      <a href="#" data-tab-link="guide">FAQ</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 TokenPlan. 数据仅供参考，不构成投资建议。使用即代表同意<a href="#" style="color:var(--gold)" onclick="return false">免责声明</a>。</p>
+    <p>© 2026 TokenPlan. 数据仅供参考，不构成投资建议。使用即代表同意<a href="#" style="color:var(--gold)" data-action="scroll-top">免责声明</a>。</p>
     <div class="footer-social">
       <a href="https://github.com/sensornew/token-plan-showcase" target="_blank" rel="noopener">GitHub</a>
-      <a href="#" onclick="switchTab('tracking');return false">邮件订阅</a>
+      <a href="#" data-tab-link="tracking">邮件订阅</a>
       <a href="mailto:contact@tokenplan.dev">Email</a>
     </div>
   </div>

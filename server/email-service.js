@@ -12,6 +12,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM = process.env.RESEND_FROM;
 const FROM_NAME = process.env.MAIL_FROM_NAME || 'TokenPlan 价格预警';
 const FROM_ADDRESS = process.env.MAIL_FROM_ADDRESS || SMTP_USER;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3210}`;
 
 let transporter = null;
 
@@ -101,7 +102,7 @@ export async function sendAlertEmail(toEmail, subject, htmlBody, textBody) {
 export async function sendWelcomeEmail(email, providers, alertTypes, unsubToken) {
   const providerList = providers.length > 0 ? providers.join('、') : '全部厂商';
   const typeList = alertTypes.length > 0 ? alertTypes.join('、') : '全部类型';
-  const unsubUrl = `http://localhost:${process.env.PORT || 3210}/api/unsubscribe?token=${unsubToken}`;
+  const unsubUrl = `${BASE_URL}/api/unsubscribe?token=${unsubToken}`;
 
   const html = `
     <div style="font-family:system-ui,-apple-system,sans-serif;max-width:600px;margin:0 auto;background:#0a0e1a;color:#e4e4e7;border-radius:16px;overflow:hidden;border:1px solid #2a2a3a">
@@ -129,7 +130,7 @@ export async function sendWelcomeEmail(email, providers, alertTypes, unsubToken)
 }
 
 export async function sendPriceChangeEmail(email, change, unsubToken) {
-  const unsubUrl = `http://localhost:${process.env.PORT || 3210}/api/unsubscribe?token=${unsubToken}`;
+  const unsubUrl = `${BASE_URL}/api/unsubscribe?token=${unsubToken}`;
   const isDrop = change.type === 'drop';
   const icon = isDrop ? '📉' : change.type === 'new' ? '🆕' : '📈';
   const color = isDrop ? '#34d399' : change.type === 'new' ? '#5ce1ff' : '#fb923c';
@@ -145,7 +146,7 @@ export async function sendPriceChangeEmail(email, change, unsubToken) {
           <p style="margin:0 0 4px;color:#8b8b9a;font-size:12px">价格变动</p>
           <p style="margin:4px 0;color:#e4e4e7;font-size:16px;line-height:1.5">${change.change.replace(/<[^>]*>/g, '')}</p>
         </div>
-        <p style="font-size:14px;color:#8b8b9a;line-height:1.6;margin:0 0 8px">${change.note}</p>
+        <p style="font-size:14px;color:#8b8b9a;line-height:1.6;margin:0 0 8px">${(change.note||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
         <p style="font-size:12px;color:#5a5a6a">变动日期：${change.date}</p>
         <a href="${unsubUrl}" style="display:inline-block;margin-top:20px;padding:8px 20px;background:transparent;border:1px solid #2a2a3a;color:#8b8b9a;text-decoration:none;border-radius:8px;font-size:12px">退订预警</a>
       </div>

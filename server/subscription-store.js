@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, renameSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
@@ -27,7 +27,9 @@ function readData() {
 
 function writeData(data) {
   ensureDataFile();
-  writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  const tmpFile = DATA_FILE + '.tmp';
+  writeFileSync(tmpFile, JSON.stringify(data, null, 2));
+  renameSync(tmpFile, DATA_FILE);
 }
 
 export function addSubscription({ email, providers, alertTypes }) {
@@ -60,6 +62,11 @@ export function removeSubscription(email) {
   const data = readData();
   data.subscriptions = data.subscriptions.filter(s => s.email !== email);
   writeData(data);
+}
+
+export function getSubscriptionByEmail(email) {
+  const data = readData();
+  return data.subscriptions.find(s => s.email === email) || null;
 }
 
 export function unsubscribeByToken(token) {
